@@ -32,88 +32,104 @@ import video1080webm from '@assets/fauves-agency-intro_1080p.webm';
       </h1>
     </section>
 
-    <section class="relative w-screen overflow-hidden" aria-label="Réalisations en avant">
+    <section class="relative w-full max-h-screen overflow-hidden" aria-label="Réalisations en avant">
       <!-- Carrousel -->
       <div
         data-carousel
-        class="flex items-end gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory px-4 pb-20"
+        class="flex items-end gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory px-4 pb-20 h-full"
         style="scrollbar-width: none;"
       >
         <!-- Slide 1 -->
-        <div class="min-w-[70%] max-w-[600px] snap-start shrink-0 relative" data-slide>
-          <img
-            src={TatImage.src}
-            width={TatImage.width}
-            height={TatImage.height}
-            alt="Projet TAT"
-            class="w-full object-cover rounded-xl"
-            loading="lazy"
-            decoding="async"
-            fetchpriority="auto"
-          />
-          <p class="absolute bottom-4 left-4 text-base font-medium text-black bg-white/80 px-2 py-1 rounded">
-            <strong class="font-bold">TAT</strong> <span class="font-light">Definity modern</span>
-          </p>
+        <div class="min-w-[70%] max-w-[600px] snap-start shrink-0 relative h-full flex items-center justify-center" data-slide>
+          <div class="relative w-full h-[90vh] max-h-[90vh]">
+            <img
+              src={TatImage.src}
+              width={TatImage.width}
+              height={TatImage.height}
+              alt="Projet TAT"
+              class="w-full h-full object-cover rounded-xl"
+              loading="lazy"
+              decoding="async"
+              fetchpriority="auto"
+            />
+            <p class="absolute bottom-4 left-4 text-base font-medium text-black bg-white/80 px-2 py-1 rounded">
+              <strong class="font-bold">TAT</strong> <span class="font-light">Definity modern</span>
+            </p>
+          </div>
         </div>
     
         <!-- Slide 2 -->
-        <div class="min-w-[70%] max-w-[500px] snap-start shrink-0 relative" data-slide>
-          <img
-            src={AnmImage.src}
-            width={AnmImage.width}
-            height={AnmImage.height}
-            alt="Projet ANM"
-            class="w-full object-cover rounded-xl"
-            loading="lazy"
-            decoding="async"
-            fetchpriority="auto"
-          />
-          <p class="absolute bottom-4 left-4 text-base font-medium text-black bg-white/80 px-2 py-1 rounded">
-            <strong class="font-bold">ANM</strong> <span class="font-light">Lorem ipsum</span>
-          </p>
+        <div class="min-w-[70%] max-w-[500px] snap-start shrink-0 relative h-full flex items-center justify-center" data-slide>
+          <div class="relative w-full h-[90vh] max-h-[90vh]">
+            <img
+              src={AnmImage.src}
+              width={AnmImage.width}
+              height={AnmImage.height}
+              alt="Projet ANM"
+              class="w-full h-full object-cover rounded-xl"
+              loading="lazy"
+              decoding="async"
+              fetchpriority="auto"
+            />
+            <p class="absolute bottom-4 left-4 text-base font-medium text-black bg-white/80 px-2 py-1 rounded">
+              <strong class="font-bold">ANM</strong> <span class="font-light">Lorem ipsum</span>
+            </p>
+          </div>
         </div>
     
         <!-- Slide 3 -->
-        <div class="min-w-[70%] max-w-[600px] snap-start shrink-0 relative" data-slide>
-          <img
-            src={TatImage.src}
-            width={TatImage.width}
-            height={TatImage.height}
-            alt="Projet TAT"
-            class="w-full object-cover rounded-xl"
-            loading="lazy"
-            decoding="async"
-            fetchpriority="auto"
-          />
-          <p class="absolute bottom-4 left-4 text-base font-medium text-black bg-white/80 px-2 py-1 rounded">
-            <strong class="font-bold">TAT</strong> <span class="font-light">Definity modern</span>
-          </p>
+        <div class="min-w-[70%] max-w-[600px] snap-start shrink-0 relative h-full flex items-center justify-center" data-slide>
+          <div class="relative w-full h-[90vh] max-h-[90vh]">
+            <img
+              src={TatImage.src}
+              width={TatImage.width}
+              height={TatImage.height}
+              alt="Projet TAT"
+              class="w-full h-full object-cover rounded-xl"
+              loading="lazy"
+              decoding="async"
+              fetchpriority="auto"
+            />
+            <p class="absolute bottom-4 left-4 text-base font-medium text-black bg-white/80 px-2 py-1 rounded">
+              <strong class="font-bold">TAT</strong> <span class="font-light">Definity modern</span>
+            </p>
+          </div>
         </div>
     
         <!-- Slide 4 -->
-        <div class="min-w-[70%] max-w-[500px] snap-start shrink-0 relative" data-slide>
-          <img
-            src={AnmImage.src}
-            width={AnmImage.width}
-            height={AnmImage.height}
-            alt="Projet ANM"
-            class="w-full object-cover rounded-xl"
-            loading="lazy"
-            decoding="async"
-            fetchpriority="auto"
-          />
-          <p class="absolute bottom-4 left-4 text-base font-medium text-black bg-white/80 px-2 py-1 rounded">
-            <strong class="font-bold">ANM</strong> <span class="font-light">Slide 3</span>
-          </p>
+        <div class="min-w-[70%] max-w-[500px] snap-start shrink-0 relative h-full flex items-center justify-center" data-slide>
+          <div class="relative w-full h-[90vh] max-h-[90vh]">
+            <img
+              src={AnmImage.src}
+              width={AnmImage.width}
+              height={AnmImage.height}
+              alt="Projet ANM"
+              class="w-full h-full object-cover rounded-xl"
+              loading="lazy"
+              decoding="async"
+              fetchpriority="auto"
+            />
+            <p class="absolute bottom-4 left-4 text-base font-medium text-black bg-white/80 px-2 py-1 rounded">
+              <strong class="font-bold">ANM</strong> <span class="font-light">Slide 3</span>
+            </p>
+          </div>
         </div>
       </div>
     
-      <!-- Flèches responsives fixées à droite -->
-      <div class="absolute bottom-6 right-4 md:right-8 lg:right-16 flex gap-2 z-10">
-        <button data-carousel-prev class="p-2 rounded-full bg-white shadow hover:bg-neutral-100 transition" aria-label="Slide précédent">
+      <!-- Flèches fixées à droite -->
+      <div class="absolute bottom-6 right-4 md:right-8 lg:right-16 flex gap-4 z-10">
+        <button
+          data-carousel-prev
+          class="w-10 h-10 flex items-center justify-center rounded-full bg-white shadow-md hover:bg-neutral-100 transition"
+          aria-label="Slide précédent"
+        >
           &#8592;
         </button>
-        <button data-carousel-next class="p-2 rounded-full bg-white shadow hover:bg-neutral-100 transition" aria-label="Slide suivant">
+        <button
+          data-carousel-next
+          class="w-10 h-10 flex items-center justify-center rounded-full bg-white shadow-md hover:bg-neutral-100 transition"
+          aria-label="Slide suivant"
+        >
           &#8594;
         </button>
       </div>
