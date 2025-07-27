@@ -17,7 +17,7 @@ const { title, description } = Astro.props as Props;
     <link rel="sitemap" href="/sitemap-index.xml" />
     <slot name="structured-data" />
   </head>
-  <body>
+  <body class="antialiased overflow-x-hidden">
     <main>
       <slot />
     </main>

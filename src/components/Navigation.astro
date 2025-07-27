@@ -1,7 +1,7 @@
-<header class="relative flex flex-wrap sm:justify-start sm:flex-nowrap w-full bg-white text-sm py-3 dark:bg-neutral-800">
-    <nav class="max-w-[85rem] w-full mx-auto px-4 sm:flex sm:items-center sm:justify-between">
-  <div class="flex items-center justify-between">
-    <a class="flex-none focus:outline-hidden focus:opacity-80" href="#" aria-label="Brand">
+<header class="w-full bg-white text-sm py-6 px-4">
+  <nav class="max-w-[85rem] px-4 pt-8 mx-auto flex items-center justify-between">
+    <!-- Logo -->
+    <a href="/" aria-label="FAUVES" class="flex-none">
       <svg class="h-10 w-auto" viewBox="0 0 1163.67 428.11" fill="#110802">
         <path d="M48.2,155.39c59.15,0,109.9-2.74,166.13-5.37v66.9c-29.63,2.42-69.98,3.32-99.61,4.26v26.19c25.32-1.14,63.52-2.01,88.84-4.25v62.54c-25.32,3.06-63.52,4.35-88.84,6.31v61.11c-26.61,2.88-39.91,4.01-66.52,5.49v-223.18Z"/>
         <path d="M298.36,266.85c8.19-1.31,12.28-1.98,20.47-3.37-4.09-21.04-6.14-31.63-10.23-52.94-4.09,22.41-6.14,33.68-10.24,56.31M351.15,138.55c21.22,76.7,31.83,113.74,53.06,185.31-26.93,6.62-40.4,9.81-67.33,15.78-2.26-9.44-3.39-14.18-5.66-23.69-18.1,3.72-27.15,5.49-45.25,8.83-2.37,10.66-3.56,16.01-5.93,26.73-26.82,5.24-40.24,7.64-67.06,11.87,21.22-88.66,31.84-131.98,53.06-216.55,34.04-2.6,51.06-4.32,85.11-8.27"/>
@@ -11,21 +11,40 @@
         <path d="M1030.37,179.52c-12.39,1.55-23.75,2.65-34.07,3.17-10.33.53-19.37.81-27.07.85-8.78.04-16.88-.16-24.24-.7v-40.3c7.72.6,16.09.91,25.05,1.02,7.7.09,16.7,0,26.93-.29,10.23-.28,21.01-.98,32.32-2.01,6.82-.62,12.25-1.23,16.3-1.86,4.04-.63,6.06-1.76,6.06-3.39,0-1.39-1.58-2.32-4.71-2.79-3.14-.47-7.27-.77-12.39-.87-5.11-.11-10.95-.13-17.51-.06-6.56.07-13.24-.1-20.06-.54-6.82-.43-13.52-1.25-20.06-2.48-6.55-1.23-12.39-3.18-17.51-5.88-5.12-2.7-9.25-6.33-12.39-10.88-3.14-4.56-4.71-10.4-4.71-17.48,0-5.41,1.3-10.82,3.91-16.15,2.6-5.33,7.04-10.16,13.33-14.39,6.28-4.23,14.72-7.74,25.32-10.45,10.59-2.7,23.88-4.2,39.86-4.37,13.47-.14,25.27.31,35.42,1.2,10.14.89,18.74,2.01,25.72,3.17,8.23,1.38,15.35,2.86,21.28,4.44v34.77c-6.64-1.27-14.15-2.46-22.35-3.34-6.95-.75-15.27-1.33-24.78-1.82-9.52-.49-19.93-.53-31.24-.05-5.93.25-11.18.68-15.75,1.25-4.58.57-6.87,2-6.87,4.23,0,1.84,2.7,2.91,8.08,3.24,5.39.33,12.12.59,20.2.85,8.08.25,16.88.85,26.39,1.8,9.51.95,18.32,2.81,26.39,5.48,8.08,2.67,14.81,6.5,20.2,11.39,5.39,4.9,8.08,11.34,8.08,19.4,0,11.73-7.23,20.82-21.68,28.04-14.45,7.22-35.6,12.32-63.42,15.8"/>
       </svg>
     </a>
+
+    <!-- Menu desktop -->
+    <ul class="hidden sm:flex gap-6 text-black font-light text-[15px] tracking-tight">
+      <li><a href="/work" class="hover:opacity-60 transition-opacity">work</a></li>
+      <li><a href="/a-propos" class="hover:opacity-60 transition-opacity">à propos</a></li>
+      <li><a href="/approche" class="hover:opacity-60 transition-opacity">approche</a></li>
+      <li><a href="/services" class="hover:opacity-60 transition-opacity">services</a></li>
+      <li><a href="/contact" class="hover:opacity-60 transition-opacity">contact</a></li>
+    </ul>
+
+    <!-- Hamburger mobile -->
     <div class="sm:hidden">
-      <button type="button" class="hs-collapse-toggle relative size-9 flex justify-center items-center gap-x-2 rounded-lg border border-gray-200 bg-white text-gray-800 shadow-2xs hover:bg-gray-50 focus:outline-hidden focus:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-transparent dark:border-neutral-700 dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" id="hs-navbar-example-collapse" aria-expanded="false" aria-controls="hs-navbar-example" aria-label="Toggle navigation" data-hs-collapse="#hs-navbar-example">
-        <svg class="hs-collapse-open:hidden shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="6" y2="6"/><line x1="3" x2="21" y1="12" y2="12"/><line x1="3" x2="21" y1="18" y2="18"/></svg>
-        <svg class="hs-collapse-open:block hidden shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+      <button id="nav-toggle" aria-label="Ouvrir le menu" class="text-black focus:outline-none">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
       </button>
     </div>
+  </nav>
+
+  <!-- Menu mobile -->
+  <div id="mobile-menu" class="sm:hidden hidden mt-4 px-4 space-y-4 text-black font-light text-[15px]">
+    <a href="/work" class="block hover:opacity-60">work</a>
+    <a href="/a-propos" class="block hover:opacity-60">à propos</a>
+    <a href="/approche" class="block hover:opacity-60">approche</a>
+    <a href="/services" class="block hover:opacity-60">services</a>
+    <a href="/contact" class="block hover:opacity-60">contact</a>
   </div>
-  <div id="hs-navbar-example" class="hs-collapse hidden overflow-hidden transition-all duration-300 basis-full grow sm:block">
-    <div class="flex flex-col gap-5 mt-5 sm:flex-row sm:items-center sm:justify-end sm:mt-0 sm:ps-5">
-      <a class="font-medium text-blue-600 dark:text-blue-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#" aria-current="page">Home</a>
-      <a class="font-medium text-gray-600 hover:text-gray-400 dark:text-neutral-400 dark:hover:text-neutral-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">Work</a>
-      <a class="font-medium text-gray-600 hover:text-gray-400 dark:text-neutral-400 dark:hover:text-neutral-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">Blog</a>
-      <a class="font-medium text-gray-600 hover:text-gray-400 dark:text-neutral-400 dark:hover:text-neutral-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">About</a>
-      <a class="font-medium text-gray-600 hover:text-gray-400 dark:text-neutral-400 dark:hover:text-neutral-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600" href="#">Contact</a>
-    </div>
-  </div>
-</nav>
+
+  <script is:inline>
+    const navToggle = document.getElementById('nav-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    navToggle?.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+  </script>
 </header>

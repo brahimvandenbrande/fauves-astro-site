@@ -5,6 +5,12 @@ import Navigation from "@components/Navigation.astro";
 import Footer from "@components/Footer.astro";
 import TatImage from "@assets/portfolio-tat.jpg";
 import AnmImage from "@assets/portfolio-anm.jpg";
+import video480mp4 from '@assets/fauves-agency-intro_480p.mp4';
+import video480webm from '@assets/fauves-agency-intro_480p.webm';
+import video720mp4 from '@assets/fauves-agency-intro_720p.mp4';
+import video720webm from '@assets/fauves-agency-intro_720p.webm';
+import video1080mp4 from '@assets/fauves-agency-intro_1080p.mp4';
+import video1080webm from '@assets/fauves-agency-intro_1080p.webm';
 ---
 
 <Layout title="Home" description="FAUVES – studio de branding et narration de marque.">
@@ -20,7 +26,7 @@ import AnmImage from "@assets/portfolio-anm.jpg";
 
     <!-- 🦁 Hero principal -->
     <section>
-      <h1 class="w-full max-w-3xl text-h1 leading-h1 text-black font-light font-degular">
+      <h1 class="w-full max-w-[75.6rem] text-h1 leading-h1 text-black font-light font-degular">
         Ici, nous créons des <span class="font-semibold">marques vivantes</span>. Activables, utiles
         et qui évoluent avec vous.
       </h1>
@@ -34,79 +40,111 @@ import AnmImage from "@assets/portfolio-anm.jpg";
         style="scrollbar-width: none;"
       >
         <!-- Slide 1 -->
-        <div class="min-w-[70%] max-w-[600px] snap-start shrink-0" data-slide>
-          <div class="rounded-xl overflow-hidden">
-            <img
-              src={TatImage.src}
-              width={TatImage.width}
-              height={TatImage.height}
-              alt="Projet TAT"
-              class="w-full object-cover rounded-xl"
-            />
-            <p class="mt-2 text-xs font-medium text-black">
-              TAT <span class="font-light">Definity modern</span>
-            </p>
-          </div>
+        <div class="min-w-[70%] max-w-[600px] snap-start shrink-0 relative" data-slide>
+          <img
+            src={TatImage.src}
+            width={TatImage.width}
+            height={TatImage.height}
+            alt="Projet TAT"
+            class="w-full object-cover rounded-xl"
+            loading="lazy"
+            decoding="async"
+            fetchpriority="auto"
+          />
+          <p class="absolute bottom-4 left-4 text-base font-medium text-black bg-white/80 px-2 py-1 rounded">
+            <strong class="font-bold">TAT</strong> <span class="font-light">Definity modern</span>
+          </p>
         </div>
     
         <!-- Slide 2 -->
-        <div class="min-w-[70%] max-w-[500px] snap-start shrink-0" data-slide>
-          <div class="rounded-xl overflow-hidden">
-            <img
-              src={AnmImage.src}
-              width={AnmImage.width}
-              height={AnmImage.height}
-              alt="Projet ANM"
-              class="w-full object-cover rounded-xl"
-            />
-            <p class="mt-2 text-xs font-medium text-black">
-              ANM <span class="font-light">Lorem ipsum</span>
-            </p>
-          </div>
-        </div>
-
-        <!-- Slide 3 -->
-        <div class="min-w-[70%] max-w-[600px] snap-start shrink-0" data-slide>
-          <div class="rounded-xl overflow-hidden">
-            <img
-              src={TatImage.src}
-              width={TatImage.width}
-              height={TatImage.height}
-              alt="Projet TAT"
-              class="w-full object-cover rounded-xl"
-            />
-            <p class="mt-2 text-xs font-medium text-black">
-              TAT <span class="font-light">Definity modern</span>
-            </p>
-          </div>
+        <div class="min-w-[70%] max-w-[500px] snap-start shrink-0 relative" data-slide>
+          <img
+            src={AnmImage.src}
+            width={AnmImage.width}
+            height={AnmImage.height}
+            alt="Projet ANM"
+            class="w-full object-cover rounded-xl"
+            loading="lazy"
+            decoding="async"
+            fetchpriority="auto"
+          />
+          <p class="absolute bottom-4 left-4 text-base font-medium text-black bg-white/80 px-2 py-1 rounded">
+            <strong class="font-bold">ANM</strong> <span class="font-light">Lorem ipsum</span>
+          </p>
         </div>
     
-        <!-- Slide 4 (déplacé ici, à l’intérieur du carrousel) -->
-        <div class="min-w-[70%] max-w-[500px] snap-start shrink-0" data-slide>
-          <div class="rounded-xl overflow-hidden">
-            <img
-              src={AnmImage.src}
-              width={AnmImage.width}
-              height={AnmImage.height}
-              alt="Projet ANM"
-              class="w-full object-cover rounded-xl"
-            />
-            <p class="mt-2 text-xs font-medium text-black">
-              ANM <span class="font-light">Slide 3</span>
-            </p>
-          </div>
+        <!-- Slide 3 -->
+        <div class="min-w-[70%] max-w-[600px] snap-start shrink-0 relative" data-slide>
+          <img
+            src={TatImage.src}
+            width={TatImage.width}
+            height={TatImage.height}
+            alt="Projet TAT"
+            class="w-full object-cover rounded-xl"
+            loading="lazy"
+            decoding="async"
+            fetchpriority="auto"
+          />
+          <p class="absolute bottom-4 left-4 text-base font-medium text-black bg-white/80 px-2 py-1 rounded">
+            <strong class="font-bold">TAT</strong> <span class="font-light">Definity modern</span>
+          </p>
+        </div>
+    
+        <!-- Slide 4 -->
+        <div class="min-w-[70%] max-w-[500px] snap-start shrink-0 relative" data-slide>
+          <img
+            src={AnmImage.src}
+            width={AnmImage.width}
+            height={AnmImage.height}
+            alt="Projet ANM"
+            class="w-full object-cover rounded-xl"
+            loading="lazy"
+            decoding="async"
+            fetchpriority="auto"
+          />
+          <p class="absolute bottom-4 left-4 text-base font-medium text-black bg-white/80 px-2 py-1 rounded">
+            <strong class="font-bold">ANM</strong> <span class="font-light">Slide 3</span>
+          </p>
         </div>
       </div>
     
-      <!-- Flèches fixées -->
-      <div class="absolute bottom-8 right-20 flex gap-2 z-10">
-        <button data-carousel-prev class="p-2 rounded-full bg-white shadow" aria-label="Slide précédent">
+      <!-- Flèches responsives fixées à droite -->
+      <div class="absolute bottom-6 right-4 md:right-8 lg:right-16 flex gap-2 z-10">
+        <button data-carousel-prev class="p-2 rounded-full bg-white shadow hover:bg-neutral-100 transition" aria-label="Slide précédent">
           &#8592;
         </button>
-        <button data-carousel-next class="p-2 rounded-full bg-white shadow" aria-label="Slide suivant">
+        <button data-carousel-next class="p-2 rounded-full bg-white shadow hover:bg-neutral-100 transition" aria-label="Slide suivant">
           &#8594;
         </button>
       </div>
+    </section>
+    
+    <section class="px-4 pb-16 max-w-6xl mx-auto text-center">
+      <p class="text-[4.06rem] leading-[4.06rem] text-black font-light font-degular">
+        Vous cherchez à inspirer autant qu’à performer ?
+        Chez FAUVES, nous donnons vie à 
+        <span class="font-semibold">des identités fortes</span>, des récits qui résonnent
+        et des marques qui engagent.
+      </p>
+    </section>
+
+    <section class="relative w-full max-w-[1209.75px] mx-auto aspect-video rounded-xl overflow-hidden bg-black">
+      <video
+        autoplay
+        muted
+        playsinline
+        loop
+        preload="auto"
+        class="w-full h-full object-cover"
+      >
+        <source src={video1080webm} type="video/webm" media="(min-width: 1024px)" />
+        <source src={video1080mp4} type="video/mp4" media="(min-width: 1024px)" />
+        <source src={video720webm} type="video/webm" media="(min-width: 640px)" />
+        <source src={video720mp4} type="video/mp4" media="(min-width: 640px)" />
+        <source src={video480webm} type="video/webm" />
+        <source src={video480mp4} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
     </section>
     
     <script is:inline>
