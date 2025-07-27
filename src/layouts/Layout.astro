@@ -1,0 +1,25 @@
+---
+import BaseHead from "@components/BaseHead.astro";
+import "@styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props as Props;
+---
+
+<!doctype html>
+<html lang="fr-be">
+  <head>
+    <BaseHead title={title} description={description} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <slot name="structured-data" />
+  </head>
+  <body>
+    <main>
+      <slot />
+    </main>
+  </body>
+</html>
