@@ -13,6 +13,7 @@
           "@pages/*": ["src/pages/*"],
           "@styles/*": ["src/styles/*"],
           "@consts": ["src/consts.ts"],
+          "@assets/*": ["./src/assets/*"],
       },
   },
 }

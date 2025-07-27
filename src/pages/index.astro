@@ -2,15 +2,147 @@
 import WebsiteStructuredData from "@components/WebsiteStructuredData.astro";
 import Layout from "@layouts/Layout.astro";
 import Navigation from "@components/Navigation.astro";
+import Footer from "@components/Footer.astro";
+import TatImage from "@assets/portfolio-tat.jpg";
+import AnmImage from "@assets/portfolio-anm.jpg";
 ---
 
-<Layout title="Home" description="Example Astro site using structured data.">
+<Layout title="Home" description="FAUVES – studio de branding et narration de marque.">
   <WebsiteStructuredData slot="structured-data" />
-  <Navigation />
-  <main class="max-w-[85rem] w-full mx-auto px-4 sm:flex sm:items-center sm:justify-between">
-    <h1 class="w-[80%] text-h1 leading-h1 text-black font-light" style="font-family: 'Degular', sans-serif;">
-      Ici, nous créons des <span class="font-semibold">marques vivantes</span>. Activables, utiles 
-      et qui évoluent avec vous.
-    </h1>
+
+  <!-- 🧭 Navigation principale -->
+  <header>
+    <Navigation />
+  </header>
+
+  <!-- 🎯 Contenu principal de la page -->
+  <main class="flex flex-col gap-12 px-4 pt-24 pb-16 max-w-[85rem] mx-auto">
+
+    <!-- 🦁 Hero principal -->
+    <section>
+      <h1 class="w-full max-w-3xl text-h1 leading-h1 text-black font-light font-degular">
+        Ici, nous créons des <span class="font-semibold">marques vivantes</span>. Activables, utiles
+        et qui évoluent avec vous.
+      </h1>
+    </section>
+
+    <section class="relative w-screen overflow-hidden" aria-label="Réalisations en avant">
+      <!-- Carrousel -->
+      <div
+        data-carousel
+        class="flex items-end gap-6 overflow-x-auto scroll-smooth snap-x snap-mandatory px-4 pb-20"
+        style="scrollbar-width: none;"
+      >
+        <!-- Slide 1 -->
+        <div class="min-w-[70%] max-w-[600px] snap-start shrink-0" data-slide>
+          <div class="rounded-xl overflow-hidden">
+            <img
+              src={TatImage.src}
+              width={TatImage.width}
+              height={TatImage.height}
+              alt="Projet TAT"
+              class="w-full object-cover rounded-xl"
+            />
+            <p class="mt-2 text-xs font-medium text-black">
+              TAT <span class="font-light">Definity modern</span>
+            </p>
+          </div>
+        </div>
+    
+        <!-- Slide 2 -->
+        <div class="min-w-[70%] max-w-[500px] snap-start shrink-0" data-slide>
+          <div class="rounded-xl overflow-hidden">
+            <img
+              src={AnmImage.src}
+              width={AnmImage.width}
+              height={AnmImage.height}
+              alt="Projet ANM"
+              class="w-full object-cover rounded-xl"
+            />
+            <p class="mt-2 text-xs font-medium text-black">
+              ANM <span class="font-light">Lorem ipsum</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="min-w-[70%] max-w-[600px] snap-start shrink-0" data-slide>
+          <div class="rounded-xl overflow-hidden">
+            <img
+              src={TatImage.src}
+              width={TatImage.width}
+              height={TatImage.height}
+              alt="Projet TAT"
+              class="w-full object-cover rounded-xl"
+            />
+            <p class="mt-2 text-xs font-medium text-black">
+              TAT <span class="font-light">Definity modern</span>
+            </p>
+          </div>
+        </div>
+    
+        <!-- Slide 4 (déplacé ici, à l’intérieur du carrousel) -->
+        <div class="min-w-[70%] max-w-[500px] snap-start shrink-0" data-slide>
+          <div class="rounded-xl overflow-hidden">
+            <img
+              src={AnmImage.src}
+              width={AnmImage.width}
+              height={AnmImage.height}
+              alt="Projet ANM"
+              class="w-full object-cover rounded-xl"
+            />
+            <p class="mt-2 text-xs font-medium text-black">
+              ANM <span class="font-light">Slide 3</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    
+      <!-- Flèches fixées -->
+      <div class="absolute bottom-8 right-20 flex gap-2 z-10">
+        <button data-carousel-prev class="p-2 rounded-full bg-white shadow" aria-label="Slide précédent">
+          &#8592;
+        </button>
+        <button data-carousel-next class="p-2 rounded-full bg-white shadow" aria-label="Slide suivant">
+          &#8594;
+        </button>
+      </div>
+    </section>
+    
+    <script is:inline>
+      const carousel = document.querySelector('[data-carousel]');
+      const slides = carousel?.querySelectorAll('[data-slide]');
+      const btnPrev = document.querySelector('[data-carousel-prev]');
+      const btnNext = document.querySelector('[data-carousel-next]');
+    
+      let currentIndex = 0;
+    
+      function scrollToSlide(index) {
+        const targetSlide = slides[index];
+        if (!targetSlide) return;
+        const offset = targetSlide.offsetLeft - carousel.offsetLeft;
+        carousel.scrollTo({ left: offset, behavior: 'smooth' });
+      }
+    
+      btnPrev?.addEventListener('click', () => {
+        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+        scrollToSlide(currentIndex);
+      });
+    
+      btnNext?.addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % slides.length;
+        scrollToSlide(currentIndex);
+      });
+    
+      scrollToSlide(currentIndex);
+    </script>
+    <!-- 🧠 Autres sections (valeurs, méthode, clients, etc.) -->
+    <!-- <section>...</section> -->
+
   </main>
+
+  <!-- 🦶 Pied de page (optionnel) -->
+  <footer>
+    <Footer />
+  </footer>
 </Layout>
