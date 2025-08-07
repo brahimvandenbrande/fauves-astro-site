@@ -27,97 +27,123 @@ async function getOptimizedImage(src: string) {
   <!-- Carousel -->
   <div
     data-carousel
-    class="flex h-full gap-6 overflow-x-auto pb-16 pl-4 scroll-smooth snap-x snap-mandatory"
+    class="flex h-full snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth pb-16 pl-4"
     style="scrollbar-width: none;"
   >
-    {projects.map(async (project, index) => {
-      const imageSrc = await getOptimizedImage(project.data.image.src);
-      
-      return (
-        <div 
-          class="group relative h-full min-w-[70vw] max-w-[800px] flex-shrink-0 snap-start"
-          data-slide
-        >
-          <a 
-            href={`/projects/${project.slug}`}
-            class="block h-full w-full"
-            aria-label={`View ${project.data.title} project`}
+    {
+      projects.map(async (project, index) => {
+        const imageSrc = await getOptimizedImage(project.data.image.src);
+
+        return (
+          <div
+            class="group relative h-full max-w-[800px] min-w-[70vw] flex-shrink-0 snap-start"
+            data-slide
           >
-            <div class="relative my-auto h-[80vh] w-full">
-              <div class="h-full w-full overflow-hidden">
-                {imageSrc ? (
-                  <Picture
-                    src={imageSrc}
-                    alt={project.data.image.alt}
-                    width={1200}
-                    height={800}
-                    class="h-full w-full rounded-2xl object-cover"
-                    loading="eager"
-                    decoding="async"
-                    formats={['avif', 'webp']}
-                    quality={90}
-                  />
-                ) : (
-                  <div class="flex h-full w-full items-center justify-center rounded-2xl bg-gray-200">
-                    <span class="text-gray-500">Image not found: {project.data.image.src}</span>
-                  </div>
-                )}
+            <a
+              href={`/projects/${project.slug}`}
+              class="block h-full w-full"
+              aria-label={`View ${project.data.title} project`}
+            >
+              <div class="relative my-auto h-[80vh] w-full">
+                <div class="h-full w-full overflow-hidden">
+                  {imageSrc ? (
+                    <Picture
+                      src={imageSrc}
+                      alt={project.data.image.alt}
+                      width={1200}
+                      height={800}
+                      class="h-full w-full rounded-2xl object-cover"
+                      loading="eager"
+                      decoding="async"
+                      formats={["avif", "webp"]}
+                      quality={90}
+                    />
+                  ) : (
+                    <div class="flex h-full w-full items-center justify-center rounded-2xl bg-gray-200">
+                      <span class="text-gray-500">
+                        Image not found: {project.data.image.src}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <p class="absolute bottom-4 left-4 rounded-lg bg-white/80 px-3 py-1.5 text-base font-medium text-black">
+                  <strong class="font-bold">
+                    {project.data.client || "Project"}
+                  </strong>
+                  {project.data.title && (
+                    <span class="ml-2 font-light">{project.data.title}</span>
+                  )}
+                </p>
               </div>
-              <p class="absolute bottom-4 left-4 rounded-lg bg-white/80 px-3 py-1.5 text-base font-medium text-black">
-                <strong class="font-bold">{project.data.client || 'Project'}</strong>
-                {project.data.title && (
-                  <span class="ml-2 font-light">{project.data.title}</span>
-                )}
-              </p>
-            </div>
-          </a>
-        </div>
-      );
-    })}
+            </a>
+          </div>
+        );
+      })
+    }
   </div>
 
   <!-- Navigation Arrows -->
-  {projects.length > 1 && (
-    <div class="absolute bottom-6 right-4 z-20 flex gap-4 md:right-8 lg:right-16">
-      <button
-        data-carousel-prev
-        class="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md transition-all duration-200 hover:bg-neutral-100"
-        aria-label="Previous slide"
-      >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M15 18l-6-6 6-6"/>
-        </svg>
-      </button>
-      <button
-        data-carousel-next
-        class="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md transition-all duration-200 hover:bg-neutral-100"
-        aria-label="Next slide"
-      >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M9 18l6-6-6-6"/>
-        </svg>
-      </button>
-    </div>
-  )}
+  {
+    projects.length > 1 && (
+      <div class="absolute right-4 bottom-6 z-20 flex gap-4 md:right-8 lg:right-16">
+        <button
+          data-carousel-prev
+          class="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md transition-all duration-200 hover:bg-neutral-100"
+          aria-label="Previous slide"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+        </button>
+        <button
+          data-carousel-next
+          class="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md transition-all duration-200 hover:bg-neutral-100"
+          aria-label="Next slide"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M9 18l6-6-6-6" />
+          </svg>
+        </button>
+      </div>
+    )
+  }
 </div>
 
 <script>
   // Carousel functionality
-  document.addEventListener('DOMContentLoaded', () => {
-    const carousel = document.querySelector('[data-carousel]');
-    const slides = document.querySelectorAll('[data-slide]');
-    const btnPrev = document.querySelector('[data-carousel-prev]');
-    const btnNext = document.querySelector('[data-carousel-next]');
-    
+  document.addEventListener("DOMContentLoaded", () => {
+    const carousel = document.querySelector("[data-carousel]");
+    const slides = document.querySelectorAll("[data-slide]");
+    const btnPrev = document.querySelector("[data-carousel-prev]");
+    const btnNext = document.querySelector("[data-carousel-next]");
+
     if (!carousel || !slides.length) return;
-    
+
     let currentIndex = 0;
     let isScrolling = false;
-    let autoplayInterval;
-    
+    let autoplayInterval: NodeJS.Timeout | null = null;
+
     // Autoplay configuration
     const AUTOPLAY_DELAY = 5000; // 5 seconds between slides
-    
+
     // Start autoplay
     function startAutoplay() {
       stopAutoplay();
@@ -128,45 +154,52 @@ async function getOptimizedImage(src: string) {
         }
       }, AUTOPLAY_DELAY);
     }
-    
+
     // Stop autoplay
     function stopAutoplay() {
       if (autoplayInterval) {
         clearInterval(autoplayInterval);
       }
     }
-    
+
     // Scroll to specific slide
-    function scrollToSlide(index) {
+    function scrollToSlide(index: number) {
       if (isScrolling || !slides[index]) return;
-      
+
       isScrolling = true;
       currentIndex = index;
       const targetSlide = slides[index];
-      const carouselRect = carousel.getBoundingClientRect();
-      const targetRect = targetSlide.getBoundingClientRect();
-      
-      // Calculate the center position of the carousel viewport
-      const viewportCenter = carouselRect.left + (carouselRect.width / 2);
-      const slideCenter = targetRect.left + (targetRect.width / 2);
-      
-      // Calculate the scroll position needed to center the slide
-      const scrollPosition = carousel.scrollLeft + (slideCenter - viewportCenter);
-      
-      carousel.scrollTo({ 
-        left: scrollPosition, 
-        behavior: 'smooth' 
-      });
-      
-      // Reset the scrolling flag after the animation completes
-      setTimeout(() => {
-        isScrolling = false;
-      }, 500);
+
+      if (carousel) {
+        const carouselRect = carousel.getBoundingClientRect();
+        const targetRect = targetSlide.getBoundingClientRect();
+
+        // Calculate the center position of the carousel viewport
+        const viewportCenter = carouselRect.left + carouselRect.width / 2;
+        const slideCenter = targetRect.left + targetRect.width / 2;
+
+        // Calculate the scroll position needed to center the slide
+        const scrollPosition =
+          carousel.scrollLeft + (slideCenter - viewportCenter);
+
+        carousel.scrollTo({
+          left: scrollPosition,
+          behavior: "smooth"
+        });
+
+        // Reset the scrolling flag after the animation completes
+        setTimeout(() => {
+          isScrolling = false;
+        }, 500);
+      } else {
+        console.error("Carousel element not found");
+        isScrolling = false; // Reset the flag even if carousel isn't found
+      }
     }
-    
+
     // Event listeners for navigation buttons
     if (btnPrev) {
-      btnPrev.addEventListener('click', (e) => {
+      btnPrev.addEventListener("click", (e) => {
         e.preventDefault();
         e.stopPropagation();
         if (isScrolling) return;
@@ -175,9 +208,9 @@ async function getOptimizedImage(src: string) {
         startAutoplay();
       });
     }
-    
+
     if (btnNext) {
-      btnNext.addEventListener('click', (e) => {
+      btnNext.addEventListener("click", (e) => {
         e.preventDefault();
         e.stopPropagation();
         if (isScrolling) return;
@@ -186,29 +219,29 @@ async function getOptimizedImage(src: string) {
         startAutoplay();
       });
     }
-    
+
     // Pause autoplay on hover
-    carousel.addEventListener('mouseenter', stopAutoplay);
-    carousel.addEventListener('mouseleave', startAutoplay);
-    
+    carousel.addEventListener("mouseenter", stopAutoplay);
+    carousel.addEventListener("mouseleave", startAutoplay);
+
     // Pause autoplay when tab is not visible
-    document.addEventListener('visibilitychange', () => {
+    document.addEventListener("visibilitychange", () => {
       if (document.hidden) {
         stopAutoplay();
       } else {
         startAutoplay();
       }
     });
-    
+
     // Handle keyboard navigation
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowLeft') {
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") {
         e.preventDefault();
         if (isScrolling) return;
         const newIndex = (currentIndex - 1 + slides.length) % slides.length;
         scrollToSlide(newIndex);
         startAutoplay();
-      } else if (e.key === 'ArrowRight') {
+      } else if (e.key === "ArrowRight") {
         e.preventDefault();
         if (isScrolling) return;
         const newIndex = (currentIndex + 1) % slides.length;
@@ -216,7 +249,7 @@ async function getOptimizedImage(src: string) {
         startAutoplay();
       }
     });
-    
+
     // Initialize autoplay
     startAutoplay();
   });

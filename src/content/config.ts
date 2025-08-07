@@ -11,7 +11,7 @@ const tagEnum = z.enum([
   "Copywriting",
   "SEO",
   "Workshops",
-  "Content Creation",
+  "Content Creation"
 ]);
 
 // Catégories principales (1 seule par projet)
@@ -19,7 +19,7 @@ const categoryEnum = z.enum([
   "Strategy & Messaging",
   "Visual & Digital Design",
   "Tech & Performance",
-  "Content & Engagement",
+  "Content & Engagement"
 ]);
 
 const projectsCollection = defineCollection({
