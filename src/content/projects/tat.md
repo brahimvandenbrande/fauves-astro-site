@@ -7,8 +7,8 @@ image:
   src: "projects/portfolio-tat.jpg"
   alt: "Project TAT - Definitly Modern"
 client: "TAT"
-category: "Web Design"
-tags: ["design", "development"]
+category: "Strategy & Messaging"
+tags: ["Brand Strategy", "Storytelling", "Visual Identity"]
 date: "2025-07-30"
 ---
 

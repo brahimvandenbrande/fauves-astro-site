@@ -1,4 +1,7 @@
 {
+  "prettier.documentSelectors": ["**/*.astro"],
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "prettier": {
     "plugins": ["prettier-plugin-astro"],
     "overrides": [
       {
@@ -9,3 +12,5 @@
       }
     ]
   }
+}
+// ~/.vscode/settings.json

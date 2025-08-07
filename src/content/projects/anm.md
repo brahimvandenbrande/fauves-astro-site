@@ -7,8 +7,8 @@ image:
   src: "projects/portfolio-anm.jpg"
   alt: "Project ANM - l'Agence pour le Non-Marchand"
 client: "ANM"
-category: "Web Design"
-tags: ["design", "development"]
+category: "Strategy & Messaging"
+tags: ["Brand Strategy", "Storytelling", "Visual Identity"]
 date: "2025-07-30"
 ---
 

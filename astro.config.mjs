@@ -1,9 +1,9 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
-import { SITE_URL } from './src/consts.ts';
-import sitemap from '@astrojs/sitemap';
-import react from '@astrojs/react';
-import tailwindcss from '@tailwindcss/vite';
+import { defineConfig } from "astro/config";
+import { SITE_URL } from "./src/consts.ts";
+import sitemap from "@astrojs/sitemap";
+import react from "@astrojs/react";
+import tailwindcss from "@tailwindcss/vite";
 
 // https://astro.build/config
 export default defineConfig({
@@ -15,11 +15,11 @@ export default defineConfig({
   },
   markdown: {
     shikiConfig: {
-      theme: 'github-dark',
-      wrap: true,
+      theme: "github-dark",
+      wrap: true
     }
   },
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [tailwindcss()]
   }
 });

@@ -1,0 +1,51 @@
+---
+// src/pages/projects/[slug].astro
+import Layout from '@layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+// Get the slug from the URL params
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+// Get the project data from props
+const { project } = Astro.props;
+const { Content } = await project.render();
+---
+
+<Layout title={project.data.title} description={project.data.description}>
+  <article class="mx-auto max-w-4xl px-4 py-16">
+    <header class="mb-12">
+      <h1 class="mb-4 text-4xl font-bold">{project.data.title}</h1>
+      {project.data.client && (
+        <p class="text-xl text-gray-600">Client: {project.data.client}</p>
+      )}
+      {project.data.category && (
+        <p class="text-lg text-gray-500">Category: {project.data.category}</p>
+      )}
+      {project.data.tags && project.data.tags.length > 0 && (
+        <div class="mt-4 flex flex-wrap gap-2">
+          {project.data.tags.map((tag) => (
+            <span class="rounded-full bg-gray-200 px-3 py-1 text-sm text-gray-700">
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
+    </header>
+
+    <div class="prose max-w-none">
+      <Content />
+    </div>
+
+    <footer class="mt-12 pt-8 border-t border-gray-200">
+      <a href="/" class="text-blue-600 hover:underline">
+        &larr; Back to all projects
+      </a>
+    </footer>
+  </article>
+</Layout>

@@ -3,18 +3,18 @@
   "include": ["**/*.ts", "**/*.astro"],
   "exclude": ["dist"],
   "compilerOptions": {
-      "baseUrl": ".",
-      "paths": {
-          "@public/*": ["public/*"],
-          "@components/*": ["src/components/*"],
-          "@content/*": ["src/content/*"],
-          "@helpers/*": ["src/helpers/*"],
-          "@layouts/*": ["src/layouts/*"],
-          "@pages/*": ["src/pages/*"],
-          "@styles/*": ["src/styles/*"],
-          "@consts": ["src/consts.ts"],
-          "@assets/*": ["./src/assets/*"],
-          "@/*": ["./src/*"],
-      },
-  },
+    "baseUrl": ".",
+    "paths": {
+      "@public/*": ["public/*"],
+      "@components/*": ["src/components/*"],
+      "@content/*": ["src/content/*"],
+      "@helpers/*": ["src/helpers/*"],
+      "@layouts/*": ["src/layouts/*"],
+      "@pages/*": ["src/pages/*"],
+      "@styles/*": ["src/styles/*"],
+      "@consts": ["src/consts.ts"],
+      "@assets/*": ["./src/assets/*"],
+      "@/*": ["./src/*"]
+    }
+  }
 }
