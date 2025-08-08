@@ -1,6 +1,6 @@
 ---
 title: "l'Agence pour le Non-Marchand"
-description: "A brief description of the example project"
+description: "Agir pour ce qui compte vraiment"
 featured: true
 order: 1
 image:
