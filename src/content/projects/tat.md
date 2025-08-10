@@ -4,7 +4,7 @@ description: "A brief description of the example project"
 featured: true
 order: 1
 image:
-  src: "projects/portfolio-tat.jpg"
+  src: "/projects/portfolio-tat.jpg"
   alt: "Project TAT - Definitly Modern"
 client: "TAT"
 category: "Strategy & Messaging"

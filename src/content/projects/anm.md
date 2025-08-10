@@ -4,7 +4,7 @@ description: "Agir pour ce qui compte vraiment"
 featured: true
 order: 1
 image:
-  src: "projects/portfolio-anm.jpg"
+  src: "/projects/portfolio-anm.jpg"
   alt: "Project ANM - l'Agence pour le Non-Marchand"
 client: "ANM"
 category: "Strategy & Messaging"

@@ -1,12 +1,20 @@
 ---
 const { pathname } = Astro.url;
-const isActive = (path: string) => pathname === path || (path !== '/' && pathname.startsWith(path));
+const isActive = (path: string) =>
+  pathname === path || (path !== "/" && pathname.startsWith(path));
 ---
+
 <header class="w-full bg-white px-4 py-6 text-sm">
-  <nav class="mx-auto flex max-w-[85rem] items-center justify-between px-4 pt-8">
+  <nav
+    class="mx-auto flex max-w-[85rem] items-center justify-between px-4 pt-8"
+  >
     <!-- Logo -->
-    <a href="/" aria-label="FAUVES" class="flex-none group">
-      <svg class="h-10 w-auto transition-colors group-hover:text-indigo-600" viewBox="0 0 1163.67 428.11" fill="currentColor">
+    <a href="/" aria-label="FAUVES" class="group flex-none">
+      <svg
+        class="h-10 w-auto transition-colors group-hover:text-indigo-600"
+        viewBox="0 0 1163.67 428.11"
+        fill="currentColor"
+      >
         <path
           d="M48.2,155.39c59.15,0,109.9-2.74,166.13-5.37v66.9c-29.63,2.42-69.98,3.32-99.61,4.26v26.19c25.32-1.14,63.52-2.01,88.84-4.25v62.54c-25.32,3.06-63.52,4.35-88.84,6.31v61.11c-26.61,2.88-39.91,4.01-66.52,5.49v-223.18Z"
         ></path>
@@ -29,43 +37,45 @@ const isActive = (path: string) => pathname === path || (path !== '/' && pathnam
     </a>
 
     <!-- Menu desktop -->
-    <ul class="hidden gap-6 text-lg font-light tracking-tight text-black sm:flex">
+    <ul
+      class="hidden gap-6 text-lg font-light tracking-tight text-black sm:flex"
+    >
       <li>
-        <a 
-          href="/projects" 
-          class={`transition-colors hover:text-indigo-600 ${isActive('/projects') ? 'text-indigo-600' : ''}`}
+        <a
+          href="/projects"
+          class={`transition-colors hover:text-indigo-600 ${isActive("/projects") ? "text-indigo-600" : ""}`}
         >
           work
         </a>
       </li>
       <li>
-        <a 
-          href="/a-propos" 
-          class={`transition-colors hover:text-indigo-600 ${isActive('/a-propos') ? 'text-indigo-600' : ''}`}
+        <a
+          href="/a-propos"
+          class={`transition-colors hover:text-indigo-600 ${isActive("/a-propos") ? "text-indigo-600" : ""}`}
         >
           à propos
         </a>
       </li>
       <li>
-        <a 
-          href="/approche" 
-          class={`transition-colors hover:text-indigo-600 ${isActive('/approche') ? 'text-indigo-600' : ''}`}
+        <a
+          href="/approche"
+          class={`transition-colors hover:text-indigo-600 ${isActive("/approche") ? "text-indigo-600" : ""}`}
         >
           approche
         </a>
       </li>
       <li>
-        <a 
-          href="/services" 
-          class={`transition-colors hover:text-indigo-600 ${isActive('/services') ? 'text-indigo-600' : ''}`}
+        <a
+          href="/services"
+          class={`transition-colors hover:text-indigo-600 ${isActive("/services") ? "text-indigo-600" : ""}`}
         >
           services
         </a>
       </li>
       <li>
-        <a 
-          href="/contact" 
-          class={`transition-colors hover:text-indigo-600 ${isActive('/contact') ? 'text-indigo-600' : ''}`}
+        <a
+          href="/contact"
+          class={`transition-colors hover:text-indigo-600 ${isActive("/contact") ? "text-indigo-600" : ""}`}
         >
           contact
         </a>
@@ -100,33 +110,33 @@ const isActive = (path: string) => pathname === path || (path !== '/' && pathnam
     id="mobile-menu"
     class="mt-4 hidden space-y-4 px-4 text-[15px] font-light text-black sm:hidden"
   >
-    <a 
-      href="/projects" 
-      class={`block hover:text-indigo-600 ${isActive('/projects') ? 'text-indigo-600' : ''}`}
+    <a
+      href="/projects"
+      class={`block hover:text-indigo-600 ${isActive("/projects") ? "text-indigo-600" : ""}`}
     >
       work
     </a>
-    <a 
-      href="/a-propos" 
-      class={`block hover:text-indigo-600 ${isActive('/a-propos') ? 'text-indigo-600' : ''}`}
+    <a
+      href="/a-propos"
+      class={`block hover:text-indigo-600 ${isActive("/a-propos") ? "text-indigo-600" : ""}`}
     >
       à propos
     </a>
-    <a 
-      href="/approche" 
-      class={`block hover:text-indigo-600 ${isActive('/approche') ? 'text-indigo-600' : ''}`}
+    <a
+      href="/approche"
+      class={`block hover:text-indigo-600 ${isActive("/approche") ? "text-indigo-600" : ""}`}
     >
       approche
     </a>
-    <a 
-      href="/services" 
-      class={`block hover:text-indigo-600 ${isActive('/services') ? 'text-indigo-600' : ''}`}
+    <a
+      href="/services"
+      class={`block hover:text-indigo-600 ${isActive("/services") ? "text-indigo-600" : ""}`}
     >
       services
     </a>
-    <a 
-      href="/contact" 
-      class={`block hover:text-indigo-600 ${isActive('/contact') ? 'text-indigo-600' : ''}`}
+    <a
+      href="/contact"
+      class={`block hover:text-indigo-600 ${isActive("/contact") ? "text-indigo-600" : ""}`}
     >
       contact
     </a>

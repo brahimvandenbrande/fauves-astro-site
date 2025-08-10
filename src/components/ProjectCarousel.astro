@@ -1,7 +1,11 @@
 ---
 // src/components/ProjectCarousel.astro
 import type { CollectionEntry } from "astro:content";
-import { Picture } from "astro:assets";
+import { Image } from "astro:assets";
+
+// Import all project images statically with correct relative paths
+import portfolioAnm from '../assets/projects/portfolio-anm.jpg';
+import portfolioTat from '../assets/projects/portfolio-tat.jpg';
 
 interface Props {
   projects: CollectionEntry<"projects">[];
@@ -9,18 +13,11 @@ interface Props {
 
 const { projects } = Astro.props;
 
-// Function to get optimized image
-async function getOptimizedImage(src: string) {
-  try {
-    // Using @vite-ignore to suppress the warning since we need dynamic imports
-    // @ts-ignore - Vite handles this import at runtime
-    const image = await import(/* @vite-ignore */ `../assets/${src}`);
-    return image.default;
-  } catch (error) {
-    console.error(`Error loading image: ${src}`, error);
-    return null;
-  }
-}
+// Map project slugs to their corresponding imported images
+const projectImages: Record<string, ImageMetadata> = {
+  'anm': portfolioAnm,
+  'tat': portfolioTat
+};
 ---
 
 <div class="relative h-[90vh] w-full" aria-label="Featured Projects">
@@ -31,9 +28,9 @@ async function getOptimizedImage(src: string) {
     style="scrollbar-width: none;"
   >
     {
-      projects.map(async (project, index) => {
-        const imageSrc = await getOptimizedImage(project.data.image.src);
-
+      projects.map((project) => {
+        const image = projectImages[project.slug];
+        
         return (
           <div
             class="group relative h-full max-w-[800px] min-w-[70vw] flex-shrink-0 snap-start"
@@ -46,23 +43,21 @@ async function getOptimizedImage(src: string) {
             >
               <div class="relative my-auto h-[80vh] w-full">
                 <div class="h-full w-full overflow-hidden">
-                  {imageSrc ? (
-                    <Picture
-                      src={imageSrc}
-                      alt={project.data.image.alt}
+                  {image ? (
+                    <Image
+                      src={image}
+                      alt={project.data.image?.alt || `Project ${project.data.title}`}
                       width={1200}
                       height={800}
                       class="h-full w-full rounded-2xl object-cover"
                       loading="eager"
                       decoding="async"
-                      formats={["avif", "webp"]}
+                      format="webp"
                       quality={90}
                     />
                   ) : (
-                    <div class="flex h-full w-full items-center justify-center rounded-2xl bg-gray-200">
-                      <span class="text-gray-500">
-                        Image not found: {project.data.image.src}
-                      </span>
+                    <div class="flex h-full items-center justify-center bg-zinc-100 dark:bg-zinc-800 rounded-2xl">
+                      <span class="text-zinc-400">Image not available</span>
                     </div>
                   )}
                 </div>

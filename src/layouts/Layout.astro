@@ -5,21 +5,58 @@ import "@styles/global.css";
 interface Props {
   title: string;
   description: string;
+  canonical?: string;
+  noindex?: boolean;
+  ogImage?: string;
+  structuredData?: any;
 }
 
-const { title, description } = Astro.props as Props;
+const { title, description, canonical, noindex, ogImage, structuredData } =
+  Astro.props as Props;
 ---
 
 <!doctype html>
 <html lang="fr-be">
   <head>
-    <BaseHead title={title} description={description} />
-    <link rel="sitemap" href="/sitemap-index.xml" />
-    <slot name="structured-data" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Astro will automatically handle critical CSS in production -->
+    <style is:inline>
+      /* Critical CSS could be inlined here */
+      :root {
+        --page-transition: 200ms ease;
+      }
+      
+      /* Add any critical above-the-fold styles here */
+      body { opacity: 0; transition: opacity var(--page-transition); }
+      body.visible { opacity: 1; }
+    </style>
+    
+    <BaseHead
+      title={title}
+      description={description}
+      canonical={canonical}
+      noindex={noindex}
+      ogImage={ogImage}
+      structuredData={structuredData}
+    />
+    
+    <!-- Sitemap link with media="print" to avoid render blocking -->
+    <link rel="sitemap" href="/sitemap-index.xml" media="print" onload="this.media='all'" />
+    
+    <slot name="head" />
   </head>
   <body class="overflow-x-hidden antialiased">
     <main>
       <slot />
     </main>
+    
+    <!-- Fade in the page to prevent FOUC -->
+    <script is:inline>
+      document.addEventListener('DOMContentLoaded', () => {
+        document.body.classList.add('visible');
+      });
+    </script>
   </body>
 </html>

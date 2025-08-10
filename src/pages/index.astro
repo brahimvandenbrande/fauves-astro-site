@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
+import { getImage } from 'astro:assets';
 import WebsiteStructuredData from "@components/WebsiteStructuredData.astro";
 import Layout from "@layouts/Layout.astro";
 import Navigation from "@components/Navigation.astro";
@@ -10,6 +11,7 @@ import video720mp4 from "@assets/videos/fauves-agency-intro_720p.mp4";
 import video720webm from "@assets/videos/fauves-agency-intro_720p.webm";
 import video1080mp4 from "@assets/videos/fauves-agency-intro_1080p.mp4";
 import video1080webm from "@assets/videos/fauves-agency-intro_1080p.webm";
+import videoPosterImage from "@assets/videos/fauves-agency-intro-poster.jpeg";
 import ProjectCarousel from "@components/ProjectCarousel.astro";
 import { getCollection } from "astro:content";
 
@@ -23,6 +25,17 @@ const allProjects = (await getCollection("projects")).sort(
 const featuredProjects = allProjects.filter(
   (project: CollectionEntry<"projects">) => project.data.featured
 );
+
+// Get the optimized image URL
+const optimizedPoster = await getImage({
+  src: videoPosterImage,
+  width: 1200,
+  height: 675,
+  format: 'webp',
+  quality: 80,
+});
+
+// ... (rest of your frontmatter)
 ---
 
 <Layout
@@ -76,8 +89,9 @@ const featuredProjects = allProjects.filter(
         muted
         playsinline
         loop
-        preload="auto"
+        preload="metadata"
         class="h-full w-full object-cover"
+        poster={optimizedPoster.src}
       >
         <source
           src={video1080webm}
