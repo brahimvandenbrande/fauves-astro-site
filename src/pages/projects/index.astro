@@ -5,166 +5,131 @@ import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import Navigation from "@components/Navigation.astro";
 import Footer from "@components/Footer.astro";
-import { Image } from 'astro:assets';
+import { Image } from "astro:assets";
 
 // Import all project images statically with correct relative paths
-import portfolioAnm from '../../assets/projects/portfolio-anm.jpg';
-import portfolioTat from '../../assets/projects/portfolio-tat.jpg';
+import portfolioAnm from "../../assets/projects/portfolio-anm.jpg";
+import portfolioTat from "../../assets/projects/portfolio-tat.jpg";
+
+// Type the projects array
+type Project = CollectionEntry<"projects">;
 
 // Get all projects, sorted by date (newest first)
-const projects = (await getCollection("projects")).sort(
-  (a: CollectionEntry<"projects">, b: CollectionEntry<"projects">) =>
-    b.data.date.getTime() - a.data.date.getTime()
+const projects: Project[] = (await getCollection("projects")).sort(
+  (a: Project, b: Project) => b.data.date.getTime() - a.data.date.getTime()
 );
 
 // Map project slugs to their corresponding imported images
 const projectImages: Record<string, ImageMetadata> = {
-  'anm': portfolioAnm,
-  'tat': portfolioTat
+  anm: portfolioAnm,
+  tat: portfolioTat
 };
 
 // Enhanced structured data
-const pageUrl = new URL(Astro.url.pathname, Astro.site).toString();
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "ItemList",
-  mainEntityOfPage: {
-    "@type": "WebPage",
-    "@id": pageUrl
-  },
-  numberOfItems: projects.length,
-  itemListElement: projects.map(
-    (project: CollectionEntry<"projects">, index: number) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      item: {
-        "@type": "CreativeWork",
-        name: project.data.title,
-        description: project.data.description || project.data.excerpt,
-        url: `${Astro.site}/projects/${project.slug}`,
-        datePublished: project.data.date.toISOString(),
-        image: project.data.image?.src
-          ? `${Astro.site}/assets/projects/${project.data.image.src.replace("projects/", "")}`
-          : undefined,
-        publisher: {
-          "@type": "Organization",
-          name: "Fauves Agency"
-        }
-      }
-    })
-  )
+  itemListElement: projects.map((project: Project, index: number) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    item: {
+      "@type": "CreativeWork",
+      name: project.data.title,
+      description: project.data.description,
+      url: `/projects/${project.slug}/`,
+      image: project.data.image?.src
+    }
+  }))
 };
-
-const pageTitle = "Nos projets";
-const pageDescription =
-  "Découvrez comment nous avons aidé ces entreprises à concrétiser leur vision et à créer leur marque.";
-const ogImage = new URL("/images/og-projects.jpg", Astro.site).toString();
 ---
 
 <Layout
-  title={pageTitle}
-  description={pageDescription}
-  canonical={pageUrl}
-  ogImage={ogImage}
-  structuredData={structuredData}
+  title="Our Projects | FAUVES"
+  description="Explore our portfolio of branding and design projects."
 >
-  <!-- Navigation -->
-  <header role="banner">
-    <Navigation />
-  </header>
+  <Navigation />
 
-  <!-- Main Content -->
-  <main
-    id="main-content"
-    class="mx-auto flex max-w-[85rem] flex-col gap-12 px-4 pt-24 pb-16"
-  >
-    <section>
-      <div>
-        <div class="mb-12 text-left">
-          <h1
-            class="text-4xl font-bold tracking-tight text-zinc-800 sm:text-5xl dark:text-zinc-100"
-          >
-            Nos projets
-          </h1>
-          <p class="mt-6 text-base text-zinc-600 dark:text-zinc-400">
-            Découvrez comment nous avons aidé ces entreprises à concrétiser leur
-            vision et à créer leur marque.
-          </p>
-        </div>
+  <main class="min-h-screen bg-white">
+    <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+      <div class="text-center">
+        <h1
+          class="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl md:text-6xl"
+        >
+          Our Projects
+        </h1>
+        <p class="mx-auto mt-6 max-w-2xl text-xl text-gray-500">
+          Discover our latest work in branding, design, and digital experiences.
+        </p>
+      </div>
 
-        <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {
-            projects.map((project: CollectionEntry< "projects" >, index: number) => {
-              const image = projectImages[project.slug];
-              
-              return (
-                <article
-                  class="group relative flex flex-col overflow-hidden rounded-lg shadow-lg transition-shadow hover:shadow-xl dark:shadow-zinc-900/50"
-                  itemscope
-                  itemtype="https://schema.org/CreativeWork"
-                >
-                  <a
-                    href={`/projects/${project.slug}`}
-                    class="block h-48 overflow-hidden"
-                    aria-label={`Voir le projet ${project.data.title}`}
-                  >
-                    {image ? (
-                      <Image
-                        src={image}
-                        alt={
-                          project.data.image?.alt ||
-                          `Image du projet ${project.data.title}`
-                        }
-                        width={800}
-                        height={600}
-                        class="h-full w-full object-cover"
-                        loading={index === 0 ? "eager" : "lazy"}
-                        decoding="async"
-                        format="webp"
-                        quality={80}
-                      />
-                    ) : (
-                      <div class="flex h-full items-center justify-center bg-zinc-100 dark:bg-zinc-800">
-                        <span class="text-zinc-400">Image non disponible</span>
-                      </div>
-                    )}
-                  </a>
-                  <div class="flex flex-1 flex-col p-6">
+      <div
+        class="mx-auto mt-16 grid max-w-2xl auto-rows-fr grid-cols-1 gap-8 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-3"
+      >
+        {
+          projects.map((project) => {
+            const image = projectImages[project.slug];
+
+            return (
+              <article
+                class="group relative flex flex-col overflow-hidden rounded-lg shadow-lg transition-shadow hover:shadow-xl dark:shadow-zinc-900/50"
+                itemscope
+                itemtype="https://schema.org/CreativeWork"
+              >
+                <div class="relative h-48 w-full overflow-hidden">
+                  {image ? (
+                    <Image
+                      src={image}
+                      alt={
+                        project.data.image?.alt ||
+                        `Project ${project.data.title}`
+                      }
+                      class="h-full w-full object-cover"
+                      width={800}
+                      height={600}
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div class="flex h-full items-center justify-center bg-gray-100">
+                      <span class="text-gray-400">Image not available</span>
+                    </div>
+                  )}
+                </div>
+                <div class="flex flex-1 flex-col p-6">
+                  <div class="flex-1">
                     <h2
-                      class="text-xl font-semibold text-zinc-900 dark:text-white"
+                      class="text-xl font-semibold text-gray-900"
                       itemprop="name"
                     >
-                      <a
-                        href={`/projects/${project.slug}`}
-                        class="after:absolute after:inset-0"
-                        itemprop="url"
-                      >
-                        {project.data.title}
-                      </a>
+                      {project.data.title}
                     </h2>
                     <p
-                      class="mt-2 text-sm text-zinc-600 dark:text-zinc-400"
+                      class="mt-3 text-base text-gray-500"
                       itemprop="description"
                     >
-                      {project.data.excerpt}
+                      {project.data.description}
                     </p>
-                    <div class="mt-4 flex items-center">
-                      <span class="text-sm text-zinc-500 dark:text-zinc-400">
-                        {new Date(project.data.date).toLocaleDateString("fr-BE", {
-                          year: "numeric",
-                          month: "long"
-                        })}
-                      </span>
-                    </div>
                   </div>
-                </article>
-              );
-            })
-          }
-        </div>
+                  <div class="mt-6">
+                    <a
+                      href={`/projects/${project.slug}/`}
+                      class="text-base font-medium text-indigo-600 hover:text-indigo-500"
+                    >
+                      View project
+                      <span class="ml-1" aria-hidden="true">
+                        →
+                      </span>
+                    </a>
+                  </div>
+                </div>
+              </article>
+            );
+          })
+        }
       </div>
-    </section>
+    </div>
   </main>
 
   <Footer />
 </Layout>
+
+<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />

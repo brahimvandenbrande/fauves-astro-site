@@ -4,8 +4,8 @@ import type { CollectionEntry } from "astro:content";
 import { Image } from "astro:assets";
 
 // Import all project images statically with correct relative paths
-import portfolioAnm from '../assets/projects/portfolio-anm.jpg';
-import portfolioTat from '../assets/projects/portfolio-tat.jpg';
+import portfolioAnm from "../assets/projects/portfolio-anm.jpg";
+import portfolioTat from "../assets/projects/portfolio-tat.jpg";
 
 interface Props {
   projects: CollectionEntry<"projects">[];
@@ -15,8 +15,8 @@ const { projects } = Astro.props;
 
 // Map project slugs to their corresponding imported images
 const projectImages: Record<string, ImageMetadata> = {
-  'anm': portfolioAnm,
-  'tat': portfolioTat
+  anm: portfolioAnm,
+  tat: portfolioTat
 };
 ---
 
@@ -30,7 +30,7 @@ const projectImages: Record<string, ImageMetadata> = {
     {
       projects.map((project) => {
         const image = projectImages[project.slug];
-        
+
         return (
           <div
             class="group relative h-full max-w-[800px] min-w-[70vw] flex-shrink-0 snap-start"
@@ -46,7 +46,10 @@ const projectImages: Record<string, ImageMetadata> = {
                   {image ? (
                     <Image
                       src={image}
-                      alt={project.data.image?.alt || `Project ${project.data.title}`}
+                      alt={
+                        project.data.image?.alt ||
+                        `Project ${project.data.title}`
+                      }
                       width={1200}
                       height={800}
                       class="h-full w-full rounded-2xl object-cover"
@@ -56,7 +59,7 @@ const projectImages: Record<string, ImageMetadata> = {
                       quality={90}
                     />
                   ) : (
-                    <div class="flex h-full items-center justify-center bg-zinc-100 dark:bg-zinc-800 rounded-2xl">
+                    <div class="flex h-full items-center justify-center rounded-2xl bg-zinc-100 dark:bg-zinc-800">
                       <span class="text-zinc-400">Image not available</span>
                     </div>
                   )}
@@ -80,41 +83,66 @@ const projectImages: Record<string, ImageMetadata> = {
   <!-- Navigation Arrows -->
   {
     projects.length > 1 && (
-      <div class="absolute right-4 bottom-6 z-20 flex gap-4 md:right-8 lg:right-16">
+      <div class="absolute right-4 bottom-1 z-20 flex gap-4 md:right-8 lg:right-16">
         <button
           data-carousel-prev
-          class="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md transition-all duration-200 hover:bg-neutral-100"
+          class="flex h-12 w-12 items-center justify-center rounded-full bg-amber-50/75 shadow-md transition-all duration-200 hover:bg-neutral-100"
           aria-label="Previous slide"
         >
           <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+            width="21"
+            height="19"
+            viewBox="0 0 21 19"
             fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            class="rotate-180"
           >
-            <path d="M15 18l-6-6 6-6" />
+            <g clip-path="url(#clip0_1_29)">
+              <path
+                d="M14.0646 8.51669H0.5V10.4786H14.0689C11.2635 12.3828 9.4267 15.4889 9.4267 18.9997H11.4991C11.4991 14.3034 15.5349 10.4786 20.4956 10.4786V8.51669C15.5349 8.51669 11.4991 4.69604 11.4991 -0.00439453H9.4267C9.4267 3.50234 11.2592 6.60843 14.0646 8.51256V8.51669Z"
+                fill="black"
+              />
+            </g>
+            <defs>
+              <clipPath id="clip0_1_29">
+                <rect
+                  width="20"
+                  height="19"
+                  fill="white"
+                  transform="translate(0.5)"
+                />
+              </clipPath>
+            </defs>
           </svg>
         </button>
         <button
           data-carousel-next
-          class="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md transition-all duration-200 hover:bg-neutral-100"
+          class="flex h-12 w-12 items-center justify-center rounded-full bg-amber-50/75 shadow-md transition-all duration-200 hover:bg-neutral-100"
           aria-label="Next slide"
         >
           <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+            width="21"
+            height="19"
+            viewBox="0 0 21 19"
             fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
           >
-            <path d="M9 18l6-6-6-6" />
+            <g clip-path="url(#clip0_1_29)">
+              <path
+                d="M14.0646 8.51669H0.5V10.4786H14.0689C11.2635 12.3828 9.4267 15.4889 9.4267 18.9997H11.4991C11.4991 14.3034 15.5349 10.4786 20.4956 10.4786V8.51669C15.5349 8.51669 11.4991 4.69604 11.4991 -0.00439453H9.4267C9.4267 3.50234 11.2592 6.60843 14.0646 8.51256V8.51669Z"
+                fill="black"
+              />
+            </g>
+            <defs>
+              <clipPath id="clip0_1_29">
+                <rect
+                  width="20"
+                  height="19"
+                  fill="white"
+                  transform="translate(0.5)"
+                />
+              </clipPath>
+            </defs>
           </svg>
         </button>
       </div>

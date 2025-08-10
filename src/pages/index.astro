@@ -1,6 +1,6 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import { getImage } from 'astro:assets';
+import { getImage } from "astro:assets";
 import WebsiteStructuredData from "@components/WebsiteStructuredData.astro";
 import Layout from "@layouts/Layout.astro";
 import Navigation from "@components/Navigation.astro";
@@ -31,8 +31,8 @@ const optimizedPoster = await getImage({
   src: videoPosterImage,
   width: 1200,
   height: 675,
-  format: 'webp',
-  quality: 80,
+  format: "webp",
+  quality: 80
 });
 
 // ... (rest of your frontmatter)
@@ -54,7 +54,7 @@ const optimizedPoster = await getImage({
     <!-- 🦁 Hero principal -->
     <section>
       <h1
-        class="text-h1 leading-h1 font-degular w-full max-w-[75.6rem] font-light text-black"
+        class="text-h1 leading-h1 font-degular w-full max-w-[75.6rem] pb-[4rem] font-light text-black"
       >
         Ici, nous créons des <span class="font-semibold">marques vivantes</span
         >. Activables, utiles et qui évoluent avec vous.
@@ -64,10 +64,8 @@ const optimizedPoster = await getImage({
     <!-- Projects Carousel -->
     <ProjectCarousel projects={featuredProjects} />
 
-    <section class="mx-auto max-w-6xl px-4 pb-16 text-center">
-      <p
-        class="font-degular text-[4.06rem] leading-[4.06rem] font-light text-black"
-      >
+    <section class="mx-auto max-w-6xl pt-16 pb-16 text-center">
+      <p class="font-degular text-[4rem] leading-[4rem] font-light text-black">
         Vous cherchez à inspirer autant qu’à performer ? Chez FAUVES, nous
         donnons vie à
         <span class="font-semibold">des identités fortes</span>, des récits qui
@@ -76,7 +74,7 @@ const optimizedPoster = await getImage({
     </section>
 
     <section
-      class="relative mx-auto aspect-video w-full max-w-[1209.75px] overflow-hidden rounded-xl bg-black"
+      class="relative mx-auto aspect-video w-full max-w-[85rem] overflow-hidden rounded-xl bg-black"
       aria-label="FAUVES Agency visual presentation"
     >
       <div class="sr-only">
@@ -115,12 +113,20 @@ const optimizedPoster = await getImage({
       </video>
     </section>
 
-    <!-- 🧠 Autres sections (valeurs, méthode, clients, etc.) -->
-    <!-- <section>...</section> -->
+    <section class="mx-auto max-w-[85rem] pt-16 pb-16 text-left">
+      <p class="font-degular text-[4rem] leading-[4rem] font-light text-black">
+        Notre agence de branding & storytelling centralise et prend en charge
+        l’ensemble de vos besoins, de votre positionnement au déploiement de
+        votre marque.
+      </p>
+    </section>
   </main>
-
-  <!-- 🦶 Pied de page (optionnel) -->
-  <footer>
-    <Footer />
-  </footer>
 </Layout>
+
+<!-- 🧠 Autres sections (valeurs, méthode, clients, etc.) -->
+<!-- <section>...</section> -->
+
+<!-- 🦶 Pied de page (optionnel) -->
+<footer>
+  <Footer />
+</footer>

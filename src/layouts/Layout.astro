@@ -20,19 +20,24 @@ const { title, description, canonical, noindex, ogImage, structuredData } =
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
+
     <!-- Astro will automatically handle critical CSS in production -->
     <style is:inline>
       /* Critical CSS could be inlined here */
       :root {
         --page-transition: 200ms ease;
       }
-      
+
       /* Add any critical above-the-fold styles here */
-      body { opacity: 0; transition: opacity var(--page-transition); }
-      body.visible { opacity: 1; }
+      body {
+        opacity: 0;
+        transition: opacity var(--page-transition);
+      }
+      body.visible {
+        opacity: 1;
+      }
     </style>
-    
+
     <BaseHead
       title={title}
       description={description}
@@ -41,21 +46,26 @@ const { title, description, canonical, noindex, ogImage, structuredData } =
       ogImage={ogImage}
       structuredData={structuredData}
     />
-    
+
     <!-- Sitemap link with media="print" to avoid render blocking -->
-    <link rel="sitemap" href="/sitemap-index.xml" media="print" onload="this.media='all'" />
-    
+    <link
+      rel="sitemap"
+      href="/sitemap-index.xml"
+      media="print"
+      onload="this.media='all'"
+    />
+
     <slot name="head" />
   </head>
   <body class="overflow-x-hidden antialiased">
     <main>
       <slot />
     </main>
-    
+
     <!-- Fade in the page to prevent FOUC -->
     <script is:inline>
-      document.addEventListener('DOMContentLoaded', () => {
-        document.body.classList.add('visible');
+      document.addEventListener("DOMContentLoaded", () => {
+        document.body.classList.add("visible");
       });
     </script>
   </body>

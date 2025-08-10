@@ -23,6 +23,11 @@
   font-display: swap;
 }
 
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 h1 {
   color: #000;
   font-family: Degular;

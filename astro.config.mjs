@@ -50,11 +50,11 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
     optimizeDeps: {
-      include: ['sharp']
+      include: ["sharp"]
     },
     build: {
       cssMinify: true,
-      target: 'esnext',
+      target: "esnext",
       assetsInlineLimit: 0 // Force all assets to be inlined (adjust as needed)
     }
   },
