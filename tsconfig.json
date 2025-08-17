@@ -1,6 +1,12 @@
 {
   "extends": "astro/tsconfigs/strict",
-  "include": ["**/*.ts", "**/*.astro"],
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.astro",
+    "**/*.d.ts",
+    ".astro/types.d.ts"
+  ],
   "exclude": ["dist"],
   "compilerOptions": {
     "baseUrl": ".",
@@ -15,6 +21,7 @@
       "@consts": ["src/consts.ts"],
       "@assets/*": ["./src/assets/*"],
       "@/*": ["./src/*"]
-    }
+    },
+    "types": ["astro/client"]
   }
 }

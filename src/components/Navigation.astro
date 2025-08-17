@@ -74,6 +74,14 @@ const isActive = (path: string) =>
       </li>
       <li>
         <a
+          href="/blog"
+          class={`transition-colors hover:text-indigo-600 ${isActive("/blog") ? "text-indigo-600" : ""}`}
+        >
+          blog
+        </a>
+      </li>
+      <li>
+        <a
           href="/contact"
           class={`transition-colors hover:text-indigo-600 ${isActive("/contact") ? "text-indigo-600" : ""}`}
         >

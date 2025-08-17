@@ -29,10 +29,127 @@ body {
 }
 
 h1 {
-  color: #000;
+  color: #000000;
   font-family: Degular;
-  font-size: 85px;
+  font-size: 5.313rem;
   font-style: normal;
   font-weight: 300;
-  line-height: 85px; /* 100% */
+  line-height: 5.313rem; /* 100% */
+}
+
+/* Prose styles for markdown content */
+.prose {
+  --tw-prose-body: #000000;           /* Black for body text */
+  --tw-prose-headings: #000000;       /* Black for headings */
+  --tw-prose-lead: #000000;           /* Black for lead text */
+  --tw-prose-links: #522BE2;          /* Purple for links */
+  --tw-prose-bold: #000000;           /* Black for bold text */
+  --tw-prose-counters: #000000;       /* Black for counters */
+  --tw-prose-bullets: #F75B31;        /* Orange for bullets */
+  --tw-prose-hr: #F8F7E5BF;           /* Light beige for horizontal rules */
+  --tw-prose-quotes: #000000;         /* Black for quotes */
+  --tw-prose-quote-borders: #F8F7E5BF;/* Light beige for quote borders */
+  --tw-prose-captions: #000000;       /* Black for captions */
+  --tw-prose-code: #000000;           /* Black for code */
+  --tw-prose-pre-code: #000000;       /* Black for pre-formatted code */
+  --tw-prose-pre-bg: #F8F7E5BF;       /* Light beige for code block background */
+  --tw-prose-th-borders: #F75B31;     /* Orange for table header borders */
+  --tw-prose-td-borders: #F8F7E5BF;   /* Light beige for table cell borders */
+  --tw-prose-invert-body: #FFFFFF;    /* White for body text in dark mode */
+  --tw-prose-invert-headings: #FFFFFF; /* White for headings in dark mode */
+  --tw-prose-invert-lead: #FFFFFF;    /* White for lead text in dark mode */
+  --tw-prose-invert-links: #FFFFFF;   /* White for links in dark mode */
+  --tw-prose-invert-bold: #FFFFFF;    /* White for bold text in dark mode */
+  --tw-prose-invert-counters: #FFFFFF; /* White for counters in dark mode */
+  --tw-prose-invert-bullets: #F75B31; /* Orange for bullets in dark mode */
+  --tw-prose-invert-hr: #522BE2;      /* Purple for horizontal rules in dark mode */
+  --tw-prose-invert-quotes: #FFFFFF;  /* White for quotes in dark mode */
+  --tw-prose-invert-quote-borders: #522BE2; /* Purple for quote borders in dark mode */
+  --tw-prose-invert-captions: #FFFFFF; /* White for captions in dark mode */
+  --tw-prose-invert-code: #FFFFFF;    /* White for code in dark mode */
+  --tw-prose-invert-pre-code: #FFFFFF; /* White for pre-formatted code in dark mode */
+  --tw-prose-invert-pre-bg: #000000;  /* Black for code block background in dark mode */
+  --tw-prose-invert-th-borders: #F75B31; /* Orange for table header borders in dark mode */
+  --tw-prose-invert-td-borders: #522BE2; /* Purple for table cell borders in dark mode */
+}
+
+.prose {
+  color: var(--tw-prose-body);
+  line-height: 1.7;
+  max-width: 65ch;
+  font-family: 'Degular', sans-serif;
+  font-weight: 300;
+}
+
+/* Reset margins for all elements first */
+.prose > * {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* Add consistent spacing between all elements */
+.prose > * + * {
+  margin-top: 0.6em !important;
+}
+
+/* Headings */
+.prose h2 {
+  color: var(--tw-prose-headings) !important;
+  font-weight: 600 !important;
+  font-size: 1.75em !important;
+  margin-bottom: 1em !important;
+  line-height: 1.333 !important;
+  letter-spacing: -0.01em !important;
+}
+
+.prose h3 {
+  color: var(--tw-prose-headings) !important;
+  font-weight: 600 !important;
+  font-size: 1.5em !important;
+  margin-bottom: 0.75em !important;
+  line-height: 1.4 !important;
+}
+
+/* Paragraphs */
+.prose p {
+  margin-bottom: 0 !important;
+  margin-top: 0.6em !important;
+  font-size: 1.1em;
+  line-height: 1.7;
+  color: var(--tw-prose-body);
+}
+
+/* Lists */
+.prose ul,
+.prose ol {
+  margin-top: 1.25em !important;
+  margin-bottom: 1.25em !important;
+  padding-left: 1.625em !important;
+}
+
+.prose ul {
+  list-style-type: disc !important;
+}
+
+.prose ol {
+  list-style-type: decimal !important;
+}
+
+.prose li {
+  margin-top: 0.5em !important;
+  margin-bottom: 0.5em !important;
+  padding-left: 0.375em !important;
+}
+
+/* Links */
+.prose a {
+  color: var(--tw-prose-links);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.prose a:hover {
+  text-decoration: none;
 }

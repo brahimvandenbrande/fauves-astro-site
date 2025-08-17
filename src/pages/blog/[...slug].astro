@@ -1,0 +1,56 @@
+---
+import MarkdownPostLayout from '../../layouts/MarkdownPostLayout.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+
+// Set the content type to UTF-8
+const headers = new Headers();
+headers.set('Content-Type', 'text/html; charset=utf-8');
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props as Props;
+const { Content, remarkPluginFrontmatter } = await render(post);
+
+// Get the minutesRead from the rendered content
+const { title, description = '' } = post.data;
+const frontmatter = {
+  ...post.data,
+  pubDate: post.data.pubDate.toISOString(),
+  minutesRead: remarkPluginFrontmatter?.minutesRead
+};
+
+---
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{title}</title>
+  <meta name="description" content={description} />
+</head>
+<body>
+  <MarkdownPostLayout 
+    frontmatter={frontmatter}
+    title={title}
+    description={description}
+  >
+    <main>
+      <article class="prose dark:prose-invert">
+        <Content />
+      </article>
+    </main>
+  </MarkdownPostLayout>
+  <Footer />
+</body>
+</html>

@@ -1,5 +1,7 @@
 // src/content/config.ts
 import { defineCollection, z } from "astro:content";
+import { glob } from "astro/loaders";
+
 // Tags disponibles (valeurs fixes, réutilisables)
 const tagEnum = z.enum([
   "Brand Strategy",
@@ -44,6 +46,22 @@ const projectsCollection = defineCollection({
     })
 });
 
+const blogCollection = defineCollection({
+  type: "content",
+  schema: z.object({
+    title: z.string(),
+    pubDate: z.union([z.date(), z.string().transform((str) => new Date(str))]),
+    description: z.string(),
+    author: z.string(),
+    image: z.object({
+      url: z.string(),
+      alt: z.string()
+    }),
+    tags: z.array(z.string())
+  })
+});
+
 export const collections = {
-  projects: projectsCollection
+  projects: projectsCollection,
+  blog: blogCollection
 };
