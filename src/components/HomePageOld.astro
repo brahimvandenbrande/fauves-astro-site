@@ -36,8 +36,6 @@ const optimizedPoster = await getImage({
 });
 
 // ... (rest of your frontmatter)
-
-
 ---
 
 <Layout
@@ -56,20 +54,15 @@ const optimizedPoster = await getImage({
     <!-- 🦁 Hero principal -->
     <section>
       <h1
-        class="text-h1 leading-h1 font-degular w-full max-w-[78.614rem] font-light text-black"
+        class="text-h1 leading-h1 font-degular w-full max-w-[75.6rem] pb-[4rem] font-light text-black"
       >
-      Nous créons des <span class="font-semibold">marques vivantes</span
-        >. Pensées pour s’activer, créer de l’impact et évoluer avec vous.
+        Ici, nous créons des <span class="font-semibold">marques vivantes</span
+        >. Activables, utiles et qui évoluent avec vous.
       </h1>
     </section>
 
-  <!-- Ancre MESURE (dans le même flux que le texte) -->
-  <div id="grid-left-anchor" class="h-0 m-0 p-0"></div>
-
-  <!-- 🔹 Wrapper full‑bleed uniquement pour le carrousel -->
-  <div class="md:w-screen md:-ml-[calc(50vw-50%)] md:-mr-[calc(50vw-50%)] overflow-visible">
+    <!-- Projects Carousel -->
     <ProjectCarousel projects={featuredProjects} />
-  </div>
 
     <section class="mx-auto max-w-6xl pt-16 pb-16 text-center">
       <p class="font-degular text-[4rem] leading-[4rem] font-light text-black">
