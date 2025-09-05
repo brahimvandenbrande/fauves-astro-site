@@ -1,8 +1,11 @@
 ---
 import Layout from "@layouts/Layout.astro";
 import Navigation from "@components/Navigation.astro";
-import { getCollection } from "astro:content";
 import Footer from "@components/Footer.astro";
+import { getCollection } from "astro:content";
+import CTABanner from "@components/ui/CTABanner.astro";
+import BlogCard from "@components/ui/BlogCard.astro";
+import SectionHeader from "@components/ui/SectionHeader.astro";
 
 const posts = (await getCollection("blog"))
   .sort((a, b) => new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf());
@@ -14,67 +17,36 @@ const pageDescription = "Tout comprendre sur le branding ou presque, sinon on ne
 <Layout title={pageTitle} description={pageDescription}>
   <Navigation />
 
-  <!-- Hero -->
-  <main class="mx-auto flex max-w-[85rem] flex-col gap-12 pt-16 pb-16">
+  <main class="mx-auto flex max-w-[85rem] flex-col gap-12 px-4 pt-16 pb-16">
     <header class="mb-4 sm:mb-8">
-      <h1 class="text-[38px] leading-[1.05] font-semibold tracking-tight text-black
-                 sm:text-6xl md:text-7xl">
-        {pageTitle}
-      </h1>
+      <SectionHeader 
+        title={pageTitle} 
+        level={1}
+        size="xl" 
+        align="left"
+      />
       <p class="text-xl text-black pt-16">
         {pageDescription}
       </p>
     </header>
 
-    <!-- Cards -->
     <section aria-label="Articles" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
       {posts.slice(0, 4).map((post) => (
-        <article class="group">
-          <a href={`/blog/${post.slug}`} class="block h-full">
-            <div
-              class="h-full rounded-xl border border-neutral-200 bg-white p-6 shadow-[0_1px_0_0_rgba(0,0,0,0.04)]
-                         transition-transform duration-200 group-hover:-translate-y-0.5"
-            >
-              <h2 class="text-xl font-semibold text-black mb-2">
-                {post.data.title}
-              </h2>
-              <p class="text-sm leading-6 text-black line-clamp-4 mb-6">
-                {post.data.description}
-              </p>
-
-              <span
-                class="inline-flex items-center rounded-full px-4 py-2 text-xs font-semibold
-                       bg-violet-600 text-white tracking-wide"
-              >
-                LIRE PLUS
-              </span>
-            </div>
-          </a>
-        </article>
+        <BlogCard
+          title={post.data.title}
+          description={post.data.description}
+          href={`/blog/${post.slug}`}
+        />
       ))}
     </section>
   </main>
 
-  <!-- Violet CTA band -->
-  <section class="px-4 sm:px-6 lg:px-8">
-    <div
-      class="mx-auto max-w-[85rem] rounded-2xl bg-violet-600 text-white px-6 sm:px-10 py-16 sm:py-20"
-    >
-      <h2 class="text-3xl sm:text-5xl md:text-6xl font-semibold leading-tight">
-        Votre partenaire de<br class="hidden sm:block" />
-        branding tout-en-un
-      </h2>
-      <div class="mt-8">
-        <a
-          href="/contact"
-          class="inline-flex items-center rounded-full bg-white text-violet-700 font-semibold
-                 px-5 py-2.5 text-sm hover:opacity-90"
-        >
-          CONTACTEZ-NOUS
-        </a>
-      </div>
-    </div>
-  </section>
+  <CTABanner 
+    title={"Votre partenaire de branding tout-en-un"}
+    description=""
+    buttonText="CONTACTEZ-NOUS"
+    buttonHref="/contact"
+  />
 
   <Footer />
 </Layout>

@@ -4,7 +4,6 @@ import { getImage } from "astro:assets";
 import WebsiteStructuredData from "@components/WebsiteStructuredData.astro";
 import Layout from "@layouts/Layout.astro";
 import Navigation from "@components/Navigation.astro";
-import Footer from "@components/Footer.astro";
 import video480mp4 from "@assets/videos/fauves-agency-intro_480p.mp4";
 import video480webm from "@assets/videos/fauves-agency-intro_480p.webm";
 import video720mp4 from "@assets/videos/fauves-agency-intro_720p.mp4";
@@ -12,8 +11,38 @@ import video720webm from "@assets/videos/fauves-agency-intro_720p.webm";
 import video1080mp4 from "@assets/videos/fauves-agency-intro_1080p.mp4";
 import video1080webm from "@assets/videos/fauves-agency-intro_1080p.webm";
 import videoPosterImage from "@assets/videos/fauves-agency-intro-poster.jpeg";
-import ProjectCarousel from "@components/ProjectCarousel.astro";
+import ProjectCarousel from "@components/ui/ProjectCarousel.astro";
+import SectionHeader from "@components/ui/SectionHeader.astro";
+import VideoPlayer from "@components/ui/VideoPlayer.astro";
+import CTABanner from "@components/ui/CTABanner.astro";
+import Footer from "@components/Footer.astro";
 import { getCollection } from "astro:content";
+
+// Video sources for the VideoPlayer component
+const videoSources = [
+  {
+    src: video1080webm,
+    type: "video/webm",
+    media: "(min-width: 1024px)"
+  },
+  {
+    src: video1080mp4,
+    type: "video/mp4",
+    media: "(min-width: 1024px)"
+  },
+  {
+    src: video720webm,
+    type: "video/webm",
+    media: "(min-width: 640px)"
+  },
+  {
+    src: video720mp4,
+    type: "video/mp4",
+    media: "(min-width: 640px)"
+  },
+  { src: video480webm, type: "video/webm" },
+  { src: video480mp4, type: "video/mp4" }
+];
 
 // Get all projects, sorted by date (newest first)
 const allProjects = (await getCollection("projects")).sort(
@@ -36,8 +65,6 @@ const optimizedPoster = await getImage({
 });
 
 // ... (rest of your frontmatter)
-
-
 ---
 
 <Layout
@@ -53,72 +80,44 @@ const optimizedPoster = await getImage({
 
   <!-- 🎯 Contenu principal de la page -->
   <main class="mx-auto flex max-w-[85rem] flex-col gap-12 px-4 pt-24 pb-16">
-    <!-- 🦁 Hero principal -->
+    <!-- 🦁 Hero section -->
     <section>
-      <h1
-        class="text-h1 leading-h1 font-degular w-full max-w-[78.614rem] font-light text-black"
+      <SectionHeader
+        level={1}
+        size="xl"
+        align="left"
+        class="w-full max-w-[78.614rem]"
       >
-      Nous créons des <span class="font-semibold">marques vivantes</span
-        >. Pensées pour s’activer, créer de l’impact et évoluer avec vous.
-      </h1>
+        Nous créons des <span class="font-semibold">marques vivantes</span>.
+        Pensées pour s'activer, créer de l'impact et évoluer avec vous.
+      </SectionHeader>
     </section>
 
-  <!-- Ancre MESURE (dans le même flux que le texte) -->
-  <div id="grid-left-anchor" class="h-0 m-0 p-0"></div>
+    <!-- Ancre MESURE (dans le même flux que le texte) -->
+    <div id="grid-left-anchor" class="m-0 h-0 p-0"></div>
 
-  <!-- 🔹 Wrapper full‑bleed uniquement pour le carrousel -->
-  <div class="md:w-screen md:-ml-[calc(50vw-50%)] md:-mr-[calc(50vw-50%)] overflow-visible">
-    <ProjectCarousel projects={featuredProjects} />
-  </div>
+    <!-- 🔹 Wrapper full‑bleed uniquement pour le carrousel -->
+    <div
+      class="overflow-visible md:-mr-[calc(50vw-50%)] md:-ml-[calc(50vw-50%)] md:w-screen"
+    >
+      <ProjectCarousel projects={featuredProjects} />
+    </div>
 
     <section class="mx-auto max-w-6xl pt-16 pb-16 text-center">
       <p class="font-degular text-[4rem] leading-[4rem] font-light text-black">
-        Vous cherchez à inspirer autant qu’à performer ? Chez FAUVES, nous
+        Vous cherchez à inspirer autant qu'à performer ? Chez FAUVES, nous
         donnons vie à
         <span class="font-semibold">des identités fortes</span>, des récits qui
         résonnent et des marques qui engagent.
       </p>
     </section>
 
-    <section
-      class="relative mx-auto aspect-video w-full max-w-[85rem] overflow-hidden rounded-xl bg-black"
-      aria-label="FAUVES Agency visual presentation"
-    >
-      <div class="sr-only">
-        <h2>FAUVES Agency Visual Presentation</h2>
-        <p>Animated showcase of FAUVES Agency's work and creative process.</p>
-      </div>
-      <video
-        aria-hidden="true"
-        autoplay
-        muted
-        playsinline
-        loop
-        preload="metadata"
-        class="h-full w-full object-cover"
-        poster={optimizedPoster.src}
-      >
-        <source
-          src={video1080webm}
-          type="video/webm"
-          media="(min-width: 1024px)"
-        />
-        <source
-          src={video1080mp4}
-          type="video/mp4"
-          media="(min-width: 1024px)"
-        />
-        <source
-          src={video720webm}
-          type="video/webm"
-          media="(min-width: 640px)"
-        />
-        <source src={video720mp4} type="video/mp4" media="(min-width: 640px)" />
-        <source src={video480webm} type="video/webm" />
-        <source src={video480mp4} type="video/mp4" />
-        <!-- No fallback needed as the video is purely decorative -->
-      </video>
-    </section>
+    <VideoPlayer
+      title="FAUVES Agency Visual Presentation"
+      description="Animated showcase of FAUVES Agency's work and creative process."
+      sources={videoSources}
+      poster={optimizedPoster.src}
+    />
 
     <section class="mx-auto max-w-[85rem] pt-16 pb-16 text-left">
       <p class="font-degular text-[4rem] leading-[4rem] font-light text-black">
@@ -128,12 +127,13 @@ const optimizedPoster = await getImage({
       </p>
     </section>
   </main>
-</Layout>
 
-<!-- 🧠 Autres sections (valeurs, méthode, clients, etc.) -->
-<!-- <section>...</section> -->
+  <CTABanner 
+    title="Prêt à donner vie à votre marque ?"
+    description="Contactez-nous pour discuter de votre projet et voir comment nous pouvons vous aider à créer une marque qui se démarque."
+    buttonText="NOUS CONTACTER"
+    buttonHref="/contact"
+  />
 
-<!-- 🦶 Pied de page (optionnel) -->
-<footer>
   <Footer />
-</footer>
+</Layout>

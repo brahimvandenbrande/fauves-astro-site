@@ -1,0 +1,43 @@
+---
+interface Props {
+  title?: string;
+  level?: 1 | 2 | 3 | 4 | 5 | 6;
+  class?: string;
+  align?: 'left' | 'center' | 'right';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+}
+
+const {
+  title = '',
+  level = 2,
+  class: className = '',
+  align = 'left',
+  size = 'lg',
+} = Astro.props;
+
+const alignClasses = {
+  left: 'text-left',
+  center: 'text-center',
+  right: 'text-right',
+};
+
+const sizeClasses = {
+  sm: 'text-2xl md:text-3xl',
+  md: 'text-3xl md:text-4xl',
+  lg: 'text-4xl md:text-5xl',
+  xl: 'text-5xl md:text-6xl',
+};
+
+const HeadingTag = `h${level}` as const;
+---
+
+<HeadingTag 
+  class:list={[
+    'font-degular font-light leading-tight text-black',
+    sizeClasses[size],
+    alignClasses[align],
+    className
+  ]}
+>
+  <slot>{title}</slot>
+</HeadingTag>

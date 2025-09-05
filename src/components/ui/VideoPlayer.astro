@@ -1,0 +1,58 @@
+---
+interface VideoSource {
+  src: string;
+  type: string;
+  media?: string;
+}
+
+interface Props {
+  sources: VideoSource[];
+  poster: string;
+  title: string;
+  description: string;
+  className?: string;
+  autoplay?: boolean;
+  loop?: boolean;
+  muted?: boolean;
+}
+
+const {
+  sources,
+  poster,
+  title,
+  description,
+  className = '',
+  autoplay = true,
+  loop = true,
+  muted = true,
+} = Astro.props;
+---
+
+<section
+  class={`relative mx-auto aspect-video w-full max-w-[85rem] overflow-hidden rounded-xl bg-black ${className}`}
+  aria-label={title}
+>
+  <div class="sr-only">
+    <h2>{title}</h2>
+    <p>{description}</p>
+  </div>
+  <video
+    aria-hidden="true"
+    autoplay={autoplay}
+    muted={muted}
+    playsinline
+    loop={loop}
+    preload="metadata"
+    class="h-full w-full object-cover"
+    poster={poster}
+  >
+    {sources.map((source) => (
+      <source
+        src={source.src}
+        type={source.type}
+        media={source.media}
+      />
+    ))}
+    Your browser does not support the video tag.
+  </video>
+</section>
