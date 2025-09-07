@@ -74,8 +74,8 @@ const projectImages: Record<string, ImageMetadata> = {
   {projects.length > 1 && (
     <div
       data-carousel-arrows
-      class="absolute bottom-1 z-20 flex gap-4 right-4 md:right-8"
-    >
+      class="absolute bottom-1 right-0 z-20 flex gap-4"
+      style="right: calc(var(--carousel-arrows-right, 1rem) + 8rem);">
       <button
         data-carousel-prev
         class="flex h-12 w-12 items-center justify-center rounded-full bg-amber-50/75 shadow-md transition-all duration-200 hover:bg-neutral-100"
@@ -98,6 +98,8 @@ const projectImages: Record<string, ImageMetadata> = {
       </button>
     </div>
   )}
+
+  </div>
 </div>
 
 <script>
@@ -144,7 +146,10 @@ const projectImages: Record<string, ImageMetadata> = {
       const { left, right } = getGutters();
       viewport.style.paddingLeft = left + "px";
       viewport.style.scrollPaddingLeft = left + "px";
-      if (arrows) arrows.style.right = right + "px";
+      if (arrows) {
+        // Set the right position as a CSS variable
+        document.documentElement.style.setProperty('--carousel-arrows-right', right + 'px');
+      }
     };
 
     // initial + reflow-safe
