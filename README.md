@@ -1,49 +1,25 @@
-# FAUVES Agency Website
+# FAUVES Agency
 
 [![Built with Astro](https://astro.badg.es/v2/built-with-astro/tiny.svg)](https://astro.build)
 
-Official website for FAUVES Agency, a branding and storytelling studio. Built with Astro, React, and Tailwind CSS for optimal performance and modern web standards.
+Official website for FAUVES Agency, a branding and storytelling studio.
 
-## 🚀 Features
+## Overview
 
-- **Blazing Fast Performance** - Built with Astro for optimal loading speeds
-- **Responsive Design** - Fully responsive layout for all devices
-- **Modern Stack** - Astro, React, and Tailwind CSS
-- **SEO Optimized** - Built-in sitemap and meta tags
-- **Content Management** - MDX support for easy content updates
-- **Animations** - Smooth animations with GSAP
+This project is built with modern web technologies to deliver exceptional performance and maintainability:
 
-## 🛠️ Tech Stack
+- **Framework**: Astro for content-driven architecture
+- **Styling**: Tailwind CSS with custom configuration
+- **Interactivity**: React components where needed
+- **Content**: MDX for structured content management
+- **Animations**: GSAP for smooth transitions
 
-- [Astro](https://astro.build/) - The web framework for content-driven websites
-- [React](https://reactjs.org/) - For interactive UI components
-- [Tailwind CSS](https://tailwindcss.com/) - For utility-first styling
-- [GSAP](https://greensock.com/gsap/) - For smooth animations
-- [MDX](https://mdxjs.com/) - For content management
+## Prerequisites
 
-## 🏗️ Project Structure
+- Node.js 18 or later
+- npm (v7+) or yarn
 
-```
-├── public/             # Static assets
-├── src/
-│   ├── assets/         # Images and fonts
-│   ├── components/     # Reusable UI components
-│   ├── content/        # MDX content files
-│   ├── layouts/        # Page layouts
-│   └── pages/          # Page components
-├── astro.config.mjs    # Astro configuration
-├── tailwind.config.js  # Tailwind CSS configuration
-└── tsconfig.json       # TypeScript configuration
-```
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Node.js 18+
-- npm or yarn
-
-### Installation
+## Quick Start
 
 1. Clone the repository:
    ```bash
@@ -54,60 +30,43 @@ Official website for FAUVES Agency, a branding and storytelling studio. Built wi
 2. Install dependencies:
    ```bash
    npm install
-   # or
-   yarn
    ```
 
-### Development
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-Start the development server:
+4. Open [http://localhost:4321](http://localhost:4321) in your browser
 
-```bash
-npm run dev
-# or
-yarn dev
+## Project Structure
+
+```
+├── public/             # Static assets
+├── src/
+│   ├── assets/         # Media and fonts
+│   ├── components/     # UI components
+│   ├── content/        # MDX content
+│   ├── layouts/        # Page layouts
+│   └── pages/          # Route components
+└── config/             # Configuration files
 ```
 
-The site will be available at `http://localhost:4321`
+## Build Commands
 
-### Building for Production
+- `npm run dev`: Start development server
+- `npm run build`: Create production build
+- `npm run preview`: Preview production build locally
+- `npm run format`: Format code with Prettier
+- `npm run lint`: Run ESLint
 
-To create a production build:
+## Content Management
 
-```bash
-npm run build
-# or
-yarn build
-```
+Content is managed through MDX files in `src/content/`. The site supports:
+- Blog posts
+- Project showcases
+- Case studies
 
-To preview the production build locally:
+## License
 
-```bash
-npm run preview
-# or
-yarn preview
-```
-
-## 🎨 Styling
-
-This project uses Tailwind CSS for styling. The configuration can be found in `tailwind.config.js`.
-
-## 📝 Content Management
-
-Content is managed through MDX files in the `src/content/` directory. The site supports blog posts and project showcases.
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## � Acknowledgments
-
-- [Astro Documentation](https://docs.astro.build/)
-- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
-- [GSAP Documentation](https://greensock.com/docs/)
-
----
-
-<p align="center">
-  Made with ❤️ by FAUVES Agency
-</p>
+MIT © FAUVES Agency
