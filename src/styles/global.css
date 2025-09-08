@@ -1,4 +1,37 @@
 @import "tailwindcss";
+
+/* View Transitions Support */
+@supports (view-transition-name: none) {
+  /* Smooth scrolling for anchor links */
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 1rem;
+  }
+  
+  /* Optimize for performance */
+  * {
+    view-transition: opacity 0.2s ease;
+  }
+  
+  /* Skip transition for reduced motion */
+  @media (prefers-reduced-motion) {
+    * {
+      view-transition: none !important;
+    }
+  }
+}
+
+/* Fallback for browsers without view transitions */
+html.no-view-transitions a {
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+html.no-view-transitions a:hover {
+  opacity: 0.8;
+}
+
+/* Font imports */
 @font-face {
   font-family: "Degular";
   src:
@@ -26,6 +59,8 @@
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Ensure smooth transitions for background colors */
+  transition: background-color 0.3s ease;
 }
 
 h1 {
@@ -35,6 +70,8 @@ h1 {
   font-style: normal;
   font-weight: 300;
   line-height: 5.313rem; /* 100% */
+  /* Add view-transition-name for shared elements */
+  view-transition-name: page-title;
 }
 
 /* Prose styles for markdown content */
@@ -152,4 +189,28 @@ h1 {
 
 .prose a:hover {
   text-decoration: none;
+}
+
+/* Smooth transitions for interactive elements */
+a, button, .transition-all {
+  transition: all 0.2s ease;
+}
+
+/* Focus styles for better accessibility */
+:focus-visible {
+  outline: 2px solid #522BE2;
+  outline-offset: 2px;
+  border-radius: 0.25rem;
+}
+
+/* Optimize transitions for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

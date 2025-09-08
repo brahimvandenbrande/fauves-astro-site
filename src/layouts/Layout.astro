@@ -1,5 +1,7 @@
 ---
 import BaseHead from "@components/BaseHead.astro";
+import { ClientRouter } from 'astro:transitions';
+import Navigation from "@components/Navigation.astro";
 import "@styles/global.css";
 
 interface Props {
@@ -20,8 +22,8 @@ const { title, description, canonical, noindex, ogImage, structuredData } =
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="view-transition" content="same-origin" />
 
-    <!-- Astro will automatically handle critical CSS in production -->
     <style is:inline>
       /* Critical CSS could be inlined here */
       :root {
@@ -30,11 +32,51 @@ const { title, description, canonical, noindex, ogImage, structuredData } =
 
       /* Add any critical above-the-fold styles here */
       body {
-        opacity: 0;
-        transition: opacity var(--page-transition);
-      }
-      body.visible {
         opacity: 1;
+      }
+      
+      /* Navigation transition */
+      header {
+        view-transition-name: main-header;
+        contain: layout;
+      }
+      
+      /* View Transition styles */
+      @keyframes fade-in {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      
+      @keyframes fade-out {
+        to { opacity: 0; transform: translateY(-10px); }
+      }
+      
+      ::view-transition-old(root) {
+        animation: 150ms cubic-bezier(0.4, 0, 0.2, 1) both fade-out;
+      }
+      
+      ::view-transition-new(root) {
+        animation: 300ms cubic-bezier(0, 0, 0.2, 1) 150ms both fade-in;
+      }
+      
+      /* Style the header during the transition */
+      ::view-transition-old(main-header),
+      ::view-transition-new(main-header) {
+        /* Prevent the default animation for the header */
+        animation: none;
+        /* Use normal blending to ensure the header is always visible */
+        mix-blend-mode: normal;
+      }
+      
+      /* Fallback for browsers without view transitions */
+      @media not (prefers-reduced-motion) {
+        .no-view-transitions [data-astro-transition-scope="old"] {
+          opacity: 0;
+        }
+        
+        .no-view-transitions [data-astro-transition-scope="new"] {
+          animation: fade-in 0.3s ease forwards;
+        }
       }
     </style>
 
@@ -56,16 +98,33 @@ const { title, description, canonical, noindex, ogImage, structuredData } =
     />
 
     <slot name="head" />
+    
+    <!-- Add ClientRouter for client-side navigation with View Transitions -->
+    <ClientRouter />
   </head>
   <body class="overflow-x-hidden antialiased">
-    <main>
+    <Navigation />
+    
+    <main data-astro-transition-scope="new">
       <slot />
     </main>
 
-    <!-- Fade in the page to prevent FOUC -->
+    <!-- Initialize view transitions -->
     <script is:inline>
-      document.addEventListener("DOMContentLoaded", () => {
-        document.body.classList.add("visible");
+      // Initialize view transitions with our utility
+      import { initViewTransitions } from '../utils/transitions';
+      
+      // Run initialization when the DOM is fully loaded
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initViewTransitions);
+      } else {
+        initViewTransitions();
+      }
+      
+      // Handle Astro's page load event
+      document.addEventListener('astro:page-load', () => {
+        // Re-initialize any page-specific JavaScript here
+        // This runs after the new page is loaded and transitions are complete
       });
     </script>
   </body>

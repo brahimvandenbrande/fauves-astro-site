@@ -1,6 +1,5 @@
 ---
 import Layout from "@layouts/Layout.astro";
-import Navigation from "@components/Navigation.astro";
 import Footer from "@components/Footer.astro";
 import { getCollection } from "astro:content";
 import CTABanner from "@components/ui/CTABanner.astro";
@@ -15,36 +14,36 @@ const pageDescription = "Tout comprendre sur le branding ou presque, sinon on ne
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
-  <Navigation />
-
-  <main class="mx-auto flex max-w-[85rem] flex-col gap-12 px-4 pt-16 pb-16">
-    <header class="mb-4 sm:mb-8">
+  <main class="mx-auto max-w-[85rem] px-4 pt-16 pb-16">
+    <div class="mx-auto max-w-3xl text-center mb-12">
       <SectionHeader 
         title={pageTitle} 
         level={1}
         size="xl" 
-        align="left"
+        align="center"
       />
-      <p class="text-xl text-black pt-16">
+      <p class="text-xl text-black mt-6">
         {pageDescription}
       </p>
-    </header>
+    </div>
 
-    <section aria-label="Articles" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       {posts.slice(0, 4).map((post) => (
         <BlogCard
           title={post.data.title}
           description={post.data.description}
           href={`/blog/${post.slug}`}
+          imageUrl={post.data.image.url}
+          imageAlt={post.data.image.alt}
         />
       ))}
-    </section>
+    </div>
   </main>
 
   <CTABanner 
     title={"Votre partenaire de branding tout-en-un"}
-    description=""
-    buttonText="CONTACTEZ-NOUS"
+    description="Contactez-nous pour discuter de votre projet et voir comment nous pouvons vous aider à créer une marque qui se démarque."
+    buttonText="NOUS CONTACTER"
     buttonHref="/contact"
   />
 
