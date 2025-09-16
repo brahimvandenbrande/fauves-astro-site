@@ -2,6 +2,7 @@
 import BaseHead from "@components/BaseHead.astro";
 import Navigation from "@components/Navigation.astro";
 import "../../src/styles/global.css";
+import ReadingProgress from "@components/ui/ReadingProgress.astro";
 
 interface Props {
   frontmatter: {
@@ -22,11 +23,18 @@ interface Props {
 }
 
 const { frontmatter, children } = Astro.props as Props;
-const { title, description, pubDate, updatedDate, author, tags = [], minutesRead } = frontmatter;
+const {
+  title,
+  description,
+  pubDate,
+  updatedDate,
+  author,
+  tags = [],
+  minutesRead
+} = frontmatter;
 
 // Debug log
-console.log('Minutes read:', minutesRead);
-
+console.log("Minutes read:", minutesRead);
 ---
 
 <!doctype html>
@@ -42,7 +50,9 @@ console.log('Minutes read:', minutesRead);
       ogImage={frontmatter.image?.url}
     />
   </head>
-  <body class="bg-[#FFFFFF] overflow-x-hidden antialiased min-h-screen flex flex-col">
+  <body
+    class="flex min-h-screen flex-col overflow-x-hidden bg-[#FFFFFF] antialiased"
+  >
     <!-- Skip to main content link for keyboard users -->
     <a href="#main-content" class="skip-link focus:top-0">
       Aller au contenu principal
@@ -51,80 +61,118 @@ console.log('Minutes read:', minutesRead);
     <header role="banner" class="border-b border-[#F8F7E5BF]">
       <Navigation />
     </header>
-
+    <ReadingProgress />
     <main id="main-content" class="flex-grow">
       <div class="mx-auto max-w-[85rem] pt-16">
-        <div class="grid grid-cols-1 gap-12 lg:grid-cols-[240px_1fr] px-4 sm:px-6 lg:px-8">
+        <div
+          class="grid grid-cols-1 gap-12 px-4 sm:px-6 lg:grid-cols-[240px_1fr] lg:px-8"
+        >
           <!-- Sidebar -->
-          <aside class="hidden lg:block pl-8">
+          <aside class="hidden pl-8 lg:block">
             <div class="sticky top-28">
-              <div class="border-b border-[#F8F7E5BF] pb-6 mb-6">
-                <h2 class="text-sm font-semibold text-[#000000] uppercase tracking-wider">Categories</h2>
+              <div class="mb-6 border-b border-[#F8F7E5BF] pb-6">
+                <h2
+                  class="text-sm font-semibold tracking-wider text-[#000000] uppercase"
+                >
+                  Categories
+                </h2>
                 <!-- Placeholder for categories - will be populated later -->
                 <div class="mt-4 space-y-2">
-                  <a href="#" class="block text-sm text-[#000000] hover:text-[#522BE2]">Branding</a>
-                  <a href="#" class="block text-sm text-[#000000] hover:text-[#522BE2]">Design</a>
-                  <a href="#" class="block text-sm text-[#000000] hover:text-[#522BE2]">Strategy</a>
+                  <a
+                    href="#"
+                    class="block text-sm text-[#000000] hover:text-[#522BE2]"
+                    >Branding</a
+                  >
+                  <a
+                    href="#"
+                    class="block text-sm text-[#000000] hover:text-[#522BE2]"
+                    >Design</a
+                  >
+                  <a
+                    href="#"
+                    class="block text-sm text-[#000000] hover:text-[#522BE2]"
+                    >Strategy</a
+                  >
                 </div>
               </div>
-              
-              {tags.length > 0 && (
-                <div>
-                  <h2 class="text-sm font-semibold text-[#000000] uppercase tracking-wider">Tags</h2>
-                  <div class="mt-4 flex flex-wrap gap-2">
-                    {tags.map((tag: string) => (
-                      <a 
-                        href={`/blog/tags/${tag.toLowerCase()}`} 
-                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#F8F7E5BF] text-[#000000] hover:bg-[#F75B31] hover:text-[#FFFFFF]"
-                      >
-                        {tag}
-                      </a>
-                    ))}
+
+              {
+                tags.length > 0 && (
+                  <div>
+                    <h2 class="text-sm font-semibold tracking-wider text-[#000000] uppercase">
+                      Tags
+                    </h2>
+                    <div class="mt-4 flex flex-wrap gap-2">
+                      {tags.map((tag: string) => (
+                        <a
+                          href={`/blog/tags/${tag.toLowerCase()}`}
+                          class="inline-flex items-center rounded-full bg-[#F8F7E5BF] px-2.5 py-0.5 text-xs font-medium text-[#000000] hover:bg-[#F75B31] hover:text-[#FFFFFF]"
+                        >
+                          {tag}
+                        </a>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
+                )
+              }
             </div>
           </aside>
 
           <!-- Main Content -->
           <article class="w-full">
-            <div class="max-w-3xl mx-auto">
+            <div class="mx-auto max-w-3xl">
               <header class="mb-12">
-                <h1 class="text-4xl font-semibold tracking-tight text-[#000000] sm:text-5xl">
+                <h1
+                  class="text-4xl font-semibold tracking-tight text-[#000000] sm:text-5xl"
+                >
                   {title}
                 </h1>
-                
+
                 <div class="mt-6 flex items-center text-sm text-[#000000]">
-                  <time datetime={frontmatter.pubDate} class="flex items-center">
-                    {new Date(frontmatter.pubDate || '').toLocaleDateString('fr-BE', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                    })}
+                  <time
+                    datetime={frontmatter.pubDate}
+                    class="flex items-center"
+                  >
+                    {
+                      new Date(frontmatter.pubDate || "").toLocaleDateString(
+                        "fr-BE",
+                        {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric"
+                        }
+                      )
+                    }
                   </time>
-                  {frontmatter.author && (
-                    <>
-                      <span class="mx-1 text-[#F75B31]">•</span>
-                      <span class="font-medium">{frontmatter.author}</span>
-                    </>
-                  )}
-                  {minutesRead && (
-                    <>
-                      <span class="mx-1 text-[#F75B31]">•</span>
-                      <span class="text-[#666666]">{minutesRead}</span>
-                    </>
-                  )}
+                  {
+                    frontmatter.author && (
+                      <>
+                        <span class="mx-1 text-[#F75B31]">•</span>
+                        <span class="font-medium">{frontmatter.author}</span>
+                      </>
+                    )
+                  }
+                  {
+                    minutesRead && (
+                      <>
+                        <span class="mx-1 text-[#F75B31]">•</span>
+                        <span class="text-[#666666]">{minutesRead}</span>
+                      </>
+                    )
+                  }
                 </div>
-                
-                {frontmatter.tags && frontmatter.tags.length > 0 && (
-                  <div class="mt-4 flex flex-wrap gap-2">
-                    {frontmatter.tags.map((tag: string) => (
-                      <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#F8F7E5BF] text-[#000000] hover:bg-[#F75B31] hover:text-[#FFFFFF]">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
+
+                {
+                  frontmatter.tags && frontmatter.tags.length > 0 && (
+                    <div class="mt-4 flex flex-wrap gap-2">
+                      {frontmatter.tags.map((tag: string) => (
+                        <span class="inline-flex items-center rounded-full bg-[#F8F7E5BF] px-2.5 py-0.5 text-xs font-medium text-[#000000] hover:bg-[#F75B31] hover:text-[#FFFFFF]">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )
+                }
               </header>
 
               <div class="prose prose-lg">
