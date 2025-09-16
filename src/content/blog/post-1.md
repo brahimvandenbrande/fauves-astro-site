@@ -1,11 +1,11 @@
 ---
-title: 'Mobil Studio devient FAUVES'
+title: "Mobil Studio devient FAUVES"
 pubDate: 2025-08-17
-description: 'Nnous avons saisi des opportunités, exploré de nouvelles perspectives et affirmé notre place dans le monde du branding et de la communication créative.'
-author: 'Laura Bacquelaine'
+description: "Nnous avons saisi des opportunités, exploré de nouvelles perspectives et affirmé notre place dans le monde du branding et de la communication créative."
+author: "Laura Bacquelaine"
 image:
-    url: 'https://docs.astro.build/assets/rose.webp'
-    alt: 'The Astro logo on a dark background with a pink glow.'
+  url: "https://docs.astro.build/assets/rose.webp"
+  alt: "The Astro logo on a dark background with a pink glow."
 tags: ["astro", "blogging", "learning in public"]
 ---
 
@@ -55,6 +55,6 @@ Plus que jamais, nous voulons créer des marques qui ne se contentent pas d'exis
 
 Nous restons animés par la même envie : **vous faire briller, révéler votre potentiel et vous accompagner vers le succès**.
 
- Envie d'en savoir plus sur **FAUVES Agency** et notre approche du **branding** ?
+Envie d'en savoir plus sur **FAUVES Agency** et notre approche du **branding** ?
 
 Découvrez nos projets et notre univers sur notre site.

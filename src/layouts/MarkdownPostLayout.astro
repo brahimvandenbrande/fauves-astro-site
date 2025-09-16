@@ -3,6 +3,17 @@ import BaseHead from "@components/BaseHead.astro";
 import Navigation from "@components/Navigation.astro";
 import "../../src/styles/global.css";
 import ReadingProgress from "@components/ui/ReadingProgress.astro";
+import TableOfContents from "@components/TableOfContents.astro";
+
+// Type definition for headings
+interface Heading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+// Initialize headings as an empty array
+const headings: Heading[] = [];
 
 interface Props {
   frontmatter: {
@@ -32,9 +43,6 @@ const {
   tags = [],
   minutesRead
 } = frontmatter;
-
-// Debug log
-console.log("Minutes read:", minutesRead);
 ---
 
 <!doctype html>
@@ -54,7 +62,7 @@ console.log("Minutes read:", minutesRead);
     class="flex min-h-screen flex-col overflow-x-hidden bg-[#FFFFFF] antialiased"
   >
     <!-- Skip to main content link for keyboard users -->
-    <a href="#main-content" class="skip-link focus:top-0">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:bg-white focus:px-4 focus:py-2 focus:font-medium focus:ring-2 focus:ring-[#522BE2] focus:ring-offset-2 focus:rounded">
       Aller au contenu principal
     </a>
 
@@ -70,6 +78,9 @@ console.log("Minutes read:", minutesRead);
           <!-- Sidebar -->
           <aside class="hidden pl-8 lg:block">
             <div class="sticky top-28">
+              <div class="mb-6 border-b border-[#F8F7E5BF] pb-6">
+                <TableOfContents headings={headings} />
+              </div>
               <div class="mb-6 border-b border-[#F8F7E5BF] pb-6">
                 <h2
                   class="text-sm font-semibold tracking-wider text-[#000000] uppercase"
@@ -183,6 +194,77 @@ console.log("Minutes read:", minutesRead);
         </div>
       </div>
     </main>
+    <script is:inline>
+      // Generate TOC from headings
+      document.addEventListener("DOMContentLoaded", () => {
+        // Get only the article content, excluding the sidebar
+        const articleContent = document.querySelector("article.prose");
+        if (!articleContent) return;
+
+        // Only get h2 and h3 elements that are direct children of the article content
+        const headingElements = articleContent.querySelectorAll(
+          ":scope > h2, :scope > h3"
+        );
+        const headings = Array.from(headingElements).map((heading) => {
+          // Ensure the heading has an ID
+          if (!heading.id) {
+            heading.id = heading.textContent
+              .toLowerCase()
+              .replace(/[^\w\s-]/g, "")
+              .replace(/\s+/g, "-")
+              .replace(/-+/g, "-")
+              .trim();
+          }
+
+          return {
+            depth: parseInt(heading.tagName.substring(1)),
+            slug: heading.id,
+            text: heading.textContent || ""
+          };
+        });
+
+        // Update the TOC component with the headings
+        const toc = document.querySelector(".toc ul");
+        if (toc) {
+          toc.innerHTML = headings
+            .map((heading) => {
+              const indentClass =
+                heading.depth === 3 ? "ml-4 text-sm" : "text-base";
+              return `
+              <li class="${indentClass}">
+                <a href="#${heading.slug}" class="block py-1 text-black transition-colors hover:text-[#F75B31]" data-depth="${heading.depth}">
+                  ${heading.text}
+                </a>
+              </li>
+            `;
+            })
+            .join("");
+        }
+
+        // Highlight active TOC item on scroll
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              const id = entry.target.getAttribute("id");
+              if (entry.intersectionRatio > 0) {
+                document.querySelectorAll(".toc a").forEach((a) => {
+                  a.classList.remove("active");
+                  if (a.getAttribute("href") === `#${id}`) {
+                    a.classList.add("active");
+                  }
+                });
+              }
+            });
+          },
+          { rootMargin: "-20% 0px -60% 0px" }
+        );
+
+        // Observe all headings
+        document.querySelectorAll("h2[id], h3[id]").forEach((section) => {
+          observer.observe(section);
+        });
+      });
+    </script>
     <script is:inline>
       // Add visible class to prevent FOUC
       document.addEventListener("DOMContentLoaded", () => {

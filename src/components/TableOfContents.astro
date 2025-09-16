@@ -1,0 +1,54 @@
+---
+interface Props {
+  headings: { depth: number; slug: string; text: string }[];
+}
+
+const { headings } = Astro.props;
+
+// Only show h2 and h3 in the TOC for better readability
+const filteredHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+<nav class="toc" aria-label="Table des matières">
+  <h2 class="text-sm font-semibold tracking-wider text-[#000000] uppercase">
+    Sommaire
+  </h2>
+  <ul class="mt-4 space-y-2">
+    {
+      filteredHeadings.map((heading) => {
+        // Create slug manually to ensure it matches the heading IDs
+        const slug = heading.text
+          .toLowerCase()
+          .replace(/[^\w\s-]/g, "")
+          .replace(/\s+/g, "-")
+          .replace(/-+/g, "-")
+          .trim();
+
+        return (
+          <li class={`${heading.depth === 3 ? "ml-4 text-sm" : "text-sm"}`}>
+            <a
+              href={`#${slug}`}
+              class="block text-sm text-[#000000] hover:text-[#522BE2]"
+              data-depth={heading.depth}
+            >
+              {heading.text}
+            </a>
+          </li>
+        );
+      })
+    }
+  </ul>
+</nav>
+
+<style is:global>
+  .toc a {
+    text-decoration: none;
+  }
+  .toc a:hover {
+    text-decoration: underline;
+  }
+  .toc a.active {
+    color: #522be2;
+    font-weight: 500;
+  }
+</style>
