@@ -7,29 +7,36 @@ gsap.registerPlugin(SplitText);
 
 // Function to initialize the heading animation
 function initHeadingAnimation() {
+  const heading = document.querySelector("#main-heading");
+  
+  // Only proceed if the heading exists on the page
+  if (!heading) return;
+  
   // Wait for fonts to be loaded before animating
   document.fonts.ready.then(() => {
     // Set initial state
-    gsap.set("#main-heading", { opacity: 1 });
+    gsap.set(heading, { opacity: 1 });
     
-    // Create SplitText instance for the heading
-    const split = SplitText.create("#main-heading", { 
-      type: "words", 
-      aria: "hidden" 
-    });
+    try {
+      // Create SplitText instance for the heading
+      const split = SplitText.create(heading, { 
+        type: "words", 
+        aria: "hidden" 
+      });
 
-    // Animate words with fade-in effect
-    gsap.from(split.words, {
-      opacity: 0,
-      duration: 2,
-      ease: "sine.out",
-      stagger: 0.1,
-      // No need to revert() as we want to keep the text visible
-      // The animation will remain in its end state
-    });
-    
-    // Ensure the parent container stays visible
-    gsap.set("#main-heading", { opacity: 1 });
+      // Animate words with fade-in effect
+      gsap.from(split.words, {
+        opacity: 0,
+        duration: 2,
+        ease: "sine.out",
+        stagger: 0.1,
+      });
+      
+      // Ensure the parent container stays visible
+      gsap.set(heading, { opacity: 1 });
+    } catch (error) {
+      console.warn("GSAP animation error:", error);
+    }
   });
 }
 

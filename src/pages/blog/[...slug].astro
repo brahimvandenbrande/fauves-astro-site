@@ -9,7 +9,7 @@ headers.set('Content-Type', 'text/html; charset=utf-8');
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
-  return posts.map((post) => ({
+  return posts.map((post: CollectionEntry<'blog'>) => ({
     params: { slug: post.slug },
     props: { post },
   }));

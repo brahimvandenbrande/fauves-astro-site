@@ -6,8 +6,12 @@ import CTABanner from "@components/ui/CTABanner.astro";
 import BlogCard from "@components/ui/BlogCard.astro";
 import SectionHeader from "@components/ui/SectionHeader.astro";
 
+import type { CollectionEntry } from 'astro:content';
+
 const posts = (await getCollection("blog"))
-  .sort((a, b) => new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf());
+  .sort((a: CollectionEntry<"blog">, b: CollectionEntry<"blog">) => 
+    new Date(b.data.pubDate).valueOf() - new Date(a.data.pubDate).valueOf()
+  );
 
 const pageTitle = "Blog";
 const pageDescription = "Tout comprendre sur le branding ou presque, sinon on ne sert à rien.";
@@ -28,7 +32,7 @@ const pageDescription = "Tout comprendre sur le branding ou presque, sinon on ne
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {posts.slice(0, 4).map((post) => (
+      {posts.slice(0, 4).map((post: CollectionEntry<"blog">) => (
         <BlogCard
           title={post.data.title}
           description={post.data.description}

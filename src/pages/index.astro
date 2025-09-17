@@ -75,16 +75,9 @@ const optimizedPoster = await getImage({
   <script is:inline>
     // Wait for everything to be loaded
     document.addEventListener("DOMContentLoaded", () => {
-      console.log("DOM fully loaded, initializing animations...");
 
       const handleIntersect = (entries, observer) => {
         entries.forEach((entry) => {
-          console.log(
-            "Intersection observed:",
-            entry.target,
-            "isIntersecting:",
-            entry.isIntersecting
-          );
 
           if (entry.isIntersecting) {
             const element = entry.target;
@@ -92,13 +85,6 @@ const optimizedPoster = await getImage({
 
             const animationType =
               element.getAttribute("data-animate") || "fade-up";
-
-            console.log(
-              "Animating element:",
-              element,
-              "with animation:",
-              animationType
-            );
 
             // Trigger the animation
             requestAnimationFrame(() => {
@@ -121,7 +107,6 @@ const optimizedPoster = await getImage({
 
       // Observe all elements with the animate-on-scroll class
       const animatedElements = document.querySelectorAll(".animate-on-scroll");
-      console.log("Found", animatedElements.length, "elements to animate");
 
       // Initialize and observe elements
       animatedElements.forEach((element) => {
@@ -137,16 +122,11 @@ const optimizedPoster = await getImage({
 
       // Also trigger a check in case elements are already in view
       const checkInitialElements = () => {
-        console.log("Checking initial elements in viewport...");
         animatedElements.forEach((element) => {
           const rect = element.getBoundingClientRect();
           const isInView =
             rect.top <= window.innerHeight * 0.9 && rect.bottom >= 0;
           if (isInView) {
-            console.log(
-              "Element already in view, triggering animation:",
-              element
-            );
             element.classList.add("animate-fade-up");
             observer.unobserve(element);
           }
