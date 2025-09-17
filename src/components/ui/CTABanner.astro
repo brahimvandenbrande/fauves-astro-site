@@ -13,7 +13,7 @@ interface Props {
 const {
   title,
   description,
-  buttonText = 'CONTACTEZ-NOUS',
+  buttonText = 'Contactez-nous',
   buttonHref = '/contact',
   variant = 'primary',
   className = ''
@@ -27,12 +27,12 @@ const variants = {
 
 <section class={`px-4 sm:px-6 lg:px-8 ${className}`}>
   <div class={`mx-auto max-w-[85rem] rounded-2xl px-6 sm:px-10 py-16 sm:py-20 ${variants[variant]}`}>
-    <h2 class="text-3xl sm:text-5xl md:text-6xl font-semibold leading-tight">
+    <h2 class="font-sans text-3xl sm:text-5xl md:text-6xl font-light leading-tight">
       {title}
     </h2>
     
     {description && (
-      <p class="mt-4 text-xl max-w-3xl">
+      <p class="font-sans font-light mt-4 text-xl max-w-3xl">
         {description}
       </p>
     )}

@@ -60,13 +60,6 @@ export default defineConfig({
     },
     optimizeDeps: {
       include: ["sharp"]
-    },
-    build: {
-      cssCodeSplit: true,
-      minify: true,
-      cssMinify: true,
-      target: "esnext",
-      assetsInlineLimit: 0 // Force all assets to be inlined (adjust as needed)
     }
   },
   devToolbar: {
