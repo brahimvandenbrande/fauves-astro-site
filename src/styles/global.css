@@ -7,12 +7,12 @@
     scroll-behavior: smooth;
     scroll-padding-top: 1rem;
   }
-  
+
   /* Optimize for performance */
   * {
     view-transition: opacity 0.2s ease;
   }
-  
+
   /* Skip transition for reduced motion */
   @media (prefers-reduced-motion) {
     * {
@@ -63,58 +63,79 @@ body {
   transition: background-color 0.3s ease;
 }
 
-h1 {
+h1, .text-h1 {
   color: #000000;
-  font-family: Degular;
+  font-family: Degular, sans-serif;
   font-size: 5.313rem;
   font-style: normal;
   font-weight: 300;
-  line-height: 5.313rem; /* 100% */
+  line-height: 1.2;
+  letter-spacing: -0.02em;
   /* Add view-transition-name for shared elements */
   view-transition-name: page-title;
 }
 
+/* Responsive adjustments for h1 */
+@media (max-width: 1024px) {
+  h1, .text-h1 {
+    font-size: 4.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  h1, .text-h1 {
+    font-size: 3.5rem;
+    line-height: 1.1;
+  }
+}
+
+@media (max-width: 480px) {
+  h1, .text-h1 {
+    font-size: 2.5rem;
+  }
+}
+
 /* Prose styles for markdown content */
 .prose {
-  --tw-prose-body: #000000;           /* Black for body text */
-  --tw-prose-headings: #000000;       /* Black for headings */
-  --tw-prose-lead: #000000;           /* Black for lead text */
-  --tw-prose-links: #522BE2;          /* Purple for links */
-  --tw-prose-bold: #000000;           /* Black for bold text */
-  --tw-prose-counters: #000000;       /* Black for counters */
-  --tw-prose-bullets: #F75B31;        /* Orange for bullets */
-  --tw-prose-hr: #F8F7E5BF;           /* Light beige for horizontal rules */
-  --tw-prose-quotes: #000000;         /* Black for quotes */
-  --tw-prose-quote-borders: #F8F7E5BF;/* Light beige for quote borders */
-  --tw-prose-captions: #000000;       /* Black for captions */
-  --tw-prose-code: #000000;           /* Black for code */
-  --tw-prose-pre-code: #000000;       /* Black for pre-formatted code */
-  --tw-prose-pre-bg: #F8F7E5BF;       /* Light beige for code block background */
-  --tw-prose-th-borders: #F75B31;     /* Orange for table header borders */
-  --tw-prose-td-borders: #F8F7E5BF;   /* Light beige for table cell borders */
-  --tw-prose-invert-body: #FFFFFF;    /* White for body text in dark mode */
-  --tw-prose-invert-headings: #FFFFFF; /* White for headings in dark mode */
-  --tw-prose-invert-lead: #FFFFFF;    /* White for lead text in dark mode */
-  --tw-prose-invert-links: #FFFFFF;   /* White for links in dark mode */
-  --tw-prose-invert-bold: #FFFFFF;    /* White for bold text in dark mode */
-  --tw-prose-invert-counters: #FFFFFF; /* White for counters in dark mode */
-  --tw-prose-invert-bullets: #F75B31; /* Orange for bullets in dark mode */
-  --tw-prose-invert-hr: #522BE2;      /* Purple for horizontal rules in dark mode */
-  --tw-prose-invert-quotes: #FFFFFF;  /* White for quotes in dark mode */
-  --tw-prose-invert-quote-borders: #522BE2; /* Purple for quote borders in dark mode */
-  --tw-prose-invert-captions: #FFFFFF; /* White for captions in dark mode */
-  --tw-prose-invert-code: #FFFFFF;    /* White for code in dark mode */
-  --tw-prose-invert-pre-code: #FFFFFF; /* White for pre-formatted code in dark mode */
-  --tw-prose-invert-pre-bg: #000000;  /* Black for code block background in dark mode */
-  --tw-prose-invert-th-borders: #F75B31; /* Orange for table header borders in dark mode */
-  --tw-prose-invert-td-borders: #522BE2; /* Purple for table cell borders in dark mode */
+  --tw-prose-body: #000000; /* Black for body text */
+  --tw-prose-headings: #000000; /* Black for headings */
+  --tw-prose-lead: #000000; /* Black for lead text */
+  --tw-prose-links: #522be2; /* Purple for links */
+  --tw-prose-bold: #000000; /* Black for bold text */
+  --tw-prose-counters: #000000; /* Black for counters */
+  --tw-prose-bullets: #f75b31; /* Orange for bullets */
+  --tw-prose-hr: #f8f7e5bf; /* Light beige for horizontal rules */
+  --tw-prose-quotes: #000000; /* Black for quotes */
+  --tw-prose-quote-borders: #f8f7e5bf; /* Light beige for quote borders */
+  --tw-prose-captions: #000000; /* Black for captions */
+  --tw-prose-code: #000000; /* Black for code */
+  --tw-prose-pre-code: #000000; /* Black for pre-formatted code */
+  --tw-prose-pre-bg: #f8f7e5bf; /* Light beige for code block background */
+  --tw-prose-th-borders: #f75b31; /* Orange for table header borders */
+  --tw-prose-td-borders: #f8f7e5bf; /* Light beige for table cell borders */
+  --tw-prose-invert-body: #ffffff; /* White for body text in dark mode */
+  --tw-prose-invert-headings: #ffffff; /* White for headings in dark mode */
+  --tw-prose-invert-lead: #ffffff; /* White for lead text in dark mode */
+  --tw-prose-invert-links: #ffffff; /* White for links in dark mode */
+  --tw-prose-invert-bold: #ffffff; /* White for bold text in dark mode */
+  --tw-prose-invert-counters: #ffffff; /* White for counters in dark mode */
+  --tw-prose-invert-bullets: #f75b31; /* Orange for bullets in dark mode */
+  --tw-prose-invert-hr: #522be2; /* Purple for horizontal rules in dark mode */
+  --tw-prose-invert-quotes: #ffffff; /* White for quotes in dark mode */
+  --tw-prose-invert-quote-borders: #522be2; /* Purple for quote borders in dark mode */
+  --tw-prose-invert-captions: #ffffff; /* White for captions in dark mode */
+  --tw-prose-invert-code: #ffffff; /* White for code in dark mode */
+  --tw-prose-invert-pre-code: #ffffff; /* White for pre-formatted code in dark mode */
+  --tw-prose-invert-pre-bg: #000000; /* Black for code block background in dark mode */
+  --tw-prose-invert-th-borders: #f75b31; /* Orange for table header borders in dark mode */
+  --tw-prose-invert-td-borders: #522be2; /* Purple for table cell borders in dark mode */
 }
 
 .prose {
   color: var(--tw-prose-body);
   line-height: 1.7;
   max-width: 65ch;
-  font-family: 'Degular', sans-serif;
+  font-family: "Degular", sans-serif;
   font-weight: 300;
 }
 
@@ -196,13 +217,15 @@ h1 {
 }
 
 /* Smooth transitions for interactive elements */
-a, button, .transition-all {
+a,
+button,
+.transition-all {
   transition: all 0.2s ease;
 }
 
 /* Focus styles for better accessibility */
 :focus-visible {
-  outline: 2px solid #522BE2;
+  outline: 2px solid #522be2;
   outline-offset: 2px;
   border-radius: 0.25rem;
 }
