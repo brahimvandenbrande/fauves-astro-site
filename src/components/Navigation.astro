@@ -4,10 +4,9 @@ const isActive = (path: string) =>
   pathname === path || (path !== "/" && pathname.startsWith(path));
 ---
 
-<header class="w-full bg-white px-4 py-6 text-sm">
-  <nav
-    class="mx-auto flex max-w-[85rem] items-center justify-between px-4 pt-8"
-  >
+<header class="w-full bg-white">
+  <div class="mx-auto w-full max-w-[90rem] px-4 py-6 md:px-6 lg:px-8">
+    <nav class="flex w-full items-center justify-between">
     <!-- Logo -->
     <a href="/" aria-label="FAUVES" class="group flex-none">
       <svg
@@ -111,7 +110,8 @@ const isActive = (path: string) =>
         </svg>
       </button>
     </div>
-  </nav>
+    </nav>
+  </div>
 
   <!-- Menu mobile -->
   <div

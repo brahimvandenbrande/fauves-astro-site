@@ -138,7 +138,7 @@ const optimizedPoster = await getImage({
       setTimeout(checkInitialElements, 500);
     });
   </script>
-  <main class="mx-auto flex max-w-[85rem] flex-col gap-12 px-4 pt-24 pb-16">
+  <main class="mx-auto flex max-w-[85rem] flex-col gap-12 px-4 pt-12 pb-16 md:pt-16 lg:pt-24">
     <!-- 🎯 Contenu principal de la page -->
     <!-- 🦁 Hero section -->
     <section>
@@ -164,7 +164,7 @@ const optimizedPoster = await getImage({
       <ProjectCarousel projects={featuredProjects} />
     </div>
 
-    <section class="mx-auto max-w-6xl pt-16 pb-16 text-center">
+    <section class="mx-auto max-w-6xl pt-8 pb-12 text-center md:pt-12 md:pb-16">
       <p
         class="animate-on-scroll font-degular mx-auto max-w-6xl px-4 text-3xl leading-[1.2] font-light text-black sm:text-4xl md:text-5xl lg:text-6xl xl:text-[4rem]"
         data-animate="fade-up"
@@ -184,7 +184,7 @@ const optimizedPoster = await getImage({
       poster={optimizedPoster.src}
     />
 
-    <section class="mx-auto max-w-[85rem] px-4 pt-16 pb-16 text-left">
+    <section class="mx-auto max-w-[85rem] px-4 pt-8 pb-8 text-left md:pt-12 md:pb-12">
       <p
         class="animate-on-scroll font-degular text-3xl leading-[1.2] font-light text-black sm:text-4xl md:text-5xl lg:text-6xl xl:text-[4rem]"
         data-animate="fade-up"
@@ -197,7 +197,7 @@ const optimizedPoster = await getImage({
     </section>
   </main>
 
-  <CTABanner
+  <CTABanner className="pt-0"
     title="Prêt à donner vie à votre marque ?"
     description="Contactez-nous pour discuter de votre projet et voir comment nous pouvons vous aider à créer une marque qui se démarque."
     buttonText="NOUS CONTACTER"
