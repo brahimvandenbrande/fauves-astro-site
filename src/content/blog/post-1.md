@@ -17,11 +17,11 @@ En 12 mois, nous avons saisi des opportunités, exploré de nouvelles perspectiv
 
 Et en 2025, **Mobil Studio devient FAUVES.**
 
-## Comme des fauves : une identité plus forte
+## Une identité plus forte
 
 Ce changement de nom ne s'est pas fait par hasard.
 
-Inspiré par le **Fauvisme** – ce mouvement artistique qui a osé briser les codes en célébrant la couleur, l'audace et l'intensité – **FAUVES** exprime notre ambition profonde :
+Inspiré par le **Fauvisme** - ce mouvement artistique qui a osé briser les codes en célébrant la couleur, l'audace et l'intensité - **FAUVES** exprime notre ambition profonde :
 
 - Créer sans limite
 
@@ -33,7 +33,7 @@ Choisir **FAUVES**, c'est revendiquer une force brute : l'instinct viscéral, l'
 
 Autant de qualités que nous mettons au service de votre **identité de marque**.
 
-## De Mobil Studio à FAUVES Agency : une nouvelle ère
+## Une nouvelle ère
 
 2025 n'est pas seulement l'année d'un nouveau nom. C'est l'année d'une transition majeure. Nous passons de **studio** à **agence**.
 
@@ -47,7 +47,7 @@ En devenant **FAUVES Agency**, nous renforçons notre positionnement :
 
 Notre identité se déploie, notre équipe se consolide, et nous affirmons notre rôle d'**agence de communication créative** pour mieux accompagner vos projets.
 
-## FAUVES : nouveau nom, même mission
+## Nouveau nom, même mission
 
 Si notre nom change, notre mission, elle, reste immuable.
 
@@ -57,4 +57,4 @@ Nous restons animés par la même envie : **vous faire briller, révéler votre 
 
 Envie d'en savoir plus sur **FAUVES Agency** et notre approche du **branding** ?
 
-Découvrez nos projets et notre univers sur notre site.
+[Découvrez nos projets](/projects) et notre univers sur notre site.
