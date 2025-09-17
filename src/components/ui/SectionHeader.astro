@@ -5,6 +5,7 @@ interface Props {
   class?: string;
   align?: 'left' | 'center' | 'right';
   size?: 'sm' | 'md' | 'lg' | 'xl';
+  id?: string;
 }
 
 const {
@@ -13,6 +14,7 @@ const {
   class: className = '',
   align = 'left',
   size = 'lg',
+  id,
 } = Astro.props;
 
 const alignClasses = {
@@ -32,12 +34,15 @@ const HeadingTag = `h${level}` as const;
 ---
 
 <HeadingTag 
+  id={id}
   class:list={[
-    'font-degular font-light leading-tight text-black',
+    'font-degular font-light leading-tight text-black gsap-heading',
     sizeClasses[size],
     alignClasses[align],
     className
   ]}
+  style="opacity: 1;"
+  data-gsap-animate
 >
   <slot>{title}</slot>
 </HeadingTag>

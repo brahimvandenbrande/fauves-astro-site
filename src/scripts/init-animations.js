@@ -1,3 +1,4 @@
+// Import GSAP and its plugins
 import { gsap } from 'gsap';
 import { SplitText } from 'gsap/SplitText';
 
@@ -53,8 +54,6 @@ function initHeadingAnimation() {
       onStart: () => debugLog('Animation started'),
       onComplete: () => {
         debugLog('Animation completed');
-        // Clean up after animation completes
-        // split.revert();
       }
     });
     
@@ -75,38 +74,35 @@ function initHeadingAnimation() {
   } catch (error) {
     console.error('Error in GSAP animation:', error);
     // Make sure text is visible even if animation fails
-    gsap.set(heading, { opacity: 1, clearProps: 'all' });
+    const heading = document.getElementById('main-heading');
+    if (heading) {
+      heading.style.opacity = '1';
+    }
   }
 }
 
-// Export the initialization function
-export default function initAnimations() {
+// Initialize animations when the page loads
+function init() {
   debugLog('Initializing animations...');
   
   // Initialize immediately if possible
-  const init = () => {
-    debugLog('Running initialization');
-    initHeadingAnimation();
-  };
-  
-  // Check if the document is already loaded
   if (document.readyState === 'complete' || document.readyState === 'interactive') {
     debugLog('Document ready, initializing...');
-    setTimeout(init, 100);
+    initHeadingAnimation();
   } else {
     debugLog('Waiting for DOM content to load...');
     document.addEventListener('DOMContentLoaded', () => {
       debugLog('DOM content loaded, initializing...');
-      setTimeout(init, 100);
+      initHeadingAnimation();
     });
   }
   
   // Also initialize when Astro's page load event fires
   document.addEventListener('astro:page-load', () => {
     debugLog('Astro page load event, reinitializing...');
-    setTimeout(init, 100);
+    setTimeout(initHeadingAnimation, 100);
   });
 }
 
-// Initialize immediately if this script is loaded directly
-initAnimations();
+// Start the initialization
+init();

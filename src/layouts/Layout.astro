@@ -115,22 +115,21 @@ const { title, description, canonical, noindex, ogImage, structuredData } =
     </main>
 
     <!-- Initialize view transitions -->
-    <script is:inline>
+    <script>
       // Initialize view transitions with our utility
       import { initViewTransitions } from '../utils/transitions';
       
       // Run initialization when the DOM is fully loaded
       if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initViewTransitions);
+        document.addEventListener('DOMContentLoaded', () => {
+          initViewTransitions();
+        });
       } else {
         initViewTransitions();
       }
-      
-      // Handle Astro's page load event
-      document.addEventListener('astro:page-load', () => {
-        // Re-initialize any page-specific JavaScript here
-        // This runs after the new page is loaded and transitions are complete
-      });
     </script>
+    
+    <!-- Load GSAP animations as a module -->
+    <script type="module" src="/src/scripts/init-animations.js"></script>
   </body>
 </html>
