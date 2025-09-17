@@ -9,6 +9,8 @@
   ],
   "exclude": ["dist"],
   "compilerOptions": {
+    "jsx": "preserve",
+    "jsxImportSource": "astro",
     "baseUrl": ".",
     "paths": {
       "@public/*": ["public/*"],

@@ -72,9 +72,94 @@ const optimizedPoster = await getImage({
   description="FAUVES – studio de branding et narration de marque."
 >
   <WebsiteStructuredData slot="structured-data" />
+  <script is:inline>
+    // Wait for everything to be loaded
+    document.addEventListener("DOMContentLoaded", () => {
+      console.log("DOM fully loaded, initializing animations...");
 
-  <!-- 🎯 Contenu principal de la page -->
+      const handleIntersect = (entries, observer) => {
+        entries.forEach((entry) => {
+          console.log(
+            "Intersection observed:",
+            entry.target,
+            "isIntersecting:",
+            entry.isIntersecting
+          );
+
+          if (entry.isIntersecting) {
+            const element = entry.target;
+            if (!(element instanceof HTMLElement)) return;
+
+            const animationType =
+              element.getAttribute("data-animate") || "fade-up";
+
+            console.log(
+              "Animating element:",
+              element,
+              "with animation:",
+              animationType
+            );
+
+            // Trigger the animation
+            requestAnimationFrame(() => {
+              element.style.opacity = "1";
+              element.style.transform = "translateY(0)";
+            });
+
+            // Unobserve the element after animation is triggered
+            observer.unobserve(element);
+          }
+        });
+      };
+
+      // Create an intersection observer with a larger rootMargin to trigger slightly before the element is in view
+      const observer = new IntersectionObserver(handleIntersect, {
+        root: null, // viewport
+        rootMargin: "0px 0px -50px 0px", // start animation when element is 50px from bottom of viewport
+        threshold: 0.1 // trigger when 10% of the element is visible
+      });
+
+      // Observe all elements with the animate-on-scroll class
+      const animatedElements = document.querySelectorAll(".animate-on-scroll");
+      console.log("Found", animatedElements.length, "elements to animate");
+
+      // Initialize and observe elements
+      animatedElements.forEach((element) => {
+        // Make sure the element is visible but transparent
+        element.style.opacity = "0";
+        element.style.transform = "translateY(20px)";
+        element.style.transition =
+          "opacity 0.8s var(--ease-out-cubic), transform 0.8s var(--ease-out-cubic)";
+
+        // Observe the element
+        observer.observe(element);
+      });
+
+      // Also trigger a check in case elements are already in view
+      const checkInitialElements = () => {
+        console.log("Checking initial elements in viewport...");
+        animatedElements.forEach((element) => {
+          const rect = element.getBoundingClientRect();
+          const isInView =
+            rect.top <= window.innerHeight * 0.9 && rect.bottom >= 0;
+          if (isInView) {
+            console.log(
+              "Element already in view, triggering animation:",
+              element
+            );
+            element.classList.add("animate-fade-up");
+            observer.unobserve(element);
+          }
+        });
+      };
+
+      // Run initial check and also after a short delay to catch any timing issues
+      checkInitialElements();
+      setTimeout(checkInitialElements, 500);
+    });
+  </script>
   <main class="mx-auto flex max-w-[85rem] flex-col gap-12 px-4 pt-24 pb-16">
+    <!-- 🎯 Contenu principal de la page -->
     <!-- 🦁 Hero section -->
     <section>
       <SectionHeader
@@ -100,7 +185,11 @@ const optimizedPoster = await getImage({
     </div>
 
     <section class="mx-auto max-w-6xl pt-16 pb-16 text-center">
-      <p class="font-degular text-[4rem] leading-[4rem] font-light text-black">
+      <p
+        class="animate-on-scroll font-degular mx-auto max-w-6xl px-4 text-3xl leading-[1.2] font-light text-black sm:text-4xl md:text-5xl lg:text-6xl xl:text-[4rem]"
+        data-animate="fade-up"
+        style="--animation-duration: 2s;"
+      >
         Vous cherchez à inspirer autant qu'à performer ? Chez FAUVES, nous
         donnons vie à
         <span class="font-semibold">des identités fortes</span>, des récits qui
@@ -115,16 +204,20 @@ const optimizedPoster = await getImage({
       poster={optimizedPoster.src}
     />
 
-    <section class="mx-auto max-w-[85rem] pt-16 pb-16 text-left">
-      <p class="font-degular text-[4rem] leading-[4rem] font-light text-black">
+    <section class="mx-auto max-w-[85rem] px-4 pt-16 pb-16 text-left">
+      <p
+        class="animate-on-scroll font-degular text-3xl leading-[1.2] font-light text-black sm:text-4xl md:text-5xl lg:text-6xl xl:text-[4rem]"
+        data-animate="fade-up"
+        style="--animation-duration: 2s;"
+      >
         Notre agence de branding & storytelling centralise et prend en charge
-        l’ensemble de vos besoins, de votre positionnement au déploiement de
+        l'ensemble de vos besoins, de votre positionnement au déploiement de
         votre marque.
       </p>
     </section>
   </main>
 
-  <CTABanner 
+  <CTABanner
     title="Prêt à donner vie à votre marque ?"
     description="Contactez-nous pour discuter de votre projet et voir comment nous pouvons vous aider à créer une marque qui se démarque."
     buttonText="NOUS CONTACTER"

@@ -1,5 +1,89 @@
 @import "tailwindcss";
 
+/* Animation Variables */
+:root {
+  /* Base durations */
+  --animation-duration-fast: 0.4s;
+  --animation-duration-normal: 0.8s;
+  --animation-duration-slow: 1.2s;
+  
+  /* Timing functions */
+  --ease-out-quad: cubic-bezier(0.5, 1, 0.89, 1);
+  --ease-out-cubic: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  
+  /* Delays */
+  --animation-delay-short: 0.1s;
+  --animation-delay-medium: 0.2s;
+  --animation-delay-long: 0.3s;
+}
+
+/* Animation Keyframes */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Base Animation Classes */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+  will-change: opacity, transform;
+  transition: opacity 0.8s var(--ease-out-cubic), 
+              transform 0.8s var(--ease-out-cubic);
+  /* Ensure the element is visible but transparent */
+  visibility: visible !important;
+  display: block !important;
+}
+
+/* Animation Types */
+.animate-fade-up.animate-visible {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible !important;
+}
+
+/* Animation Durations */
+.animate-duration-fast {
+  --animation-duration: var(--animation-duration-fast);
+  animation-duration: var(--animation-duration);
+  transition-duration: var(--animation-duration);
+}
+
+.animate-duration-normal {
+  --animation-duration: var(--animation-duration-normal);
+  animation-duration: var(--animation-duration);
+  transition-duration: var(--animation-duration);
+}
+
+.animate-duration-slow {
+  --animation-duration: var(--animation-duration-slow);
+  animation-duration: var(--animation-duration);
+  transition-duration: var(--animation-duration);
+}
+
+/* Animation Delays */
+.animate-delay-short {
+  animation-delay: var(--animation-delay-short);
+  transition-delay: var(--animation-delay-short);
+}
+
+.animate-delay-medium {
+  animation-delay: var(--animation-delay-medium);
+  transition-delay: var(--animation-delay-medium);
+}
+
+.animate-delay-long {
+  animation-delay: var(--animation-delay-long);
+  transition-delay: var(--animation-delay-long);
+}
+
 /* View Transitions Support */
 @supports (view-transition-name: none) {
   /* Smooth scrolling for anchor links */
