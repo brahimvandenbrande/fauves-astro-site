@@ -71,8 +71,8 @@ export async function GET(context: RSSContext) {
         <title>${feedTitle}</title>
         <link>${baseUrl}</link>
         <description>${feedDescription}</description>
-        <width>1200</width>
-        <height>630</height>
+        <width>144</width>
+        <height>144</height>
       </image>
     `,
     items: allPosts.map((post) => ({
