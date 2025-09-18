@@ -1,4 +1,4 @@
 User-agent: *
-Allow: /
+Disallow: /
 
 Sitemap: https://ocwwsggk4w84wockocgckk4k.apps.fauves.agency/sitemap-index.xml
