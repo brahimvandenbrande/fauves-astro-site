@@ -49,7 +49,8 @@ export async function GET(context: RSSContext) {
   const feedDescription =
     "Découvrez les derniers articles et projets publiés par Fauves";
 
-  // Image du flux (doit être PNG/JPG/GIF, pas SVG)
+  // Favicon for the feed (must be PNG/JPG/GIF, not SVG)
+  const faviconUrl = new URL("/favicon-32x32.png", baseUrl).toString();
   const imageUrl = new URL("/images/og-image.png", baseUrl).toString();
 
   const feed = await rss({
@@ -64,12 +65,12 @@ export async function GET(context: RSSContext) {
       <copyright>${new Date().getFullYear()} Fauves. Tous droits réservés.</copyright>
       <atom:link href="${new URL("/rss.xml", baseUrl).toString()}" rel="self" type="application/rss+xml" />
       <image>
-        <url>${imageUrl}</url>
+        <url>${faviconUrl}</url>
         <title>${feedTitle}</title>
         <link>${baseUrl}</link>
         <description>${feedDescription}</description>
-        <width>144</width>
-        <height>144</height>
+        <width>32</width>
+        <height>32</height>
       </image>
     `,
     items: allPosts.map((post) => ({
