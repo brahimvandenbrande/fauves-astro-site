@@ -53,21 +53,24 @@ export async function GET(context: RSSContext) {
   const feedTitle = "Fauves - Actualités récentes";
   const feedDescription = "Découvrez les derniers articles et projets publiés par Fauves";
   
+  // Ensure the image URL is correctly formed
+  const imageUrl = new URL("/images/og-image.png", baseUrl).toString();
+  
   const feed = await rss({
     title: feedTitle,
     description: feedDescription,
     site: baseUrl,
-    // Add self-referential link
+    // Add self-referential link with proper XML namespace
     xmlns: {
       atom: 'http://www.w3.org/2005/Atom',
     },
-    // Add custom XML for atom:link
+    // Add custom XML for atom:link and image
     customData: `
       <language>fr-BE</language>
       <copyright>${new Date().getFullYear()} Fauves. Tous droits réservés.</copyright>
-      <atom:link href="${new URL('rss.xml', baseUrl).toString()}" rel="self" type="application/rss+xml" />
+      <atom:link href="${baseUrl}rss.xml" rel="self" type="application/rss+xml" />
       <image>
-        <url>${new URL("/images/og-image.png", baseUrl).toString()}</url>
+        <url>${imageUrl}</url>
         <title>${feedTitle}</title>
         <link>${baseUrl}</link>
         <description>${feedDescription}</description>
