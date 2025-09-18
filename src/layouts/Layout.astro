@@ -2,6 +2,7 @@
 import BaseHead from "@components/BaseHead.astro";
 import { ClientRouter } from 'astro:transitions';
 import Navigation from "@components/Navigation.astro";
+import AnimateHeading from "@components/animations/AnimateHeading.astro";
 import "@styles/global.css";
 
 interface Props {
@@ -135,7 +136,7 @@ const { title, description, canonical, noindex, ogImage, structuredData } =
       }
     </script>
     
-    <!-- Load GSAP animations as a module -->
-    <script type="module" src="/scripts/init-animations.js"></script>
+    <!-- GSAP animations are now handled by AnimateHeading component -->
+    <AnimateHeading />
   </body>
 </html>

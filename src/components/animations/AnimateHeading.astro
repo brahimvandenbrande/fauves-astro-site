@@ -1,0 +1,71 @@
+---
+---
+// No server-side code needed here
+---
+
+<script>
+  // Import GSAP and its plugins on the client side
+  import('gsap').then(({ gsap }) => {
+    return import('gsap/SplitText').then(({ SplitText }) => {
+      // Register the SplitText plugin
+      gsap.registerPlugin(SplitText);
+
+      // Function to initialize the heading animation
+      function initHeadingAnimation() {
+        // Find the heading by ID or class
+        const heading = document.querySelector("#main-heading, .gsap-heading");
+        
+        // Only proceed if the heading exists on the page
+        if (!heading) {
+          console.warn("No heading element found with ID 'main-heading' or class 'gsap-heading'");
+          return;
+        }
+        
+        // Wait for fonts to be loaded before animating
+        document.fonts.ready.then(() => {
+          try {
+            // Set initial state
+            gsap.set(heading, { opacity: 1 });
+            
+            // Create SplitText instance for the heading
+            const split = new SplitText(heading, { 
+              type: "words,chars",
+              wordsClass: "word",
+              charsClass: "char",
+              aria: "hidden"
+            });
+
+            // Animate words with fade-in effect
+            gsap.from(split.words || split.chars || [heading], {
+              opacity: 0,
+              y: 20,
+              duration: 0.8,
+              ease: "power3.out",
+              stagger: 0.05,
+              onComplete: () => {
+                // Clean up after animation if needed
+                if (split.revert) split.revert();
+              }
+            });
+            
+          } catch (error) {
+            console.warn("GSAP animation error:", error);
+          }
+        });
+      }
+
+      // Initialize animations when the component mounts
+      document.addEventListener('astro:page-load', initHeadingAnimation);
+      
+      // Also run on initial load
+      if (document.readyState === 'complete') {
+        initHeadingAnimation();
+      } else {
+        window.addEventListener('load', initHeadingAnimation);
+      }
+    });
+  }).catch(error => {
+    console.error("Failed to load GSAP:", error);
+  });
+</script>
+</script>
