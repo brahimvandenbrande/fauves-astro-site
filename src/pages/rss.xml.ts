@@ -50,26 +50,40 @@ export async function GET(context: RSSContext) {
     }))
   ].sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime());
 
+  const feedTitle = "Fauves - Actualités récentes";
+  const feedDescription = "Découvrez les derniers articles et projets publiés par Fauves";
+  
   const feed = await rss({
-    title: "Fauves - Actualités récentes",
-    description: "Découvrez les derniers articles et projets publiés par Fauves",
+    title: feedTitle,
+    description: feedDescription,
     site: baseUrl,
+    // Add self-referential link
+    xmlns: {
+      atom: 'http://www.w3.org/2005/Atom',
+    },
+    // Add custom XML for atom:link
+    customData: `
+      <language>fr-BE</language>
+      <copyright>${new Date().getFullYear()} Fauves. Tous droits réservés.</copyright>
+      <atom:link href="${new URL('rss.xml', baseUrl).toString()}" rel="self" type="application/rss+xml" />
+      <image>
+        <url>${new URL("/images/og-image.png", baseUrl).toString()}</url>
+        <title>${feedTitle}</title>
+        <link>${baseUrl}</link>
+        <description>${feedDescription}</description>
+        <width>1200</width>
+        <height>630</height>
+      </image>
+    `,
     items: allPosts.map((post) => ({
       title: post.data.title,
       pubDate: post.data.pubDate,
       description: post.data.description,
       link: post.url,
+      // Ensure each item has a guid
+      guid: post.url,
       customData: `<category>${post.type}</category>`
-    })),
-    customData: `
-      <language>fr-BE</language>
-      <copyright>${new Date().getFullYear()} Fauves. Tous droits réservés.</copyright>
-      <image>
-        <url>${new URL("/favicon.svg", baseUrl).toString()}</url>
-        <title>Fauves</title>
-        <link>${baseUrl}</link>
-      </image>
-    `
+    }))
   });
 
   return new Response(feed.body, {
