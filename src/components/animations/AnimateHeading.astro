@@ -2,127 +2,11 @@
 // This script will only run on the client
 ---
 
-<script>
-  // Load GSAP and its plugins on the client side
-  import('gsap').then(({ gsap }) => {
-    return import('gsap/SplitText').then(({ SplitText }) => {
-      // Register the SplitText plugin
-      gsap.registerPlugin(SplitText);
-
-      // Function to initialize the heading animation
-      function initHeadingAnimation() {
-        // Find the heading by ID or class
-        const heading = document.querySelector("#main-heading, .gsap-heading");
-
-        // Only proceed if the heading exists on the page
-        if (!heading) {
-          console.warn("No heading element found with ID 'main-heading' or class 'gsap-heading'");
-          return;
-        }
-
-        // Make sure the heading is visible
-        gsap.set(heading, { opacity: 1, visibility: 'visible' });
-
-        // Wait for fonts to be loaded before animating
-        document.fonts.ready.then(() => {
-          try {
-            // Create SplitText instance for the heading
-            const split = new SplitText(heading, {
-              type: "lines,words",
-              linesClass: "gsap-line",
-              wordsClass: "gsap-word",
-              aria: "hidden"
-            });
-
-            // Store the original HTML to restore it later
-            const originalHTML = heading.innerHTML;
-            
-            // Animate each line separately
-            if (split.lines && split.lines.length > 0) {
-              // Hide the lines initially
-              gsap.set(split.lines, { 
-                opacity: 0,
-                y: 20,
-                display: 'block',
-                overflow: 'hidden'
-              });
-
-              // Animate each line in sequence
-              split.lines.forEach((line, i) => {
-                // Create a new SplitText for this line to handle words
-                const lineSplit = new SplitText(line, {
-                  type: "words",
-                  wordsClass: "gsap-line-word"
-                });
-
-                // Animate words in this line
-                gsap.from(lineSplit.words || [line], {
-                  opacity: 0,
-                  y: 20,
-                  duration: 0.8,
-                  ease: "power3.out",
-                  stagger: {
-                    amount: 0.6,
-                    from: "start"
-                  },
-                  onComplete: () => {
-                    // Clean up this line's SplitText
-                    if (lineSplit.revert) lineSplit.revert();
-                  }
-                });
-              });
-            } else {
-              // Fallback if no lines are detected
-              const wordsSplit = new SplitText(heading, { type: "words" });
-              gsap.from(wordsSplit.words || [heading], {
-                opacity: 0,
-                y: 20,
-                duration: 0.8,
-                ease: "power3.out",
-                stagger: 0.05,
-                onComplete: () => {
-                  if (wordsSplit.revert) wordsSplit.revert();
-                }
-              });
-            }
-
-            // Clean up the main SplitText after all animations are done
-            setTimeout(() => {
-              if (split.revert) {
-                // Restore original HTML to prevent layout issues
-                heading.innerHTML = originalHTML;
-                split.revert();
-              }
-            }, 3000); // Adjust timeout as needed based on animation duration
-
-          } catch (error) {
-            console.warn("GSAP animation error:", error);
-            // Make sure text is visible if there's an error
-            gsap.set(heading, { opacity: 1, visibility: 'visible' });
-          }
-        });
-      }
-
-      // Initialize animations when the component mounts
-      document.addEventListener('astro:page-load', initHeadingAnimation);
-      
-      // Also run on initial load
-      if (document.readyState === 'complete') {
-        initHeadingAnimation();
-      } else {
-        window.addEventListener('load', initHeadingAnimation);
-      }
-    });
-  }).catch(error => {
-    console.error("Failed to load GSAP:", error);
-  });
-</script>
-
 <style>
-  /* Ensure the heading is visible by default */
-  #main-heading, .gsap-heading {
-    opacity: 1 !important;
-    visibility: visible !important;
+  /* Base styles for the heading */
+  .gsap-heading, #main-heading {
+    opacity: 1;
+    visibility: visible;
   }
   
   /* Style for split text elements */
@@ -134,5 +18,81 @@
   .gsap-word {
     display: inline-block;
     white-space: nowrap;
+    opacity: 0;
+    transform: translateY(20px);
   }
 </style>
+
+<script>
+  // Function to initialize the heading animation
+  async function initHeadingAnimation() {
+    try {
+      // Load GSAP and its plugins
+      const { gsap } = await import('gsap');
+      const { SplitText } = await import('gsap/SplitText');
+      gsap.registerPlugin(SplitText);
+
+      // Find the heading by ID or class
+      const heading = document.querySelector("#main-heading, .gsap-heading");
+      if (!heading) return;
+
+      // Create SplitText instance for the heading
+      const split = new SplitText(heading, {
+        type: "lines,words",
+        linesClass: "gsap-line",
+        wordsClass: "gsap-word",
+        aria: "hidden"
+      });
+
+      // Store the original HTML to restore it later
+      const originalHTML = heading.innerHTML;
+      
+      // Animate each line separately
+      if (split.lines && split.lines.length > 0) {
+        // Animate each line in sequence
+        split.lines.forEach((line, i) => {
+          // Animate words in this line
+          gsap.to(line.querySelectorAll('.gsap-word') || [line], {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power3.out",
+            stagger: 0.05,
+            delay: i * 0.1
+          });
+        });
+      } else {
+        // Fallback if no lines are detected
+        gsap.to(split.words || [heading], {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: "power3.out",
+          stagger: 0.05
+        });
+      }
+
+      // Clean up function for Astro view transitions
+      const cleanup = () => {
+        if (split.revert) {
+          heading.innerHTML = originalHTML;
+          split.revert();
+        }
+        document.removeEventListener('astro:before-preparation', cleanup);
+      };
+
+      // Clean up when navigating away
+      document.addEventListener('astro:before-preparation', cleanup);
+      
+    } catch (error) {
+      console.warn("GSAP animation error:", error);
+    }
+  }
+
+  // Initialize animation when the page loads or view transition completes
+  if (document.startViewTransition) {
+    document.addEventListener('astro:page-load', initHeadingAnimation);
+  } else {
+    document.addEventListener('DOMContentLoaded', initHeadingAnimation);
+  }
+</script>
