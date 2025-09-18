@@ -1,23 +1,16 @@
 import rss from "@astrojs/rss";
 import { getCollection } from "astro:content";
-import type { CollectionEntry } from 'astro:content';
+import type { CollectionEntry } from "astro:content";
 import { SITE_URL } from "../consts";
 
-// Use the current site URL from the context, falling back to SITE_URL
-function getSiteUrl(context: { site: URL } | undefined): string {
-  // In development or when context.site is not available, use the environment variable or fallback
-  if (import.meta.env.DEV) {
-    return 'http://localhost:4321';
-  }
-  // In production or staging, use the current hostname
-  if (typeof window !== 'undefined') {
-    return window.location.origin;
-  }
-  // For server-side rendering, use the context site or fallback to SITE_URL
-  return context?.site?.toString() || SITE_URL;
+// Récupère l'URL du site en fonction du contexte/env
+function getSiteUrl(context: { site?: URL } | undefined): string {
+  if (context?.site) return context.site.toString();
+  if (import.meta.env.DEV) return "http://localhost:4321";
+  return SITE_URL;
 }
 
-type Post = CollectionEntry<'blog'> | CollectionEntry<'projects'>;
+type Post = CollectionEntry<"blog"> | CollectionEntry<"projects">;
 
 interface ExtendedPost extends Post {
   type: string;
@@ -29,46 +22,47 @@ type RSSContext = {
 };
 
 export async function GET(context: RSSContext) {
-  // Get the appropriate base URL based on the environment
   const baseUrl = getSiteUrl(context);
-  
-  // Get blog posts and projects
+
+  // Récupération des contenus
   const blogPosts = await getCollection("blog");
   const projects = await getCollection("projects");
 
-  // Combine and sort all content by publication date
+  // Fusion et tri des contenus par date décroissante
   const allPosts: ExtendedPost[] = [
-    ...blogPosts.map((post: CollectionEntry<'blog'>) => ({
+    ...blogPosts.map((post: CollectionEntry<"blog">) => ({
       ...post,
       type: "blog",
       url: new URL(`/blog/${post.slug}/`, baseUrl).toString()
     })),
-    ...projects.map((project: CollectionEntry<'projects'>) => ({
+    ...projects.map((project: CollectionEntry<"projects">) => ({
       ...project,
       type: "projet",
       url: new URL(`/projects/${project.slug}/`, baseUrl).toString()
     }))
-  ].sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime());
+  ].sort(
+    (a, b) =>
+      new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
+  );
 
   const feedTitle = "Fauves - Actualités récentes";
-  const feedDescription = "Découvrez les derniers articles et projets publiés par Fauves";
-  
-  // Ensure the image URL is correctly formed
+  const feedDescription =
+    "Découvrez les derniers articles et projets publiés par Fauves";
+
+  // Image du flux (doit être PNG/JPG/GIF, pas SVG)
   const imageUrl = new URL("/images/og-image.png", baseUrl).toString();
-  
+
   const feed = await rss({
     title: feedTitle,
     description: feedDescription,
     site: baseUrl,
-    // Add self-referential link with proper XML namespace
     xmlns: {
-      atom: 'http://www.w3.org/2005/Atom',
+      atom: "http://www.w3.org/2005/Atom"
     },
-    // Add custom XML for atom:link and image
     customData: `
       <language>fr-BE</language>
       <copyright>${new Date().getFullYear()} Fauves. Tous droits réservés.</copyright>
-      <atom:link href="${baseUrl}rss.xml" rel="self" type="application/rss+xml" />
+      <atom:link href="${new URL("/rss.xml", baseUrl).toString()}" rel="self" type="application/rss+xml" />
       <image>
         <url>${imageUrl}</url>
         <title>${feedTitle}</title>
@@ -83,7 +77,6 @@ export async function GET(context: RSSContext) {
       pubDate: post.data.pubDate,
       description: post.data.description,
       link: post.url,
-      // Ensure each item has a guid
       guid: post.url,
       customData: `<category>${post.type}</category>`
     }))
@@ -92,9 +85,9 @@ export async function GET(context: RSSContext) {
   return new Response(feed.body, {
     status: 200,
     headers: {
-      'Content-Type': 'application/rss+xml; charset=utf-8',
-      'Cache-Control': 'public, max-age=3600',
-      'Access-Control-Allow-Origin': '*'
+      "Content-Type": "application/rss+xml; charset=utf-8",
+      "Cache-Control": "public, max-age=3600",
+      "Access-Control-Allow-Origin": "*"
     }
   });
 }
