@@ -1,10 +1,9 @@
 ---
----
-// No server-side code needed here
+// This script will only run on the client
 ---
 
 <script>
-  // Import GSAP and its plugins on the client side
+  // Load GSAP and its plugins on the client side
   import('gsap').then(({ gsap }) => {
     return import('gsap/SplitText').then(({ SplitText }) => {
       // Register the SplitText plugin
@@ -14,42 +13,92 @@
       function initHeadingAnimation() {
         // Find the heading by ID or class
         const heading = document.querySelector("#main-heading, .gsap-heading");
-        
+
         // Only proceed if the heading exists on the page
         if (!heading) {
           console.warn("No heading element found with ID 'main-heading' or class 'gsap-heading'");
           return;
         }
-        
+
+        // Make sure the heading is visible
+        gsap.set(heading, { opacity: 1, visibility: 'visible' });
+
         // Wait for fonts to be loaded before animating
         document.fonts.ready.then(() => {
           try {
-            // Set initial state
-            gsap.set(heading, { opacity: 1 });
-            
             // Create SplitText instance for the heading
-            const split = new SplitText(heading, { 
-              type: "words,chars",
-              wordsClass: "word",
-              charsClass: "char",
+            const split = new SplitText(heading, {
+              type: "lines,words",
+              linesClass: "gsap-line",
+              wordsClass: "gsap-word",
               aria: "hidden"
             });
 
-            // Animate words with fade-in effect
-            gsap.from(split.words || split.chars || [heading], {
-              opacity: 0,
-              y: 20,
-              duration: 0.8,
-              ease: "power3.out",
-              stagger: 0.05,
-              onComplete: () => {
-                // Clean up after animation if needed
-                if (split.revert) split.revert();
-              }
-            });
+            // Store the original HTML to restore it later
+            const originalHTML = heading.innerHTML;
             
+            // Animate each line separately
+            if (split.lines && split.lines.length > 0) {
+              // Hide the lines initially
+              gsap.set(split.lines, { 
+                opacity: 0,
+                y: 20,
+                display: 'block',
+                overflow: 'hidden'
+              });
+
+              // Animate each line in sequence
+              split.lines.forEach((line, i) => {
+                // Create a new SplitText for this line to handle words
+                const lineSplit = new SplitText(line, {
+                  type: "words",
+                  wordsClass: "gsap-line-word"
+                });
+
+                // Animate words in this line
+                gsap.from(lineSplit.words || [line], {
+                  opacity: 0,
+                  y: 20,
+                  duration: 0.8,
+                  ease: "power3.out",
+                  stagger: {
+                    amount: 0.6,
+                    from: "start"
+                  },
+                  onComplete: () => {
+                    // Clean up this line's SplitText
+                    if (lineSplit.revert) lineSplit.revert();
+                  }
+                });
+              });
+            } else {
+              // Fallback if no lines are detected
+              const wordsSplit = new SplitText(heading, { type: "words" });
+              gsap.from(wordsSplit.words || [heading], {
+                opacity: 0,
+                y: 20,
+                duration: 0.8,
+                ease: "power3.out",
+                stagger: 0.05,
+                onComplete: () => {
+                  if (wordsSplit.revert) wordsSplit.revert();
+                }
+              });
+            }
+
+            // Clean up the main SplitText after all animations are done
+            setTimeout(() => {
+              if (split.revert) {
+                // Restore original HTML to prevent layout issues
+                heading.innerHTML = originalHTML;
+                split.revert();
+              }
+            }, 3000); // Adjust timeout as needed based on animation duration
+
           } catch (error) {
             console.warn("GSAP animation error:", error);
+            // Make sure text is visible if there's an error
+            gsap.set(heading, { opacity: 1, visibility: 'visible' });
           }
         });
       }
@@ -68,4 +117,22 @@
     console.error("Failed to load GSAP:", error);
   });
 </script>
-</script>
+
+<style>
+  /* Ensure the heading is visible by default */
+  #main-heading, .gsap-heading {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+  
+  /* Style for split text elements */
+  .gsap-line {
+    display: block;
+    overflow: hidden;
+  }
+  
+  .gsap-word {
+    display: inline-block;
+    white-space: nowrap;
+  }
+</style>

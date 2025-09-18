@@ -1,7 +1,7 @@
 ---
 title: "Mobil Studio devient FAUVES"
 pubDate: 2025-08-17
-description: "Nnous avons saisi des opportunités, exploré de nouvelles perspectives et affirmé notre place dans le monde du branding et de la communication créative."
+description: "Nous avons saisi des opportunités, exploré de nouvelles perspectives et affirmé notre place dans le monde du branding et de la communication créative."
 author: "Laura Bacquelaine"
 image:
   url: "https://docs.astro.build/assets/rose.webp"
