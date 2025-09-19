@@ -1,0 +1,161 @@
+---
+// src/pages/services/[slug]/[sub].astro
+import type { CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
+import Layout from '../../../layouts/Layout.astro';
+
+// This function tells Astro which pages to generate at build time
+export async function getStaticPaths() {
+  const allServices = await getCollection('services');
+  
+  // Generate paths for all subservices that have ownPage: true
+  const paths = [];
+  
+  for (const service of allServices) {
+    if (service.data.subservices && service.data.subservices.length > 0) {
+      for (const subservice of service.data.subservices) {
+        if (subservice.ownPage) {
+          paths.push({
+            params: { 
+              slug: service.slug || service.id.split('/').pop()?.replace(/\.md$/, ''),
+              sub: subservice.key 
+            },
+            props: { 
+              serviceSlug: service.slug || service.id.split('/').pop()?.replace(/\.md$/, ''),
+              subserviceKey: subservice.key
+            }
+          });
+        }
+      }
+    }
+  }
+  
+  return paths;
+}
+
+// Get the slug and sub from the URL and props
+const { slug, sub } = Astro.params;
+const { serviceSlug, subserviceKey } = Astro.props as { 
+  serviceSlug: string; 
+  subserviceKey: string;
+};
+
+// Get all services
+const allServices = await getCollection('services');
+
+// Find the parent service
+const parentService = allServices.find((service: CollectionEntry<"services">) => 
+  service.slug === serviceSlug || 
+  service.slug === `${serviceSlug}.md` || 
+  service.id.endsWith(`/${serviceSlug}.md`)
+);
+
+// If parent service not found, return 404
+if (!parentService) {
+  return Astro.redirect('/404');
+}
+
+// Find the subservice
+const subservice = parentService.data.subservices.find((s: { key: string }) => s.key === subserviceKey);
+
+// If subservice not found or not marked as ownPage, redirect to parent
+if (!subservice || !subservice.ownPage) {
+  return Astro.redirect(`/services/${serviceSlug}`);
+}
+
+// Generate the page title and description
+const pageTitle = subservice.title;
+const pageDescription = subservice.excerpt || `Learn more about ${subservice.title} - ${parentService.data.title}`;
+
+// Generate canonical URL
+const canonical = `/services/${slug}/${sub}`;
+
+// Generate breadcrumb structured data
+const breadcrumbStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Services",
+      "item": new URL('/services', Astro.site || 'https://fauves.be').href
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": parentService.data.title,
+      "item": new URL(`/services/${slug}`, Astro.site || 'https://fauves.be').href
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": subservice.title,
+      "item": new URL(canonical, Astro.site || 'https://fauves.be').href
+    }
+  ]
+};
+---
+
+<Layout 
+  title={`${pageTitle} | ${parentService.data.title} | Fauves`}
+  description={pageDescription}
+  canonical={canonical}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(breadcrumbStructuredData)} />
+  
+  <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <nav aria-label="Breadcrumb" class="mb-6">
+      <ol class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+        <li>
+          <a href="/" class="hover:text-primary-600 dark:hover:text-primary-400">Home</a>
+        </li>
+        <li class="flex items-center">
+          <svg class="h-4 w-4 mx-1" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+          </svg>
+          <a href="/services" class="hover:text-primary-600 dark:hover:text-primary-400">Services</a>
+        </li>
+        <li class="flex items-center">
+          <svg class="h-4 w-4 mx-1" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+          </svg>
+          <a href={`/services/${slug}`} class="hover:text-primary-600 dark:hover:text-primary-400">
+            {parentService.data.title}
+          </a>
+        </li>
+        <li class="flex items-center">
+          <svg class="h-4 w-4 mx-1" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+          </svg>
+          <span class="text-gray-500 dark:text-gray-400">{subservice.title}</span>
+        </li>
+      </ol>
+    </nav>
+
+    <header class="mb-8">
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">
+        {subservice.title}
+      </h1>
+      <p class="text-xl text-gray-600 dark:text-gray-300">
+        {parentService.data.title}
+      </p>
+    </header>
+
+    <div class="prose dark:prose-invert max-w-none">
+      <slot />
+      
+      <div class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
+        <a 
+          href={`/services/${slug}`}
+          class="inline-flex items-center text-primary-600 hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-300 font-medium"
+        >
+          <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+          Back to {parentService.data.shortTitle}
+        </a>
+      </div>
+    </div>
+  </article>
+</Layout>

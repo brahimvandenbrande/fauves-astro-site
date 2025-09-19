@@ -61,7 +61,31 @@ const blogCollection = defineCollection({
   })
 });
 
+const servicesCollection = defineCollection({
+  type: "content",
+  schema: z.object({
+    shortTitle: z.string(),
+    title: z.string(),
+    slug: z.string().optional(),
+    excerpt: z.string().max(180),
+    order: z.number().default(0),
+    tags: z.array(z.string()).default([]),
+    subservices: z.array(z.object({
+      title: z.string(),
+      key: z.string(),
+      ownPage: z.boolean().default(false),
+      excerpt: z.string().optional(),
+      order: z.number().default(0)
+    })).default([]),
+    seo: z.object({
+      title: z.string().optional(),
+      description: z.string().optional()
+    }).optional()
+  })
+});
+
 export const collections = {
   projects: projectsCollection,
-  blog: blogCollection
+  blog: blogCollection,
+  services: servicesCollection
 };

@@ -1,0 +1,65 @@
+---
+// components/ServiceCard.astro
+interface Props {
+  href: string;
+  shortTitle: string;
+  title: string;
+  excerpt: string;
+  tags?: string[];
+}
+
+const { href, shortTitle, title, excerpt, tags = [] } = Astro.props;
+---
+
+<div class="group relative h-full min-h-[500px] md:min-h-[500px]">
+  <div
+    class="relative flex h-full flex-col rounded-[20px] border border-solid border-black bg-white px-6 pt-6 pb-2 transition-all duration-300 hover:border-[#522be2] md:px-8 md:pt-8"
+  >
+    {/* Tags container with fixed height */}
+    <div class="relative z-10 mb-auto">
+      <div class="relative min-h-[150px]">
+        {
+          tags.length > 0 && (
+            <div class="flex flex-wrap gap-1.5">
+              {tags.map((tag: string) => (
+                <a
+                  href={`/services#${tag.toLowerCase().replace(/\s+/g, "-")}`}
+                  class="group/tag inline-flex items-center rounded-[30.7px] border border-solid border-[#522be2] px-3 py-1.5 no-underline transition-colors duration-300 hover:bg-[#522be2]"
+                >
+                  <span class="font-sans text-[11px] leading-none font-medium tracking-wider text-[#522be2] uppercase group-hover/tag:text-white">
+                    {tag}
+                  </span>
+                </a>
+              ))}
+            </div>
+          )
+        }
+      </div>
+      {/* Spacer to maintain consistent height and push content down */}
+      <div class="h-16"></div>
+    </div>
+
+    {/* Clickable section for title and excerpt */}
+    <a
+      href={href}
+      class="group/link relative z-0 mt-auto block flex h-full flex-col pt-8 no-underline"
+      aria-label={`View ${title}`}
+    >
+      <div class="flex flex-1 flex-col">
+        {/* Title - simplified to only show short title */}
+        <h2
+          class="flex min-h-[4.4rem] items-start font-sans text-[2rem] leading-[1.1] font-semibold tracking-wider text-black lowercase transition-colors duration-300 group-hover:text-[#522be2]"
+        >
+          {shortTitle}
+        </h2>
+
+        {/* Excerpt with reduced top margin */}
+        <p
+          class="font-sans text-[1.1rem] leading-[1.5] font-light text-black transition-colors duration-300 group-hover:text-[#522be2]"
+        >
+          {excerpt}
+        </p>
+      </div>
+    </a>
+  </div>
+</div>

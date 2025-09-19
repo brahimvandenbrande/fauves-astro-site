@@ -17,6 +17,9 @@ import VideoPlayer from "@components/ui/VideoPlayer.astro";
 import CTABanner from "@components/ui/CTABanner.astro";
 import Footer from "@components/Footer.astro";
 import { getCollection } from "astro:content";
+// Import the server-side ServiceCard component
+import ServiceCard from "@components/ServiceCard.astro";
+import { Fragment } from "astro/jsx-runtime";
 
 // Video sources for the VideoPlayer component
 const videoSources = [
@@ -55,6 +58,21 @@ const featuredProjects = allProjects.filter(
   (project: CollectionEntry<"projects">) => project.data.featured
 );
 
+// Get all services, sorted by order
+const allServices: CollectionEntry<"services">[] = (
+  await getCollection("services")
+).sort(
+  (a: CollectionEntry<"services">, b: CollectionEntry<"services">) =>
+    (a.data.order || 0) - (b.data.order || 0)
+);
+
+// Helper function to get service slug
+function getServiceSlug(service: CollectionEntry<"services">): string {
+  return (
+    service.slug || service.id.split("/").pop()?.replace(/\.md$/, "") || ""
+  );
+}
+
 // Get the optimized image URL
 const optimizedPoster = await getImage({
   src: videoPosterImage,
@@ -75,10 +93,8 @@ const optimizedPoster = await getImage({
   <script is:inline>
     // Wait for everything to be loaded
     document.addEventListener("DOMContentLoaded", () => {
-
       const handleIntersect = (entries, observer) => {
         entries.forEach((entry) => {
-
           if (entry.isIntersecting) {
             const element = entry.target;
             if (!(element instanceof HTMLElement)) return;
@@ -138,7 +154,9 @@ const optimizedPoster = await getImage({
       setTimeout(checkInitialElements, 500);
     });
   </script>
-  <main class="mx-auto flex max-w-[85rem] flex-col gap-12 px-4 pt-12 pb-16 md:pt-16 lg:pt-24">
+  <main
+    class="mx-auto flex max-w-[85rem] flex-col gap-12 px-4 pt-12 pb-16 md:pt-16 lg:pt-24"
+  >
     <!-- 🎯 Contenu principal de la page -->
     <!-- 🦁 Hero section -->
     <section>
@@ -184,7 +202,361 @@ const optimizedPoster = await getImage({
       poster={optimizedPoster.src}
     />
 
-    <section class="mx-auto max-w-[85rem] px-4 pt-8 pb-8 text-left md:pt-12 md:pb-12">
+    <!-- Services Section -->
+    <section
+      class="mx-auto max-w-[85rem] px-4 pt-8 pb-8 text-left md:pt-12 md:pb-12"
+    >
+      <div class="max-w-[900px] pb-12">
+        <p
+          class="font-degular text-left text-3xl leading-[1.2] font-light text-black sm:text-4xl md:text-5xl lg:text-6xl xl:text-[4rem]"
+        >
+          Nous créons votre marque et la déployons partout où elle doit vivre.
+        </p>
+      </div>
+      <div class:list={["relative", "overflow-hidden", "-mx-4"]}>
+        <div
+          class:list={[
+            "w-full",
+            "flex",
+            "transition-transform",
+            "duration-1000",
+            "ease-in-out",
+            "px-4"
+          ]}
+          id="services-track"
+        >
+          {
+            allServices.map((service) => {
+              const slug = getServiceSlug(service);
+              const href = `/services/${slug}`;
+
+              return (
+                <div
+                  class:list={[
+                    "service-card",
+                    "w-1/3",
+                    "px-4",
+                    "flex-shrink-0"
+                  ]}
+                  onmouseenter="document.dispatchEvent(new CustomEvent('pauseCarousel'))"
+                  onmouseleave="document.dispatchEvent(new CustomEvent('resumeCarousel'))"
+                >
+                  <ServiceCard
+                    href={href}
+                    shortTitle={service.data.shortTitle}
+                    title={service.data.title}
+                    excerpt={service.data.excerpt}
+                    tags={service.data.tags || []}
+                  />
+                </div>
+              );
+            })
+          }
+        </div>
+      </div>
+
+      <script>
+        // Type definitions for TypeScript
+        interface Window {
+          requestAnimationFrame: (callback: FrameRequestCallback) => number;
+          cancelAnimationFrame: (handle: number) => void;
+          setInterval: (
+            handler: TimerHandler,
+            timeout?: number,
+            ...args: any[]
+          ) => number;
+          clearInterval: (handle?: number) => void;
+        }
+        document.addEventListener("DOMContentLoaded", () => {
+          // Type assertions for event handlers
+          type EventHandler = (e: Event) => void;
+          type MouseEventHandler = (e: MouseEvent) => void;
+          type TouchEventHandler = (e: TouchEvent) => void;
+          const track = document.getElementById("services-track");
+          if (!track) {
+            console.error("Could not find element with ID 'services-track'");
+            return;
+          }
+
+          // Store event handler references for cleanup
+          const handleDragStart = (e: Event) => {
+            e.preventDefault();
+            return false;
+          };
+
+          const container = track.parentElement;
+          if (!container) {
+            console.error("Could not find parent element of services-track");
+            return;
+          }
+
+          const cards = document.querySelectorAll("#services-track > div");
+          if (cards.length === 0) {
+            console.error("No carousel cards found");
+            return;
+          }
+
+          let currentIndex = 0;
+          let cardsPerView =
+            window.innerWidth >= 1024 ? 3 : window.innerWidth >= 768 ? 2 : 1;
+          const autoplayDelay = 5000; // 5 seconds between slides
+          let autoplayInterval: number | undefined;
+          let isDragging = false;
+          let startPos = 0;
+          let currentTranslate = 0;
+          let prevTranslate = 0;
+          let animationID = 0;
+          let isDraggingManually = false;
+
+          const updateCarousel = () => {
+            const cardWidth = 100 / cardsPerView;
+            currentTranslate = -currentIndex * cardWidth;
+            track.style.transform = `translateX(${currentTranslate}%)`;
+          };
+
+          // Touch and mouse event handlers
+          const startDrag = (e: MouseEvent | TouchEvent) => {
+            isDragging = true;
+            isDraggingManually = true;
+            startPos = "touches" in e ? e.touches[0].clientX : e.clientX;
+            track.style.cursor = "grabbing";
+            track.style.transition = "none";
+            // Pause autoplay while dragging
+            if (autoplayInterval) {
+              clearInterval(autoplayInterval);
+            }
+            // Prevent text selection while dragging
+            document.body.style.userSelect = "none";
+          };
+
+          const drag = (e: MouseEvent | TouchEvent) => {
+            if (!isDragging) return;
+            const currentPosition =
+              "touches" in e ? e.touches[0].clientX : e.clientX;
+            const diff = currentPosition - startPos;
+            const cardWidth = 100 / cardsPerView;
+
+            // Prevent dragging beyond boundaries
+            const maxTranslate = 0;
+            const minTranslate = -((cards.length - cardsPerView) * cardWidth);
+
+            currentTranslate = Math.max(
+              Math.min(
+                prevTranslate + (diff / track.offsetWidth) * 100,
+                maxTranslate
+              ),
+              minTranslate
+            );
+            track.style.transform = `translateX(${currentTranslate}%)`;
+          };
+
+          const endDrag = (e?: Event) => {
+            if (!isDragging) return;
+            isDragging = false;
+            track.style.cursor = "grab";
+            track.style.transition = "transform 0.5s ease-out";
+
+            // Snap to nearest card
+            const cardWidth = 100 / cardsPerView;
+            const draggedCards = Math.round(-currentTranslate / cardWidth);
+            currentIndex = Math.max(
+              0,
+              Math.min(draggedCards, cards.length - cardsPerView)
+            );
+
+            updateCarousel();
+
+            // Re-enable text selection
+            document.body.style.userSelect = "";
+
+            // Restart autoplay after a short delay if not manually dragging
+            setTimeout(() => {
+              isDraggingManually = false;
+              if (!isDraggingManually) {
+                startAutoplay();
+              }
+            }, 1000);
+          };
+
+          // Function to handle cleanup of event listeners
+          const cleanupEventListeners = () => {
+            track.removeEventListener("mousedown", startDrag as EventListener);
+            track.removeEventListener("touchstart", startDrag as EventListener);
+            window.removeEventListener("mousemove", drag as EventListener);
+            window.removeEventListener("touchmove", drag as EventListener);
+            window.removeEventListener("mouseup", endDrag);
+            window.removeEventListener("touchend", endDrag);
+            window.removeEventListener("mouseleave", endDrag);
+          };
+
+          const nextSlide = () => {
+            if (currentIndex < cards.length - cardsPerView) {
+              currentIndex++;
+            } else {
+              currentIndex = 0; // Loop back to the first slide
+            }
+            updateCarousel();
+          };
+
+          // Handle window resize
+          const handleResize = () => {
+            updateCarousel();
+          };
+          window.addEventListener("resize", handleResize);
+
+          // Start autoplay
+          const startAutoplay = () => {
+            if (typeof window !== "undefined" && !isDraggingManually) {
+              clearInterval(autoplayInterval);
+              autoplayInterval = window.setInterval(nextSlide, autoplayDelay);
+            }
+          };
+
+          // Pause autoplay on card hover
+          document.addEventListener("pauseCarousel", () => {
+            if (autoplayInterval) {
+              clearInterval(autoplayInterval);
+            }
+          });
+
+          // Resume autoplay when mouse leaves card
+          document.addEventListener("resumeCarousel", startAutoplay);
+
+          // Initialize
+          window.addEventListener("resize", handleResize);
+
+          // Mouse event handlers
+          const onMouseDown = (e: MouseEvent) => {
+            e.preventDefault();
+            isDragging = true;
+            isDraggingManually = true;
+            startPos = e.clientX;
+            track.style.cursor = "grabbing";
+            track.style.transition = "none";
+            if (autoplayInterval) {
+              clearInterval(autoplayInterval);
+            }
+            document.body.style.userSelect = "none";
+          };
+
+          const onMouseMove = (e: MouseEvent) => {
+            if (!isDragging) return;
+            const currentPosition = e.clientX;
+            const diff = currentPosition - startPos;
+            const cardWidth = 100 / cardsPerView;
+
+            // Prevent dragging beyond boundaries
+            const maxTranslate = 0;
+            const minTranslate = -((cards.length - cardsPerView) * cardWidth);
+
+            currentTranslate = Math.max(
+              Math.min(
+                prevTranslate + (diff / track.offsetWidth) * 100,
+                maxTranslate
+              ),
+              minTranslate
+            );
+            track.style.transform = `translateX(${currentTranslate}%)`;
+          };
+
+          // Touch event handlers
+          const onTouchStart = (e: TouchEvent) => {
+            const touch = e.touches[0];
+            isDragging = true;
+            isDraggingManually = true;
+            startPos = touch.clientX;
+            track.style.cursor = "grabbing";
+            track.style.transition = "none";
+            if (autoplayInterval) {
+              clearInterval(autoplayInterval);
+            }
+            document.body.style.userSelect = "none";
+          };
+
+          const onTouchMove = (e: TouchEvent) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            const touch = e.touches[0];
+            const currentPosition = touch.clientX;
+            const diff = currentPosition - startPos;
+            const cardWidth = 100 / cardsPerView;
+
+            // Prevent dragging beyond boundaries
+            const maxTranslate = 0;
+            const minTranslate = -((cards.length - cardsPerView) * cardWidth);
+
+            currentTranslate = Math.max(
+              Math.min(
+                prevTranslate + (diff / track.offsetWidth) * 100,
+                maxTranslate
+              ),
+              minTranslate
+            );
+            track.style.transform = `translateX(${currentTranslate}%)`;
+          };
+
+          // Add mouse event listeners with proper typing
+          track.addEventListener("mousedown", startDrag as EventListener);
+          window.addEventListener("mousemove", drag as EventListener);
+          window.addEventListener("mouseup", endDrag as EventListener);
+          window.addEventListener("mouseleave", endDrag as EventListener);
+
+          // Add touch event listeners with proper typing
+          track.addEventListener(
+            "touchstart",
+            startDrag as unknown as EventListener
+          );
+          window.addEventListener(
+            "touchmove",
+            drag as unknown as EventListener,
+            { passive: false }
+          );
+          window.addEventListener("touchend", endDrag as EventListener);
+
+          // Prevent image drag
+          const images = track.querySelectorAll("img");
+          images.forEach((img) => {
+            img.addEventListener("dragstart", handleDragStart);
+          });
+
+          startAutoplay();
+          updateCarousel();
+
+          // Cleanup
+          return () => {
+            if (autoplayInterval) {
+              clearInterval(autoplayInterval);
+            }
+            window.removeEventListener("resize", handleResize);
+
+            // Remove drag event listeners with proper typing
+            track.removeEventListener("mousedown", startDrag as EventListener);
+            track.removeEventListener(
+              "touchstart",
+              startDrag as unknown as EventListener
+            );
+            window.removeEventListener("mousemove", drag as EventListener);
+            window.removeEventListener(
+              "touchmove",
+              drag as unknown as EventListener
+            );
+            window.removeEventListener("mouseup", endDrag as EventListener);
+            window.removeEventListener("touchend", endDrag as EventListener);
+            window.removeEventListener("mouseleave", endDrag as EventListener);
+
+            // Remove image drag prevention
+            const images = track.querySelectorAll("img");
+            images.forEach((img) => {
+              img.removeEventListener("dragstart", handleDragStart);
+            });
+          };
+        });
+      </script>
+    </section>
+
+    <section
+      class="mx-auto max-w-[85rem] px-4 pt-8 pb-8 text-left md:pt-12 md:pb-12"
+    >
       <p
         class="animate-on-scroll font-degular text-3xl leading-[1.2] font-light text-black sm:text-4xl md:text-5xl lg:text-6xl xl:text-[4rem]"
         data-animate="fade-up"
@@ -197,7 +569,8 @@ const optimizedPoster = await getImage({
     </section>
   </main>
 
-  <CTABanner className="pt-0"
+  <CTABanner
+    className="pt-0"
     title="Prêt à donner vie à votre marque ?"
     description="Contactez-nous pour discuter de votre projet et voir comment nous pouvons vous aider à créer une marque qui se démarque."
     buttonText="NOUS CONTACTER"

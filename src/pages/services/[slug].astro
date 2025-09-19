@@ -1,0 +1,130 @@
+---
+// src/pages/services/[slug].astro
+import type { CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import ServiceCard from '../../components/ServiceCard.astro';
+
+// This function tells Astro which pages to generate at build time
+export async function getStaticPaths() {
+  const allServices = await getCollection('services', ({ data }: { data: { draft?: boolean } }) => !data.draft);
+  
+  return allServices.map((service: CollectionEntry<'services'>) => ({
+    params: { 
+      slug: service.slug || service.id.split('/').pop()?.replace(/\.md$/, '') 
+    },
+    props: { service },
+  }));
+}
+
+// Get the slug from the URL
+const { slug } = Astro.params;
+
+// Get the service from props (provided by getStaticPaths)
+const service = (Astro.props as { service: CollectionEntry<'services'> }).service;
+
+// Get all services (for the "More Services" section)
+const allServices = await getCollection('services', ({ data }: { data: { draft?: boolean } }) => !data.draft);
+
+// Get other services for the "More Services" section
+const otherServices = allServices
+  .filter((s: CollectionEntry<"services">) => s.id !== service.id)
+  .sort((a: CollectionEntry<"services">, b: CollectionEntry<"services">) => (a.data.order || 0) - (b.data.order || 0));
+
+// Generate the page title
+const pageTitle = service.data.seo?.title || `${service.data.title} | Fauves`;
+const pageDescription = service.data.seo?.description || service.data.excerpt;
+
+// Generate structured data
+const structuredData = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "serviceType": service.data.title,
+  "provider": {
+    "@type": "Organization",
+    "name": "Fauves",
+    "url": new URL(Astro.url.pathname, Astro.site || 'https://fauves.be').href
+  },
+  "areaServed": ["Belgium", "Europe"],
+  "description": pageDescription,
+  "name": service.data.title
+};
+---
+
+<Layout 
+  title={pageTitle}
+  description={pageDescription}
+  canonical={`/services/${slug}`}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+  
+  <article class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <header class="mb-12">
+      <span class="text-sm font-semibold text-primary-600 dark:text-primary-400 mb-2 inline-block">
+        Service
+      </span>
+      <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+        {service.data.title}
+      </h1>
+      <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl">
+        {service.data.excerpt}
+      </p>
+    </header>
+
+    <div class="prose dark:prose-invert max-w-none">
+      <slot />
+      
+      {service.data.subservices.length > 0 && (
+        <div class="mt-12">
+          <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6">
+            What we offer
+          </h2>
+          <div class="grid gap-6 md:grid-cols-2">
+            {service.data.subservices.sort((a: { order: number }, b: { order: number }) => a.order - b.order).map((subservice: { title: string; excerpt?: string; key: string; ownPage: boolean; order: number }) => (
+              <div class="p-6 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                  {subservice.title}
+                </h3>
+                {subservice.excerpt && (
+                  <p class="text-gray-600 dark:text-gray-300 mb-4">
+                    {subservice.excerpt}
+                  </p>
+                )}
+                {subservice.ownPage && (
+                  <a 
+                    href={`/services/${slug}/${subservice.key}`}
+                    class="inline-flex items-center text-primary-600 hover:text-primary-800 dark:text-primary-400 dark:hover:text-primary-300 font-medium"
+                  >
+                    Learn more
+                    <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </a>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+
+    {otherServices.length > 0 && (
+      <section class="mt-16">
+        <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-8">
+          Explore our other services
+        </h2>
+        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {otherServices.map((service: CollectionEntry<"services">) => (
+            <ServiceCard
+              href={`/services/${service.slug || service.id.split('/').pop()?.replace(/\.md$/, '')}`}
+              shortTitle={service.data.shortTitle}
+              title={service.data.title}
+              excerpt={service.data.excerpt}
+              tags={service.data.tags}
+            />
+          ))}
+        </div>
+      </section>
+    )}
+  </article>
+</Layout>
