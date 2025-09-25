@@ -129,6 +129,11 @@ html.no-view-transitions a:hover {
   font-weight: 300;
   font-style: normal;
   font-display: swap;
+  /* Font metric overrides to reduce reflow on swap. These values are conservative. */
+  size-adjust: 100%;
+  ascent-override: 88%;
+  descent-override: 12%;
+  line-gap-override: 0%;
 }
 
 @font-face {
@@ -141,6 +146,11 @@ html.no-view-transitions a:hover {
   font-weight: 600;
   font-style: normal;
   font-display: swap;
+  /* Font metric overrides to reduce reflow on swap. */
+  size-adjust: 100%;
+  ascent-override: 88%;
+  descent-override: 12%;
+  line-gap-override: 0%;
 }
 
 body {

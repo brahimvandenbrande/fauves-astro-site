@@ -5,10 +5,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 // Register the GSAP plugins
 gsap.registerPlugin(SplitText, ScrollTrigger);
 
-// Debug function
-function debugLog(...args) {
-  console.log('[GSAP Debug]', ...args);
-}
+// Debug function (silenced)
+function debugLog(..._args) { /* no-op */ }
 
 // Function to initialize the heading animation
 function initHeadingAnimation() {
@@ -100,32 +98,8 @@ export default function initAnimations() {
     initHeadingAnimation();
   };
   
-  // Check if the document is already loaded
-  if (document.readyState === 'complete' || document.readyState === 'interactive') {
-    debugLog('Document ready, initializing...');
-    setTimeout(init, 100);
-  } else {
-    debugLog('Waiting for DOM content to load...');
-    document.addEventListener('DOMContentLoaded', () => {
-      debugLog('DOM content loaded, initializing...');
-      setTimeout(init, 100);
-    });
-  }
-  
-  // Also initialize when Astro's page load event fires
-  document.addEventListener('astro:page-load', () => {
-    debugLog('Astro page load event, reinitializing...');
-    setTimeout(init, 100);
-  });
+  // Caller must invoke init() at the right moment to avoid duplicates; we do not auto-run here
+  return { init };
 }
 
-// Initialize animations when the page loads and on route changes
-if (import.meta.hot) {
-  import.meta.hot.on('astro:page-load', () => {
-    // Refresh ScrollTrigger on page navigation
-    ScrollTrigger.refresh();
-  });
-}
-
-// Initialize immediately if this script is loaded directly
-initAnimations();
+// No automatic initialization to avoid duplicates with AnimateHeading.astro

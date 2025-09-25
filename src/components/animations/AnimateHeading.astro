@@ -19,8 +19,6 @@
   .gsap-word {
     display: inline-block;
     white-space: nowrap;
-    opacity: 0;
-    transform: translateY(20px);
   }
 </style>
 
@@ -38,6 +36,11 @@
   if (!window.__gsapCleanup) {
     window.__gsapCleanup = [];
   }
+
+  // Debug toggles
+  const DEBUG = false;
+  const dlog = (...args: any[]) => { if (DEBUG) console.log(...args); };
+  const dwarn = (...args: any[]) => { if (DEBUG) console.warn(...args); };
 
   // Function to initialize the heading animation
   async function initHeadingAnimation() {
@@ -72,51 +75,25 @@
         return;
       }
 
-      console.log(`Found ${headings.length} headings to animate`);
+      dlog(`Found ${headings.length} headings to animate`);
 
       // Process each heading
       for (const heading of headings) {
         if (!(heading instanceof HTMLElement)) continue;
         
-        console.log("Animating heading:", heading);
+        dlog("Animating heading:", heading);
 
         // Check if this is an H1 (should animate immediately without scroll)
         const isH1 = heading.tagName === 'H1';
 
-        // For H1, use the specific animation style
+        // For H1, no animation: keep it visible immediately (better UX + LCP), ensure accessibility
         if (isH1) {
-          // Make sure heading is visible before animation
-          gsap.set(heading, { opacity: 1 });
-
-          // Create SplitText for H1 with words only
-          const split = new SplitText(heading, { 
-            type: "words", 
-            wordsClass: "gsap-word",
-            aria: "hidden"
-          });
-
-          // Accessibility: ensure the heading itself is not hidden from AT
+          gsap.set(heading, { opacity: 1, clearProps: 'transform' });
           heading.removeAttribute('aria-hidden');
           if (!heading.getAttribute('aria-label')) {
             const label = heading.textContent?.trim() || '';
             if (label) heading.setAttribute('aria-label', label);
           }
-
-          // Animate words with the specified effect
-          gsap.from(split.words, {
-            opacity: 0,
-            duration: 2,
-            ease: "sine.out",
-            stagger: 0.1,
-            onComplete: () => {
-              // Clean up aria-hidden after animation
-              (split.words as unknown as Element[]).forEach((word) =>
-                (word as HTMLElement).removeAttribute('aria-hidden')
-              );
-            }
-          });
-
-          // Skip to next heading
           continue;
         }
 
@@ -150,7 +127,7 @@
             ease: "power3.out"
           },
           onComplete: () => {
-            console.log("Animation complete for heading:", heading);
+            dlog("Animation complete for heading:", heading);
             // Restore original aria attributes after animation
             if (split.words) {
               (split.words as unknown as Element[]).forEach((word) =>
@@ -168,9 +145,9 @@
           start: "top 80%",
           end: "center 20%",
           toggleActions: "play none none none",
-          markers: true,
-          onEnter: () => console.log("Heading entered viewport:", heading),
-          onEnterBack: () => console.log("Heading re-entered viewport:", heading)
+          markers: false,
+          onEnter: () => dlog("Heading entered viewport:", heading),
+          onEnterBack: () => dlog("Heading re-entered viewport:", heading)
         });
         
         // Add cleanup for ScrollTrigger
@@ -262,8 +239,8 @@
     try {
       const gs = window.gsap as any | undefined;
       const st = window.ScrollTrigger as any | undefined;
-      console.log("GSAP version:", gs?.version);
-      console.log("ScrollTrigger version:", st?.version);
+      dlog("GSAP version:", gs?.version);
+      dlog("ScrollTrigger version:", st?.version);
 
       const plugins: string[] = [];
       if (gs?.plugins) {
@@ -273,18 +250,18 @@
           }
         }
       }
-      console.log("GSAP plugins:", plugins);
+      dlog("GSAP plugins:", plugins);
 
       const isScrollTriggerActive = Boolean(st && 'isTouch' in st);
-      console.log("ScrollTrigger is active:", isScrollTriggerActive);
+      dlog("ScrollTrigger is active:", isScrollTriggerActive);
     } catch (error) {
-      console.error("Error logging GSAP status:", error);
+      if (DEBUG) console.error("Error logging GSAP status:", error);
     }
   }
 
   // Initialize animations with cleanup handling
   function initAnimations(): Promise<void> {
-    console.log("Initializing animations...");
+    dlog("Initializing animations...");
     // Run any existing cleanup functions before re-initializing
     if (window.__gsapCleanup && Array.isArray(window.__gsapCleanup)) {
       window.__gsapCleanup.forEach((fn) => {
@@ -299,15 +276,15 @@
 
     return initHeadingAnimation()
       .then(() => {
-        console.log("Animations initialized");
+        dlog("Animations initialized");
         // Refresh ScrollTrigger after a short delay to ensure all elements are in place
         setTimeout(() => {
           const st = window.ScrollTrigger as any | undefined;
           if (st && typeof st.refresh === 'function') {
             st.refresh();
-            console.log("ScrollTrigger refreshed");
+            dlog("ScrollTrigger refreshed");
           }
-          logGSAPStatus();
+          if (DEBUG) logGSAPStatus();
         }, 500);
       })
       .catch((error) => {
@@ -328,7 +305,7 @@
       return; // too soon since last init
     }
     window.__gsapInitLock = true;
-    console.log("DOM ready, initializing animations...");
+    dlog("DOM ready, initializing animations...");
     initAnimations()
       .finally(() => {
         window.__gsapLastInitTime = Date.now();
@@ -345,7 +322,7 @@
 
   // Also initialize on Astro page transitions
   document.addEventListener("astro:page-load", () => {
-    console.log("Astro page loaded, reinitializing animations...");
+    dlog("Astro page loaded, reinitializing animations...");
     // In case DOMContentLoaded and astro:page-load fire close, let our guard suppress duplicates
     setTimeout(init, 120);
   });

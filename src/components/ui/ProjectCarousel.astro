@@ -28,8 +28,8 @@ const projectImages: Record<string, ImageMetadata> = {
       <!-- Scrollable viewport -->
       <div
         data-carousel
-        class="flex h-full snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth pb-16 overscroll-x-contain"
-        style="scrollbar-width: none; -webkit-overflow-scrolling: touch; contain: layout paint; scrollbar-gutter: stable both-edges;"
+        class="invisible opacity-0 transition-opacity duration-500 ease-out flex h-full snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth pb-16 overscroll-x-contain pl-4 md:pl-6 lg:pl-8"
+        style="scrollbar-width: none; -webkit-overflow-scrolling: touch; contain: layout paint; scrollbar-gutter: stable both-edges; scroll-padding-left: 1rem;"
       >
         {projects.map((project, index) => {
           const image = projectImages[project.slug];
@@ -161,11 +161,16 @@ const projectImages: Record<string, ImageMetadata> = {
       viewport.style.paddingLeft = left + "px";
       viewport.style.scrollPaddingLeft = left + "px";
       // Note: left gutter applied to viewport padding only; arrows use a fixed right offset to avoid movement.
+      // Reveal viewport once initial paddings are applied and fade it in
+      if (viewport.classList.contains('invisible')) viewport.classList.remove('invisible');
+      if (viewport.classList.contains('opacity-0')) {
+        requestAnimationFrame(() => viewport.classList.remove('opacity-0'));
+      }
     };
 
     // initial + reflow-safe
     requestAnimationFrame(() => { applyGutters(); requestAnimationFrame(applyGutters); });
-    window.addEventListener("load", applyGutters);
+    window.addEventListener("load", applyGutters, { once: true });
     const ro = new ResizeObserver(applyGutters);
     ro.observe(document.documentElement);
     const main = document.querySelector("main");

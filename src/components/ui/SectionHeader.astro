@@ -40,7 +40,8 @@ const HeadingTag = `h${level}` as const;
     sizeClasses[size],
     alignClasses[align],
     className,
-    'opacity-0' // Start with 0 opacity, GSAP will handle the animation
+    // Do NOT hide H1 on initial render, to avoid delaying LCP
+    level === 1 ? 'opacity-100' : 'opacity-0'
   ]}
   data-gsap-animate="true"
 >

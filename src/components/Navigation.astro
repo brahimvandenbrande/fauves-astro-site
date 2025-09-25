@@ -37,12 +37,12 @@ const isActive = (path: string) =>
 
     <!-- Menu desktop -->
     <ul
-      class="hidden gap-6 text-lg font-light tracking-tight text-black sm:flex sm:items-center sm:whitespace-nowrap"
+      class="hidden gap-6 text-lg font-light tracking-tight text-black sm:flex sm:items-center sm:whitespace-nowrap sm:min-h-[2.75rem]"
     >
       <li>
         <a
           href="/projects"
-          class={`transition-colors hover:text-indigo-600 ${isActive("/projects") ? "text-indigo-600" : ""}`}
+          class={`transition-colors hover:text-indigo-600 leading-none whitespace-nowrap ${isActive("/projects") ? "text-indigo-600" : ""}`}
         >
           projets
         </a>
@@ -50,7 +50,7 @@ const isActive = (path: string) =>
       <li>
         <a
           href="/a-propos"
-          class={`transition-colors hover:text-indigo-600 ${isActive("/a-propos") ? "text-indigo-600" : ""}`}
+          class={`transition-colors hover:text-indigo-600 leading-none whitespace-nowrap ${isActive("/a-propos") ? "text-indigo-600" : ""}`}
         >
           à propos
         </a>
@@ -58,7 +58,7 @@ const isActive = (path: string) =>
       <li>
         <a
           href="/approche"
-          class={`transition-colors hover:text-indigo-600 ${isActive("/approche") ? "text-indigo-600" : ""}`}
+          class={`transition-colors hover:text-indigo-600 leading-none whitespace-nowrap ${isActive("/approche") ? "text-indigo-600" : ""}`}
         >
           approche
         </a>
@@ -66,7 +66,7 @@ const isActive = (path: string) =>
       <li>
         <a
           href="/services"
-          class={`transition-colors hover:text-indigo-600 ${isActive("/services") ? "text-indigo-600" : ""}`}
+          class={`transition-colors hover:text-indigo-600 leading-none whitespace-nowrap ${isActive("/services") ? "text-indigo-600" : ""}`}
         >
           services
         </a>
@@ -74,7 +74,7 @@ const isActive = (path: string) =>
       <li>
         <a
           href="/blog"
-          class={`transition-colors hover:text-indigo-600 ${isActive("/blog") ? "text-indigo-600" : ""}`}
+          class={`transition-colors hover:text-indigo-600 leading-none whitespace-nowrap ${isActive("/blog") ? "text-indigo-600" : ""}`}
         >
           blog
         </a>
@@ -82,7 +82,7 @@ const isActive = (path: string) =>
       <li>
         <a
           href="/contact"
-          class={`transition-colors hover:text-indigo-600 ${isActive("/contact") ? "text-indigo-600" : ""}`}
+          class={`transition-colors hover:text-indigo-600 leading-none whitespace-nowrap ${isActive("/contact") ? "text-indigo-600" : ""}`}
         >
           contact
         </a>
