@@ -11,13 +11,13 @@ interface Props {
 const { href, shortTitle, title, excerpt, tags = [] } = Astro.props;
 ---
 
-<div class="group relative h-full min-h-[500px] md:min-h-[500px]">
+<div class="group relative h-full min-h-[500px] md:min-h-[500px] flex flex-col">
   <div
-    class="relative flex h-full flex-col rounded-[20px] border border-solid border-black bg-white px-6 pt-6 pb-2 transition-all duration-300 hover:border-[#522be2] md:px-8 md:pt-8"
+    class="relative flex flex-1 flex-col rounded-[20px] border border-solid border-black bg-white px-6 pt-6 pb-2 transition-all duration-300 hover:border-[#522be2] md:px-8 md:pt-8 h-full"
   >
-    {/* Tags container with fixed height */}
-    <div class="relative z-10 mb-auto">
-      <div class="relative min-h-[150px]">
+    {/* Tags container */}
+    <div class="relative z-10">
+      <div class="relative">
         {
           tags.length > 0 && (
             <div class="flex flex-wrap gap-1.5">
@@ -35,20 +35,21 @@ const { href, shortTitle, title, excerpt, tags = [] } = Astro.props;
           )
         }
       </div>
-      {/* Spacer to maintain consistent height and push content down */}
-      <div class="h-16"></div>
     </div>
+
+    {/* Spacer to push content to bottom */}
+    <div class="flex-1"></div>
 
     {/* Clickable section for title and excerpt */}
     <a
       href={href}
-      class="group/link relative z-0 mt-auto block flex h-full flex-col pt-8 no-underline"
+      class="group/link relative z-0 block pt-10 pb-4 no-underline"
       aria-label={`View ${title}`}
     >
-      <div class="flex flex-1 flex-col">
+      <div class="flex flex-col">
         {/* Title - simplified to only show short title */}
         <h2
-          class="flex min-h-[4.4rem] items-start font-sans text-[2rem] leading-[1.1] font-semibold tracking-wider text-black lowercase transition-colors duration-300 group-hover:text-[#522be2]"
+          class="mb-4 flex items-start font-sans text-[2rem] leading-[1.1] font-semibold tracking-wider text-black lowercase transition-colors duration-300 group-hover:text-[#522be2]"
         >
           {shortTitle}
         </h2>

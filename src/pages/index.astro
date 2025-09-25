@@ -213,7 +213,7 @@ const optimizedPoster = await getImage({
           Nous créons votre marque et la déployons partout où elle doit vivre.
         </p>
       </div>
-      <div class:list={["relative", "overflow-hidden", "-mx-4"]}>
+      <div class:list={["relative", "overflow-hidden", "w-full", "px-4"]}>
         <div
           class:list={[
             "w-full",
@@ -221,11 +221,11 @@ const optimizedPoster = await getImage({
             "transition-transform",
             "duration-1000",
             "ease-in-out",
-            "px-4",
             // Explicit horizontal gaps between cards
             "gap-4 md:gap-6"
           ]}
           id="services-track"
+          style="--cards-per-view: 3;"
         >
           {
             allServices.map((service) => {
@@ -234,11 +234,12 @@ const optimizedPoster = await getImage({
 
               return (
                 <div
-                  class:list=[
+                  class:list={[
                     "service-card",
-                    "w-1/3",
-                    "flex-shrink-0"
-                  ]
+                    "flex-shrink-0",
+                    "px-2" // Add horizontal padding to each card
+                  ]}
+                  style="width: calc(100% / var(--cards-per-view) - 1rem);"
                   onmouseenter="document.dispatchEvent(new CustomEvent('pauseCarousel'))"
                   onmouseleave="document.dispatchEvent(new CustomEvent('resumeCarousel'))"
                 >
@@ -298,8 +299,8 @@ const optimizedPoster = await getImage({
           }
 
           let currentIndex = 0;
-          let cardsPerView =
-            window.innerWidth >= 1024 ? 3 : window.innerWidth >= 768 ? 2 : 1;
+          // Always show 3 cards at a time on all screen sizes
+          const cardsPerView = 3;
           const autoplayDelay = 5000; // 5 seconds between slides
           let autoplayInterval: number | undefined;
           let isDragging = false;
@@ -311,6 +312,9 @@ const optimizedPoster = await getImage({
 
           const updateCarousel = () => {
             const cardWidth = 100 / cardsPerView;
+            // Calculate the maximum allowed index to prevent empty space at the end
+            const maxIndex = Math.max(0, cards.length - cardsPerView);
+            currentIndex = Math.min(currentIndex, maxIndex);
             currentTranslate = -currentIndex * cardWidth;
             track.style.transform = `translateX(${currentTranslate}%)`;
           };
@@ -391,17 +395,28 @@ const optimizedPoster = await getImage({
           };
 
           const nextSlide = () => {
-            if (currentIndex < cards.length - cardsPerView) {
+            const cards = document.querySelectorAll('.service-card');
+            const maxIndex = Math.max(0, cards.length - cardsPerView);
+            
+            if (currentIndex < maxIndex) {
               currentIndex++;
+              updateCarousel();
             } else {
-              currentIndex = 0; // Loop back to the first slide
+              // If at the end, loop back to the start
+              currentIndex = 0;
+              updateCarousel();
             }
-            updateCarousel();
           };
 
           // Handle window resize
           const handleResize = () => {
+            // Force recalculation of card widths
+            track.style.transition = 'none';
             updateCarousel();
+            // Re-enable transitions after resize
+            setTimeout(() => {
+              track.style.transition = 'transform 1000ms ease-in-out';
+            }, 100);
           };
           window.addEventListener("resize", handleResize);
 
