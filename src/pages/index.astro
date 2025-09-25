@@ -221,7 +221,9 @@ const optimizedPoster = await getImage({
             "transition-transform",
             "duration-1000",
             "ease-in-out",
-            "px-4"
+            "px-4",
+            // Explicit horizontal gaps between cards
+            "gap-4 md:gap-6"
           ]}
           id="services-track"
         >
@@ -232,12 +234,11 @@ const optimizedPoster = await getImage({
 
               return (
                 <div
-                  class:list={[
+                  class:list=[
                     "service-card",
                     "w-1/3",
-                    "px-4",
                     "flex-shrink-0"
-                  ]}
+                  ]
                   onmouseenter="document.dispatchEvent(new CustomEvent('pauseCarousel'))"
                   onmouseleave="document.dispatchEvent(new CustomEvent('resumeCarousel'))"
                 >
