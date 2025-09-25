@@ -11,12 +11,15 @@ const {
   className = '' 
 } = Astro.props;
 
-const baseClasses = 'inline-flex items-center rounded-full font-semibold text-sm px-5 py-2.5 transition-colors uppercase tracking-wider';
+const baseClasses = 'inline-flex items-center rounded-full font-semibold text-sm px-5 py-2.5 transition-colors uppercase tracking-wider border';
 
 const variants = {
-  primary: 'bg-violet-600 text-white hover:bg-violet-700',
-  secondary: 'bg-white text-violet-700 hover:bg-gray-50',
-  outline: 'border border-current text-current hover:bg-gray-50'
+  // Primary stays purple by default; on hover, reinforce purple bg, white text, and show a white border
+  primary: 'bg-violet-600 text-white border-transparent hover:bg-violet-700 hover:text-white hover:border-white',
+  // Secondary is white by default; on hover, switch to purple bg, white text, and white border
+  secondary: 'bg-white text-violet-700 border-violet-600 hover:bg-violet-600 hover:text-white hover:border-white',
+  // Outline starts transparent with violet border/text; on hover, switch to purple bg, white text, white border
+  outline: 'bg-transparent text-violet-700 border-violet-600 hover:bg-violet-600 hover:text-white hover:border-white'
 };
 
 const buttonClasses = `${baseClasses} ${variants[variant]} ${className}`;

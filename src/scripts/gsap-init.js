@@ -1,8 +1,9 @@
 import { gsap } from 'gsap';
 import { SplitText } from 'gsap/SplitText';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-// Register the SplitText plugin
-gsap.registerPlugin(SplitText);
+// Register the GSAP plugins
+gsap.registerPlugin(SplitText, ScrollTrigger);
 
 // Debug function
 function debugLog(...args) {
@@ -48,16 +49,26 @@ function initHeadingAnimation() {
       willChange: 'transform, opacity'
     });
     
-    // Animate each character with a staggered effect
+    // Create a timeline with ScrollTrigger
     const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: heading,
+        start: 'center 80%', // Start animation when element's center hits 80% of viewport height
+        end: 'center 20%',   // End animation when element's center hits 20% of viewport height
+        toggleActions: 'play none none none', // Only play the animation once when scrolling down
+        onEnter: () => debugLog('Element entered viewport'),
+        onEnterBack: () => debugLog('Element re-entered viewport'),
+        onLeave: () => debugLog('Element left viewport'),
+        onLeaveBack: () => debugLog('Element left viewport (back)'),
+        markers: false // Set to true for debugging
+      },
       onStart: () => debugLog('Animation started'),
       onComplete: () => {
         debugLog('Animation completed');
-        // Clean up after animation completes
-        // split.revert();
       }
     });
     
+    // Animate each character with a staggered effect
     tl.to(split.chars, {
       opacity: 1,
       y: 0,
@@ -105,6 +116,14 @@ export default function initAnimations() {
   document.addEventListener('astro:page-load', () => {
     debugLog('Astro page load event, reinitializing...');
     setTimeout(init, 100);
+  });
+}
+
+// Initialize animations when the page loads and on route changes
+if (import.meta.hot) {
+  import.meta.hot.on('astro:page-load', () => {
+    // Refresh ScrollTrigger on page navigation
+    ScrollTrigger.refresh();
   });
 }
 

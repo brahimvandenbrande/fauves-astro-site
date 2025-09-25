@@ -19,45 +19,59 @@ const projectImages: Record<string, ImageMetadata> = {
 };
 ---
 
-<div class="relative h-[90vh] w-full" aria-label="Featured Projects">
-  <!-- Full-bleed wrapper (lets right side peek) -->
+<div class="relative h-[90vh] w-full" style="contain: content;" aria-label="Featured Projects">
+  <!-- Removed manual preload to avoid mismatch warnings; first slides already use eager + fetchpriority -->
+  
+  <!-- Full-bleed wrapper -->
   <div class="w-screen -ml-[calc(50vw-50%)] -mr-[calc(50vw-50%)]">
-    <!-- Left mask: hides anything before slide #1 -->
     <div class="relative overflow-hidden">
       <!-- Scrollable viewport -->
       <div
         data-carousel
         class="flex h-full snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth pb-16 overscroll-x-contain"
-        style="scrollbar-width:none;-webkit-overflow-scrolling:touch;"
+        style="scrollbar-width: none; -webkit-overflow-scrolling: touch; contain: layout paint; scrollbar-gutter: stable both-edges;"
       >
-        {projects.map((project) => {
+        {projects.map((project, index) => {
           const image = projectImages[project.slug];
           return (
             <div
-              class="group relative h-full max-w-[800px] min-w-[70vw] flex-shrink-0 snap-start"
+              class="carousel-slide group relative h-full max-w-[800px] min-w-[70vw] flex-shrink-0 snap-start"
               data-slide
+              style={{
+                '--slide-aspect-ratio': '16/9',
+                '--slide-height': '80vh',
+                '--slide-min-height': '400px',
+                '--slide-max-height': '800px',
+              }}
             >
-              <a href={`/projects/${project.slug}`} class="block h-full w-full">
-                <div class="relative my-auto h-[80vh] w-full">
-                  <div class="h-full w-full overflow-hidden rounded-2xl">
-                    {image ? (
-                      <Image
-                        src={image}
-                        alt={project.data.image?.alt || `Project ${project.data.title}`}
-                        width={1200}
-                        height={800}
-                        class="h-full w-full object-cover"
-                        loading="eager"
-                        decoding="async"
-                        format="webp"
-                        quality={90}
-                      />
-                    ) : (
-                      <div class="flex h-full items-center justify-center rounded-2xl bg-zinc-100 dark:bg-zinc-800">
-                        <span class="text-zinc-400">Image not available</span>
-                      </div>
-                    )}
-                  </div>
+              <a href={`/projects/${project.slug}`} class="block h-full w-full flex items-center">
+                <div
+                  class="relative overflow-hidden rounded-2xl"
+                  style={{
+                    'height': 'var(--slide-height, 80vh)',
+                    'min-height': 'var(--slide-min-height, 400px)',
+                    'max-height': 'var(--slide-max-height, 800px)'
+                  }}
+                >
+                  {image ? (
+                    <Image
+                      src={image}
+                      alt={project.data.image?.alt || `Project ${project.data.title}`}
+                      width={1200}
+                      height={675}
+                      class="h-full w-full object-cover transition-opacity duration-300"
+                      loading={index < 2 ? 'eager' : 'lazy'}
+                      decoding="async"
+                      fetchpriority={index === 0 ? 'high' : 'auto'}
+                      format="webp"
+                      quality={90}
+                    />
+                  ) : (
+                    <div class="flex h-full items-center justify-center bg-zinc-100 dark:bg-zinc-800">
+                      <span class="text-zinc-400">Image not available</span>
+                    </div>
+                  )}
+
                   <p class="absolute bottom-4 left-4 rounded-lg bg-white/80 px-3 py-1.5 text-base font-medium text-black">
                     <strong class="font-bold">{project.data.client || "Project"}</strong>
                     {project.data.title && <span class="ml-2 font-light">{project.data.title}</span>}
@@ -74,8 +88,8 @@ const projectImages: Record<string, ImageMetadata> = {
   {projects.length > 1 && (
     <div
       data-carousel-arrows
-      class="absolute bottom-1 right-0 z-20 flex gap-4"
-      style="right: calc(var(--carousel-arrows-right, 1rem) + 8rem);">
+      class="absolute bottom-1 right-6 z-20 flex gap-4"
+    >
       <button
         data-carousel-prev
         class="flex h-12 w-12 items-center justify-center rounded-full bg-amber-50/75 shadow-md transition-all duration-200 hover:bg-neutral-100"
@@ -146,10 +160,7 @@ const projectImages: Record<string, ImageMetadata> = {
       const { left, right } = getGutters();
       viewport.style.paddingLeft = left + "px";
       viewport.style.scrollPaddingLeft = left + "px";
-      if (arrows) {
-        // Set the right position as a CSS variable
-        document.documentElement.style.setProperty('--carousel-arrows-right', right + 'px');
-      }
+      // Note: left gutter applied to viewport padding only; arrows use a fixed right offset to avoid movement.
     };
 
     // initial + reflow-safe

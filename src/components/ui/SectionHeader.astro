@@ -34,15 +34,15 @@ const HeadingTag = `h${level}` as const;
 ---
 
 <HeadingTag 
-  id={id}
+  id={id || `section-heading-${Math.random().toString(36).substr(2, 9)}`}
   class:list={[
     'font-degular font-light leading-tight text-black gsap-heading',
     sizeClasses[size],
     alignClasses[align],
-    className
+    className,
+    'opacity-0' // Start with 0 opacity, GSAP will handle the animation
   ]}
-  style="opacity: 1;"
-  data-gsap-animate
+  data-gsap-animate="true"
 >
   <slot>{title}</slot>
 </HeadingTag>

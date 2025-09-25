@@ -4,17 +4,18 @@
 
 <style>
   /* Base styles for the heading */
-  .gsap-heading, #main-heading {
+  .gsap-heading,
+  #main-heading {
     opacity: 1;
     visibility: visible;
   }
-  
+
   /* Style for split text elements */
   .gsap-line {
     display: block;
     overflow: hidden;
   }
-  
+
   .gsap-word {
     display: inline-block;
     white-space: nowrap;
@@ -24,75 +25,337 @@
 </style>
 
 <script>
+  // Extend Window interface to include our cleanup property
+  declare global {
+    interface Window {
+      __gsapCleanup?: Array<() => void>;
+      gsap?: any;
+      ScrollTrigger?: any;
+    }
+  }
+
+  // Initialize cleanup array if it doesn't exist
+  if (!window.__gsapCleanup) {
+    window.__gsapCleanup = [];
+  }
+
   // Function to initialize the heading animation
   async function initHeadingAnimation() {
     try {
       // Load GSAP and its plugins
-      const { gsap } = await import('gsap');
-      const { SplitText } = await import('gsap/SplitText');
-      gsap.registerPlugin(SplitText);
+      const { gsap } = await import("gsap");
+      const { SplitText } = await import("gsap/SplitText");
+      const { ScrollTrigger } = await import("gsap/ScrollTrigger");
 
-      // Find the heading by ID or class
-      const heading = document.querySelector("#main-heading, .gsap-heading");
-      if (!heading) return;
-
-      // Create SplitText instance for the heading
-      const split = new SplitText(heading, {
-        type: "lines,words",
-        linesClass: "gsap-line",
-        wordsClass: "gsap-word",
-        aria: "hidden"
-      });
-
-      // Store the original HTML to restore it later
-      const originalHTML = heading.innerHTML;
+      // Register plugins
+      gsap.registerPlugin(SplitText, ScrollTrigger);
       
-      // Animate each line separately
-      if (split.lines && split.lines.length > 0) {
-        // Animate each line in sequence
-        split.lines.forEach((line, i) => {
-          // Animate words in this line
-          gsap.to(line.querySelectorAll('.gsap-word') || [line], {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            ease: "power3.out",
-            stagger: 0.05,
-            delay: i * 0.1
-          });
-        });
-      } else {
-        // Fallback if no lines are detected
-        gsap.to(split.words || [heading], {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          ease: "power3.out",
-          stagger: 0.05
-        });
+      // Make GSAP available globally for debugging
+      window.gsap = gsap;
+      window.ScrollTrigger = ScrollTrigger;
+
+      // Enable debug mode
+      gsap.config({ nullTargetWarn: false });
+
+      // Wait for fonts to be loaded before animating
+      await document.fonts.ready;
+
+      // Find all headings with data-gsap-animate attribute or .gsap-heading class
+      const headings = document.querySelectorAll(
+        "[data-gsap-animate], .gsap-heading"
+      );
+
+      if (headings.length === 0) {
+        console.warn(
+          "No animated headings found. Looking for elements with [data-gsap-animate] or .gsap-heading class"
+        );
+        return;
       }
 
-      // Clean up function for Astro view transitions
-      const cleanup = () => {
-        if (split.revert) {
-          heading.innerHTML = originalHTML;
-          split.revert();
-        }
-        document.removeEventListener('astro:before-preparation', cleanup);
-      };
+      console.log(`Found ${headings.length} headings to animate`);
 
-      // Clean up when navigating away
-      document.addEventListener('astro:before-preparation', cleanup);
-      
+      // Process each heading
+      for (const heading of headings) {
+        if (!(heading instanceof HTMLElement)) continue;
+        
+        console.log("Animating heading:", heading);
+
+        // Check if this is an H1 (should animate immediately without scroll)
+        const isH1 = heading.tagName === 'H1';
+
+        // For H1, use the specific animation style
+        if (isH1) {
+          // Make sure heading is visible before animation
+          gsap.set(heading, { opacity: 1 });
+
+          // Create SplitText for H1 with words only
+          const split = new SplitText(heading, { 
+            type: "words", 
+            wordsClass: "gsap-word",
+            aria: "hidden"
+          });
+
+          // Accessibility: ensure the heading itself is not hidden from AT
+          heading.removeAttribute('aria-hidden');
+          if (!heading.getAttribute('aria-label')) {
+            const label = heading.textContent?.trim() || '';
+            if (label) heading.setAttribute('aria-label', label);
+          }
+
+          // Animate words with the specified effect
+          gsap.from(split.words, {
+            opacity: 0,
+            duration: 2,
+            ease: "sine.out",
+            stagger: 0.1,
+            onComplete: () => {
+              // Clean up aria-hidden after animation
+              (split.words as unknown as Element[]).forEach((word) =>
+                (word as HTMLElement).removeAttribute('aria-hidden')
+              );
+            }
+          });
+
+          // Skip to next heading
+          continue;
+        }
+
+        // For non-H1 headings, use scroll-triggered animation
+        const split = new SplitText(heading, {
+          type: "lines,words",
+          linesClass: "gsap-line",
+          wordsClass: "gsap-word"
+        });
+
+        // Accessibility: ensure the heading itself is not hidden from AT
+        heading.removeAttribute('aria-hidden');
+        if (!heading.getAttribute('aria-label')) {
+          const label = heading.textContent?.trim() || '';
+          if (label) heading.setAttribute('aria-label', label);
+        }
+
+        // Set initial state for non-H1 headings
+        gsap.set(heading, { opacity: 0, y: 20 });
+        heading.style.setProperty('opacity', '0');
+        heading.style.setProperty('transform', 'translateY(20px)');
+        heading.style.setProperty('will-change', 'transform, opacity');
+
+        // Store the original HTML to restore it later
+        const originalHTML = heading.innerHTML;
+
+        // Create a timeline with ScrollTrigger
+        const tl = gsap.timeline({
+          defaults: {
+            duration: 0.8,
+            ease: "power3.out"
+          },
+          onComplete: () => {
+            console.log("Animation complete for heading:", heading);
+            // Restore original aria attributes after animation
+            if (split.words) {
+              (split.words as unknown as Element[]).forEach((word) =>
+                (word as HTMLElement).removeAttribute('aria-hidden')
+              );
+            }
+            // Ensure the heading itself remains exposed to AT
+            heading.removeAttribute('aria-hidden');
+          }
+        });
+        
+        // Create a ScrollTrigger for the timeline
+        const scrollTrigger = ScrollTrigger.create({
+          trigger: heading,
+          start: "top 80%",
+          end: "center 20%",
+          toggleActions: "play none none none",
+          markers: true,
+          onEnter: () => console.log("Heading entered viewport:", heading),
+          onEnterBack: () => console.log("Heading re-entered viewport:", heading)
+        });
+        
+        // Add cleanup for ScrollTrigger
+        const cleanupFn = () => {
+          if (scrollTrigger && 'kill' in scrollTrigger && typeof scrollTrigger.kill === 'function') {
+            scrollTrigger.kill();
+          }
+          if (split && typeof split.revert === 'function') {
+            try {
+              heading.innerHTML = originalHTML;
+              split.revert();
+            } catch (e) {
+              console.warn('Error cleaning up SplitText:', e);
+            }
+          }
+        };
+        
+        // Add to cleanup array
+        if (window.__gsapCleanup) {
+          window.__gsapCleanup.push(cleanupFn);
+        }
+
+        // First, animate the entire heading in
+        tl.to(
+          heading,
+          {
+            opacity: 1,
+            y: 0,
+            duration: isH1 ? 0.8 : 1, // Slightly faster for H1
+            ease: "power2.out"
+          },
+          isH1 ? 0 : 0.2 // Start immediately for H1, slight delay for others
+        );
+        
+        // If it's an H1, add a small delay before starting the text animation
+        const initialDelay = isH1 ? 0.2 : 0;
+
+        // Then animate the text content if it's a text node
+        if (heading.textContent && heading.textContent.trim() !== "") {
+          // Animate each line separately if available
+          if (split.lines && split.lines.length > 0) {
+            (split.lines as unknown as Element[]).forEach((lineEl: Element, i: number) => {
+              const line = lineEl as HTMLElement;
+              // Animate words in this line
+              const words = line.querySelectorAll(".gsap-word");
+              tl.to(
+                words.length > 0 ? words : [line],
+                {
+                  opacity: 1,
+                  y: 0,
+                  stagger: 0.05,
+                  duration: 0.6
+                },
+                i === 0 ? initialDelay : `>0.2` // Add a small delay between lines
+              );
+            });
+          } else if (split.words && split.words.length > 0) {
+            // Fallback for words if no lines
+            tl.to(
+              split.words,
+              {
+                opacity: 1,
+                y: 0,
+                stagger: 0.05,
+                duration: 0.6
+              },
+              initialDelay
+            );
+          }
+        }
+      } // End of headings loop
+
+      // Refresh ScrollTrigger after all animations are set up
+     ScrollTrigger.refresh();
     } catch (error) {
-      console.warn("GSAP animation error:", error);
+      console.error("GSAP animation error:", error);
+      // Make sure headings are visible even if animation fails
+      const headings = document.querySelectorAll("[data-gsap-animate], .gsap-heading");
+      if (window.gsap) {
+        headings.forEach((el) => {
+          window.gsap.set(el, { opacity: 1, y: 0, clearProps: "all" });
+        });
+      }
     }
   }
 
-  // Initialize animation when the page loads or view transition completes
-  if (document.startViewTransition) {
-    document.addEventListener('astro:page-load', initHeadingAnimation);
-  } else {
-    document.addEventListener('DOMContentLoaded', initHeadingAnimation);
+  // Debug function to log GSAP and ScrollTrigger status
+  function logGSAPStatus(): void {
+    try {
+      const gs = window.gsap as any | undefined;
+      const st = window.ScrollTrigger as any | undefined;
+      console.log("GSAP version:", gs?.version);
+      console.log("ScrollTrigger version:", st?.version);
+
+      const plugins: string[] = [];
+      if (gs?.plugins) {
+        for (const key in gs.plugins) {
+          if (Object.prototype.hasOwnProperty.call(gs.plugins, key)) {
+            plugins.push(key);
+          }
+        }
+      }
+      console.log("GSAP plugins:", plugins);
+
+      const isScrollTriggerActive = Boolean(st && 'isTouch' in st);
+      console.log("ScrollTrigger is active:", isScrollTriggerActive);
+    } catch (error) {
+      console.error("Error logging GSAP status:", error);
+    }
   }
+
+  // Initialize animations with cleanup handling
+  function initAnimations(): Promise<void> {
+    console.log("Initializing animations...");
+    // Run any existing cleanup functions before re-initializing
+    if (window.__gsapCleanup && Array.isArray(window.__gsapCleanup)) {
+      window.__gsapCleanup.forEach((fn) => {
+        try {
+          if (typeof fn === 'function') fn();
+        } catch (e) {
+          console.warn('Cleanup function threw:', e);
+        }
+      });
+      window.__gsapCleanup = [];
+    }
+
+    return initHeadingAnimation()
+      .then(() => {
+        console.log("Animations initialized");
+        // Refresh ScrollTrigger after a short delay to ensure all elements are in place
+        setTimeout(() => {
+          const st = window.ScrollTrigger as any | undefined;
+          if (st && typeof st.refresh === 'function') {
+            st.refresh();
+            console.log("ScrollTrigger refreshed");
+          }
+          logGSAPStatus();
+        }, 500);
+      })
+      .catch((error) => {
+        console.error("Error initializing animations:", error);
+        return Promise.reject(error);
+      });
+  }
+
+  // Initialize when the page loads or view transition completes (with duplicate guards)
+  declare global {
+    interface Window { __gsapInitLock?: boolean; __gsapLastInitTime?: number }
+  }
+  const MIN_INIT_INTERVAL_MS = 600; // prevent double inits firing close together
+  const init = () => {
+    const now = Date.now();
+    if (window.__gsapInitLock) return; // another init in progress
+    if (typeof window.__gsapLastInitTime === 'number' && (now - window.__gsapLastInitTime) < MIN_INIT_INTERVAL_MS) {
+      return; // too soon since last init
+    }
+    window.__gsapInitLock = true;
+    console.log("DOM ready, initializing animations...");
+    initAnimations()
+      .finally(() => {
+        window.__gsapLastInitTime = Date.now();
+        window.__gsapInitLock = false;
+      });
+  };
+
+  // Handle page transitions and initial load
+  if (document.readyState === "complete" || document.readyState === "interactive") {
+    setTimeout(init, 100);
+  } else {
+    document.addEventListener("DOMContentLoaded", init);
+  }
+
+  // Also initialize on Astro page transitions
+  document.addEventListener("astro:page-load", () => {
+    console.log("Astro page loaded, reinitializing animations...");
+    // In case DOMContentLoaded and astro:page-load fire close, let our guard suppress duplicates
+    setTimeout(init, 120);
+  });
+
+  // Clean up on unload
+  window.addEventListener('beforeunload', () => {
+    if (window.__gsapCleanup) {
+      window.__gsapCleanup.forEach((fn) => {
+        try { if (typeof fn === 'function') fn(); } catch {}
+      });
+    }
+  });
 </script>
