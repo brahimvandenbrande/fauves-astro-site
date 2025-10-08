@@ -1,4 +1,4 @@
 # https://ocwwsggk4w84wockocgckk4k.apps.fauves.agency — Blog index for LLMs
 
-- [Le secret des marques B2B qui réussissent ? Leur "Why" puissant.](https://ocwwsggk4w84wockocgckk4k.apps.fauves.agency/blog/post-2/)
 - [Mobil Studio devient FAUVES](https://ocwwsggk4w84wockocgckk4k.apps.fauves.agency/blog/post-1/)
+- [Le secret des marques B2B qui réussissent ? Leur "Why" puissant.](https://ocwwsggk4w84wockocgckk4k.apps.fauves.agency/blog/post-2/)

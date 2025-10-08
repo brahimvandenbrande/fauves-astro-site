@@ -83,6 +83,31 @@ const optimizedPoster = await getImage({
 });
 
 // ... (rest of your frontmatter)
+
+import Button from "../components/ui/Button.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+  buttonText?: string;
+  buttonHref?: string;
+  variant?: "primary" | "secondary";
+  className?: string;
+}
+
+const {
+  title,
+  description,
+  buttonText = "Notre accompagnement",
+  buttonHref = "/contact",
+  variant = "primary",
+  className = ""
+} = Astro.props;
+
+const variants = {
+  primary: "bg-violet-600 text-white",
+  secondary: "bg-gray-100 text-black"
+};
 ---
 
 <Layout
@@ -202,59 +227,186 @@ const optimizedPoster = await getImage({
       poster={optimizedPoster.src}
     />
 
-    <!-- Services Section -->
+    <!-- Services Section with Container Queries -->
     <section
-      class="mx-auto max-w-[85rem] px-4 pt-8 pb-8 text-left md:pt-12 md:pb-12"
+      class="services-section mx-auto w-full max-w-[85rem] px-4 py-8 md:py-12"
     >
-      <div class="max-w-[900px] pb-12">
-        <p
-          class="font-degular text-left text-3xl leading-[1.2] font-light text-black sm:text-4xl md:text-5xl lg:text-6xl xl:text-[4rem]"
-        >
-          Nous créons votre marque et la déployons partout où elle doit vivre.
-        </p>
-      </div>
-      <div class:list={["relative", "overflow-hidden", "w-full", "px-4"]}>
-        <div
-          class:list={[
-            "w-full",
-            "flex",
-            "transition-transform",
-            "duration-1000",
-            "ease-in-out",
-            // Explicit horizontal gaps between cards
-            "gap-4 md:gap-6"
-          ]}
-          id="services-track"
-          style="--cards-per-view: 3;"
-        >
-          {
-            allServices.map((service) => {
-              const slug = getServiceSlug(service);
-              const href = `/services/${slug}`;
-
-              return (
-                <div
-                  class:list={[
-                    "service-card",
-                    "flex-shrink-0",
-                    "px-2" // Add horizontal padding to each card
-                  ]}
-                  style="width: calc(100% / var(--cards-per-view) - 1rem);"
-                  onmouseenter="document.dispatchEvent(new CustomEvent('pauseCarousel'))"
-                  onmouseleave="document.dispatchEvent(new CustomEvent('resumeCarousel'))"
-                >
-                  <ServiceCard
-                    href={href}
-                    shortTitle={service.data.shortTitle}
-                    title={service.data.title}
-                    excerpt={service.data.excerpt}
-                    tags={service.data.tags || []}
-                  />
-                </div>
-              );
-            })
-          }
+      <div class="mx-auto w-full max-w-[85rem]">
+        <div class="max-w-[900px] pb-12">
+          <p
+            class="font-degular text-left text-3xl leading-[1.2] font-light text-black sm:text-4xl md:text-5xl lg:text-6xl xl:text-[4rem]"
+          >
+            Nous créons votre marque et la déployons partout où elle doit vivre.
+          </p>
         </div>
+
+        <div class="services-track-container">
+          <div
+            class:list={[
+              "services-track",
+              "w-full",
+              "flex",
+              "transition-transform",
+              "duration-1000",
+              "ease-in-out"
+            ]}
+            id="services-track"
+            style="--cards-per-view: 3;"
+          >
+            {
+              allServices.map((service, index) => {
+                const slug = getServiceSlug(service);
+                const href = `/services/${slug}`;
+
+                return (
+                  <div
+                    class:list={["service-card-container", "flex-shrink-0"]}
+                    style="width: calc(100% / var(--cards-per-view) - 1rem);"
+                    onmouseenter="document.dispatchEvent(new CustomEvent('pauseCarousel'))"
+                    onmouseleave="document.dispatchEvent(new CustomEvent('resumeCarousel'))"
+                  >
+                    <ServiceCard
+                      href={href}
+                      shortTitle={service.data.shortTitle}
+                      title={service.data.title}
+                      excerpt={service.data.excerpt}
+                      tags={service.data.tags || []}
+                    />
+                  </div>
+                );
+              })
+            }
+          </div>
+        </div>
+
+        <style>
+          /* Services Section Layout */
+          .services-section {
+            container-type: inline-size;
+            container-name: services-section;
+          }
+
+          /* Track Container */
+          .services-track-container {
+            width: 100%;
+            overflow: hidden;
+          }
+
+          /* Track Layout */
+          .services-track {
+            display: flex;
+            gap: 1rem;
+            width: 100%;
+            padding-bottom: 1rem; /* Space for scrollbar */
+          }
+
+          /* Responsive adjustments */
+          @container services-section (max-width: 767px) {
+            .services-track {
+              gap: 0.75rem;
+            }
+
+            .service-card-container {
+              width: 85%;
+              margin-right: 0.75rem;
+            }
+          }
+
+          @container services-section (min-width: 768px) and (max-width: 1023px) {
+            .services-track {
+              gap: 1rem;
+            }
+
+            .service-card-container {
+              width: calc(50% - 0.5rem);
+            }
+          }
+
+          @container services-section (min-width: 1024px) {
+            .services-track {
+              gap: 1.5rem;
+            }
+
+            .service-card-container {
+              width: calc(33.333% - 1rem);
+            }
+          }
+
+          /* Ensure consistent card content alignment */
+          .service-card-container > :global(div) {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+          }
+
+          /* Align all titles at the same position from the top */
+          .service-card-container :global(h2) {
+            margin: 0;
+            padding: 1.5rem 0;
+            min-height: 4.5rem;
+            display: flex;
+            align-items: center;
+          }
+
+          /* Ensure consistent spacing above titles */
+          .service-card-container :global(.relative) {
+            flex-grow: 1;
+          }
+
+          /* Responsive Adjustments */
+          @container services-section (min-width: 480px) {
+            .services-title {
+              font-size: 3rem;
+            }
+          }
+
+          @container services-section (min-width: 768px) {
+            .services-title {
+              font-size: 3.5rem;
+            }
+
+            .services-track {
+              --gap: 1.5rem;
+            }
+          }
+
+          @container services-section (min-width: 1024px) {
+            .services-title {
+              font-size: 4rem;
+            }
+
+            .services-track {
+              grid-template-columns: repeat(3, 1fr);
+            }
+          }
+
+          /* Animation */
+          @keyframes fadeIn {
+            from {
+              opacity: 0;
+              transform: translateY(1rem);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+
+          .service-card-container {
+            animation: fadeIn 0.5s ease-out forwards;
+            opacity: 0;
+          }
+
+          .service-card-container:nth-child(1) {
+            animation-delay: 0.1s;
+          }
+          .service-card-container:nth-child(2) {
+            animation-delay: 0.2s;
+          }
+          .service-card-container:nth-child(3) {
+            animation-delay: 0.3s;
+          }
+        </style>
       </div>
 
       <script>
@@ -395,9 +547,9 @@ const optimizedPoster = await getImage({
           };
 
           const nextSlide = () => {
-            const cards = document.querySelectorAll('.service-card');
+            const cards = document.querySelectorAll(".service-card");
             const maxIndex = Math.max(0, cards.length - cardsPerView);
-            
+
             if (currentIndex < maxIndex) {
               currentIndex++;
               updateCarousel();
@@ -411,11 +563,11 @@ const optimizedPoster = await getImage({
           // Handle window resize
           const handleResize = () => {
             // Force recalculation of card widths
-            track.style.transition = 'none';
+            track.style.transition = "none";
             updateCarousel();
             // Re-enable transitions after resize
             setTimeout(() => {
-              track.style.transition = 'transform 1000ms ease-in-out';
+              track.style.transition = "transform 1000ms ease-in-out";
             }, 100);
           };
           window.addEventListener("resize", handleResize);
@@ -525,7 +677,9 @@ const optimizedPoster = await getImage({
           window.addEventListener(
             "touchmove",
             drag as unknown as EventListener,
-            { passive: false }
+            {
+              passive: false
+            }
           );
           window.addEventListener("touchend", endDrag as EventListener);
 
@@ -570,18 +724,24 @@ const optimizedPoster = await getImage({
       </script>
     </section>
 
-    <section
-      class="mx-auto max-w-[85rem] px-4 pt-8 pb-8 text-left md:pt-12 md:pb-12"
-    >
+    <section class="mx-auto max-w-6xl pt-8 pb-12 text-center md:pt-12 md:pb-16">
       <p
-        class="animate-on-scroll font-degular text-3xl leading-[1.2] font-light text-black sm:text-4xl md:text-5xl lg:text-6xl xl:text-[4rem]"
+        class="animate-on-scroll font-degular mx-auto max-w-6xl px-4 text-3xl leading-[1.2] font-light text-black sm:text-4xl md:text-5xl lg:text-6xl xl:text-[4rem]"
         data-animate="fade-up"
         style="--animation-duration: 2s;"
       >
-        Notre agence de branding & storytelling centralise et prend en charge
-        l'ensemble de vos besoins, de votre positionnement au déploiement de
-        votre marque.
+        Notre promesse : un accompagnement
+        <br />expert, complet et concret. Pas de <br />branding hors-sol, mais
+        des solutions <br />pensées pour votre réalité.
       </p>
+      <div class="mt-8">
+        <Button
+          href={buttonHref}
+          variant={variant === "primary" ? "secondary" : "primary"}
+        >
+          {buttonText}
+        </Button>
+      </div>
     </section>
   </main>
 

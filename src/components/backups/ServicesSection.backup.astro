@@ -1,0 +1,57 @@
+<!-- Backup of Services Section - Created at 2025-10-06T20:56:00+02:00 -->
+<!-- Original location: /src/pages/index.astro -->
+
+<!-- Services Section Backup -->
+<section class="mx-auto w-full max-w-[85rem] px-4 pt-8 pb-8 text-left md:pt-12 md:pb-12">
+  <div class="w-full max-w-[85rem] mx-auto">
+    <div class="max-w-[900px] pb-12">
+      <p class="font-degular text-left text-3xl leading-[1.2] font-light text-black sm:text-4xl md:text-5xl lg:text-6xl xl:text-[4rem]">
+        Nous créons votre marque et la déployons partout où elle doit vivre.
+      </p>
+    </div>
+    <div class="relative w-full overflow-hidden">
+      <div
+        class:list={[
+          "w-full",
+          "flex",
+          "transition-transform",
+          "duration-1000",
+          "ease-in-out",
+          "gap-4 md:gap-6"
+        ]}
+        id="services-track"
+        style="--cards-per-view: 3;"
+      >
+        {
+          allServices.map((service) => {
+            const slug = getServiceSlug(service);
+            const href = `/services/${slug}`;
+
+            return (
+              <div
+                class:list={[
+                  "service-card",
+                  "flex-shrink-0",
+                  "px-2"
+                ]}
+                style="width: calc(100% / var(--cards-per-view) - 1rem);"
+                onmouseenter="document.dispatchEvent(new CustomEvent('pauseCarousel'))"
+                onmouseleave="document.dispatchEvent(new CustomEvent('resumeCarousel'))"
+              >
+                <ServiceCard
+                  href={href}
+                  shortTitle={service.data.shortTitle}
+                  title={service.data.title}
+                  excerpt={service.data.excerpt}
+                  tags={service.data.tags || []}
+                />
+              </div>
+            );
+          })
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- End of Backup -->

@@ -19,13 +19,16 @@ const projectImages: Record<string, ImageMetadata> = {
 };
 ---
 
-<div class="project-carousel" style="container-type: inline-size; contain: content;" aria-label="Featured Projects">
+<div class="relative h-[90vh] w-full" style="contain: content;" aria-label="Featured Projects">
+  <!-- Removed manual preload to avoid mismatch warnings; first slides already use eager + fetchpriority -->
+  
   <!-- Full-bleed wrapper -->
-  <div class="w-screen -ml-[calc(50vw-50%)] -mr-[calc(50vw-50%)">
+  <div class="w-screen -ml-[calc(50vw-50%)] -mr-[calc(50vw-50%)]">
     <div class="relative overflow-hidden">
-      <!-- Scrollable viewport with container query classes -->
+      <!-- Scrollable viewport -->
       <div
-        class="carousel-viewport invisible opacity-0 transition-opacity duration-500 ease-out flex h-full snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth pb-16 overscroll-x-contain pl-4 md:pl-6 lg:pl-8"
+        data-carousel
+        class="invisible opacity-0 transition-opacity duration-500 ease-out flex h-full snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth pb-16 overscroll-x-contain pl-4 md:pl-6 lg:pl-8"
         style="scrollbar-width: none; -webkit-overflow-scrolling: touch; contain: layout paint; scrollbar-gutter: stable both-edges; scroll-padding-left: 1rem;"
       >
         {projects.map((project, index) => {
@@ -36,14 +39,11 @@ const projectImages: Record<string, ImageMetadata> = {
               data-slide
               style={{
                 '--slide-aspect-ratio': '16/9',
-                '--slide-min-height': '300px',
+                '--slide-height': '80vh',
+                '--slide-min-height': '400px',
                 '--slide-max-height': '800px',
-                'height': 'var(--slide-height, 60vh)',
-                'min-height': 'var(--slide-min-height)',
-                'max-height': 'var(--slide-max-height)',
-                'aspect-ratio': 'var(--slide-aspect-ratio)'
               }}
-              >
+            >
               <a href={`/projects/${project.slug}`} class="block h-full w-full flex items-center">
                 <div
                   class="relative overflow-hidden rounded-2xl"
@@ -95,8 +95,9 @@ const projectImages: Record<string, ImageMetadata> = {
         class="flex h-12 w-12 items-center justify-center rounded-full bg-amber-50/75 shadow-md transition-all duration-200 hover:bg-neutral-100"
         aria-label="Previous slide"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
-          <path d="m15 18-6-6 6-6" />
+        <!-- left arrow -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="21" height="19" viewBox="0 0 21 19" fill="none" class="rotate-180">
+          <path d="M14.0646 8.51669H0.5V10.4786H14.0689C11.2635 12.3828 9.4267 15.4889 9.4267 18.9997H11.4991C11.4991 14.3034 15.5349 10.4786 20.4956 10.4786V8.51669C15.5349 8.51669 11.4991 4.69604 11.4991 -0.00439453H9.4267C9.4267 3.50234 11.2592 6.60843 14.0646 8.51256V8.51669Z" fill="black"/>
         </svg>
       </button>
       <button
@@ -104,79 +105,16 @@ const projectImages: Record<string, ImageMetadata> = {
         class="flex h-12 w-12 items-center justify-center rounded-full bg-amber-50/75 shadow-md transition-all duration-200 hover:bg-neutral-100"
         aria-label="Next slide"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5">
-          <path d="m9 18 6-6-6-6" />
+        <!-- right arrow -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="21" height="19" viewBox="0 0 21 19" fill="none">
+          <path d="M14.0646 8.51669H0.5V10.4786H14.0689C11.2635 12.3828 9.4267 15.4889 9.4267 18.9997H11.4991C11.4991 14.3034 15.5349 10.4786 20.4956 10.4786V8.51669C15.5349 8.51669 11.4991 4.69604 11.4991 -0.00439453H9.4267C9.4267 3.50234 11.2592 6.60843 14.0646 8.51256V8.51669Z" fill="black"/>
         </svg>
       </button>
     </div>
   )}
+
+  </div>
 </div>
-
-<style is:global>
-  /* Base styles */
-  .project-carousel {
-    width: 100%;
-    height: 100%;
-    --slide-min-height: 300px;
-    --slide-max-height: 800px;
-    --slide-aspect-ratio: 16/9;
-  }
-
-  /* Container Queries */
-  @container (min-width: 300px) {
-    .carousel-viewport {
-      --slide-height: 60vh;
-    }
-    .carousel-slide {
-      min-width: 85vw;
-    }
-  }
-
-  @container (min-width: 640px) {
-    .carousel-viewport {
-      --slide-height: 70vh;
-    }
-    .carousel-slide {
-      min-width: 70vw;
-    }
-  }
-
-  @container (min-width: 1024px) {
-    .carousel-viewport {
-      --slide-height: 80vh;
-    }
-    .carousel-slide {
-      min-width: 60vw;
-    }
-  }
-
-  /* Fallback for browsers without container query support */
-  @supports not (container-type: inline-size) {
-    .project-carousel {
-      height: 80vh;
-    }
-    .carousel-viewport {
-      --slide-height: 80vh;
-    }
-    .carousel-slide {
-      min-width: 70vw;
-    }
-  }
-
-  /* Ensure images fill their container */
-  .carousel-slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  /* Fix for the linting error on line 81 */
-  .carousel-slide a {
-    display: block;
-    height: 100%;
-    width: 100%;
-  }
-</style>
 
 <script>
 /**
@@ -210,7 +148,7 @@ const projectImages: Record<string, ImageMetadata> = {
   }
 
   function ready() {
-    const viewport = document.querySelector(".carousel-viewport") as HTMLElement;
+    const viewport = document.querySelector("[data-carousel]") as HTMLElement;
     const arrows = document.querySelector("[data-carousel-arrows]") as HTMLElement;
     const slides = document.querySelectorAll("[data-slide]");
     const btnPrev = document.querySelector("[data-carousel-prev]");
